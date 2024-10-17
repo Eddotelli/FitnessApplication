@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitTrack", "FitTrack.csproj", "{674BF697-ABB7-47DC-9ADA-2612375E8EA8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{674BF697-ABB7-47DC-9ADA-2612375E8EA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{674BF697-ABB7-47DC-9ADA-2612375E8EA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{674BF697-ABB7-47DC-9ADA-2612375E8EA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{674BF697-ABB7-47DC-9ADA-2612375E8EA8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DE04EE77-DDC8-40E6-83EA-FAF4D7AE40EF}
+	EndGlobalSection
+EndGlobal
