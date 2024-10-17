@@ -13,16 +13,13 @@ namespace FitTrack.Model
         public string Password { get; set; }
 
         // ---------- Konstruktor ---------- //
-        public Person(string username, string password)
+        public Person(string Username, string Password)
         {
-            Username = username;
-            Password = password;
+            this.Username = Username;
+            this.Password = Password;
         }
 
-        public void SignIn()
-        {
-
-        }
-
+        // ------------------------------ Metoder ------------------------------ //
+        public abstract void SignIn();
     }
 }
