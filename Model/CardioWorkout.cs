@@ -12,10 +12,10 @@ namespace FitTrack.Model
         public int Distance { get; set; }
 
         // ---------- Konstruktor ---------- //
-        public CardioWorkout(int Distance, string DateTime, string Type, string Duration, int CaloriesBurned, string Notes) : base(DateTime, Type, Duration, CaloriesBurned, Notes)
+        public CardioWorkout(int Distance, DateTime Date, string Type, TimeSpan Duration, int CaloriesBurned, string Notes) : base(Date, Type, Duration, CaloriesBurned, Notes)
         {
             this.Distance = Distance;
-            this.DateTime = DateTime;
+            this.Date = Date;
             this.Type = Type;
             this.Duration = Duration;
             this.CaloriesBurned = CaloriesBurned;

@@ -9,16 +9,16 @@ namespace FitTrack.Model
     public abstract class Workout
     {
         // ---------- Egenskaper ---------- //
-        public string DateTime {  get; set; }
+        public DateTime Date {  get; set; }
         public string Type { get; set; }
-        public string Duration {  get; set; }
+        public TimeSpan Duration {  get; set; }
         public int CaloriesBurned {  get; set; }
         public string Notes {  get; set; }
 
         // ---------- Konstruktor ---------- //
-        public Workout(string DateTime, string Type, string Duration, int CaloriesBurned, string Notes)
+        public Workout(DateTime Date, string Type, TimeSpan Duration, int CaloriesBurned, string Notes)
         {
-            this.DateTime = DateTime;
+            this.Date = Date;
             this.Type = Type;
             this.Duration = Duration;
             this.CaloriesBurned = CaloriesBurned;

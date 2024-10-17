@@ -23,5 +23,29 @@ namespace FitTrack.ViewModel
         {
             InitializeComponent();
         }
+
+        // ---------- Egenskaper ---------- //
+        public string LabelTitle {  get; set; }
+        public string UsernameInput { get; set; }
+        public string PasswordInput { get; set; }
+
+        // ---------- Konstruktor ---------- //
+        public MainWindowViewModel(string LabelTitle, string UsernameInput, string PasswordInput)
+        {
+            this.LabelTitle = LabelTitle;
+            this.UsernameInput = UsernameInput;
+            this.PasswordInput = PasswordInput;
+        }
+
+        // ------------------------------ Metoder ------------------------------ //
+        public void SignIn()
+        {
+
+        }
+
+        public void Register()
+        {
+
+        }
     }
 }

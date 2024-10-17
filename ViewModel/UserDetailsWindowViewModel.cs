@@ -6,7 +6,24 @@ using System.Threading.Tasks;
 
 namespace FitTrack.ViewModel
 {
-    internal class UserDetailsWindowViewModel
+    public class UserDetailsWindowViewModel
     {
+        // ---------- Egenskaper ---------- //
+        public string UsernameInput {  get; set; }
+        public string PasswordInput { get; set; }
+        public string ConfirmPasswordInput {  get; set; }
+        public string CountryComboBox {  get; set; }
+
+
+        // ------------------------------ Metoder ------------------------------ //
+        public void SaveUserDetails()
+        {
+
+        }
+
+        public void Cancel() 
+        {
+            
+        }
     }
 }

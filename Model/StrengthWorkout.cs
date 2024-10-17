@@ -13,10 +13,10 @@ namespace FitTrack.Model
 
 
         // ---------- Konstruktor ---------- //
-        public StrengthWorkout(int Repetitions, string DateTime, string Type, string Duration, int CaloriesBurned, string Notes) : base(DateTime, Type, Duration, CaloriesBurned, Notes)
+        public StrengthWorkout(int Repetitions, DateTime Date, string Type, TimeSpan Duration, int CaloriesBurned, string Notes) : base(Date, Type, Duration, CaloriesBurned, Notes)
         {
             this.Repetitions = Repetitions;
-            this.DateTime = DateTime;
+            this.Date = Date;
             this.Type = Type;
             this.Duration = Duration;
             this.CaloriesBurned = CaloriesBurned;

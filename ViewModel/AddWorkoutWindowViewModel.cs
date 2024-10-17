@@ -6,7 +6,20 @@ using System.Threading.Tasks;
 
 namespace FitTrack.ViewModel
 {
-    internal class AddWorkoutWindowViewModel
+    public class AddWorkoutWindowViewModel
     {
+        // ---------- Egenskaper ---------- //
+        public string WorkoutTypeComboBox{ get; set; }
+        public TimeSpan DurationInput { get; set; }
+        public int CaloriesBurnedInput { get; set; }
+        public string NotesInput { get; set; }
+
+        // ---------- Konstruktor ---------- //
+
+        // ------------------------------ Metoder ------------------------------ //
+        public void SaveWorkout()
+        {
+
+        }
     }
 }

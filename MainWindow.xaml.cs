@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using FitTrack.ViewModel;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -19,6 +20,8 @@ namespace FitTrack
         public MainWindow()
         {
             InitializeComponent();
+            MainWindowViewModel viewModel = new MainWindowViewModel();
+            DataContext = viewModel;
         }
     }
 }
