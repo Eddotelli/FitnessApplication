@@ -13,33 +13,60 @@
             <TextBox x:Name="tbUsername"      
                      Text="{Binding UsernameInput, UpdateSourceTrigger=PropertyChanged}"
                      TextAlignment="Center"
-                     Foreground="Black"/>
+                     Margin="10"
+                     />
 
             <TextBox x:Name="tbPassword"
                      Text="{Binding PasswordInput, UpdateSourceTrigger=PropertyChanged}"
                      TextAlignment="Center"
-                     Foreground="Black"/>
+                     Margin="10"
+                     />
 
-            
+            <TextBox x:Name="tbConfirmPassword"
+                     Text="{Binding ConfirmPasswordInput, UpdateSourceTrigger=PropertyChanged}"
+                     TextAlignment="Center"
+                     Margin="10"
+                     />
 
-            <Label Content="{Binding UsernameInput}"
-                   Foreground="Black"
-                   FontSize="20"
-                   Height="40"/>
-
-            <Label Content="{Binding PasswordInput}"
-                   Foreground="Black"
-                   FontSize="20"
-                   Height="40"/>
-
+            <ComboBox Name="cbCountrys"
+                      ItemsSource="{Binding Countries}"
+                      SelectedItem="{Binding CountryComboBox}"
+                      Margin="10"
+                      />
 
             <Button Command="{Binding RegisterCommand}"
-                    Content="Register"/>
+                    Content="Register"
+                    Margin="10"/>
 
+            <ListBox ItemsSource="{Binding User}"
+                     Height="200"
+                     Width="400"
+                     Foreground="Black"
+                     Background="LightGray"
+                     Margin="10">
 
-            <!-- ComboBox för länder -->
-            
+                <ListBox.ItemTemplate>
+
+                    <DataTemplate>
+
+                        <StackPanel Orientation="Horizontal">
+
+                            <TextBlock Text="{Binding Username}" Margin="5"/>
+                            <TextBlock Text=" | "/>
+                            <TextBlock Text="{Binding Password}" Margin="5"/>
+                            <TextBlock Text=" | "/>
+                            <TextBlock Text="{Binding Country}" Margin="5"/>
+
+                        </StackPanel>
+
+                    </DataTemplate>
+
+                </ListBox.ItemTemplate>
+
+            </ListBox>
+
         </StackPanel>
         
     </Grid>
+    
 </Window>
