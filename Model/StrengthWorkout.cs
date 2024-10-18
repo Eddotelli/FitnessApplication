@@ -28,7 +28,7 @@ namespace FitTrack.Model
         // ------------------------------ Metoder ------------------------------ //
         public override int CalculateCaloriesBurned()
         {
-            
+            return 0;
         }
     }
 }

@@ -7,6 +7,39 @@
         mc:Ignorable="d"
         Title="RegisterWindow" Height="450" Width="800">
     <Grid>
+ 
+        <StackPanel>
+            
+            <TextBox x:Name="tbUsername"      
+                     Text="{Binding UsernameInput, UpdateSourceTrigger=PropertyChanged}"
+                     TextAlignment="Center"
+                     Foreground="Black"/>
+
+            <TextBox x:Name="tbPassword"
+                     Text="{Binding PasswordInput, UpdateSourceTrigger=PropertyChanged}"
+                     TextAlignment="Center"
+                     Foreground="Black"/>
+
+            
+
+            <Label Content="{Binding UsernameInput}"
+                   Foreground="Black"
+                   FontSize="20"
+                   Height="40"/>
+
+            <Label Content="{Binding PasswordInput}"
+                   Foreground="Black"
+                   FontSize="20"
+                   Height="40"/>
+
+
+            <Button Command="{Binding RegisterCommand}"
+                    Content="Register"/>
+
+
+            <!-- ComboBox för länder -->
+            
+        </StackPanel>
         
     </Grid>
 </Window>

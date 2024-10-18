@@ -25,6 +25,8 @@ namespace FitTrack.View
             InitializeComponent();
             RegisterWindowViewModel viewModel = new RegisterWindowViewModel();
             DataContext = viewModel;
+
+            //DataContext = new RegisterWindowViewModel();
         }
     }
 }

@@ -6,20 +6,17 @@ using System.Threading.Tasks;
 
 namespace FitTrack.Model
 {
-    public abstract class Person
+    public class ListOfUsers
     {
         // ---------- Egenskaper ---------- //
         public string Username { get; set; }
         public string Password { get; set; }
 
         // ---------- Konstruktor ---------- //
-        public Person(string Username, string Password)
+        public ListOfUsers(string Username, string Password)
         {
-            this.Username = Username;
-            this.Password = Password;
+            //this.Username = Username;
+            //this.Password = Password;
         }
-
-        // ------------------------------ Metoder ------------------------------ //
-        public abstract void SignIn();
     }
 }

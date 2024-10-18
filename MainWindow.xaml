@@ -8,5 +8,25 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
 
+        <StackPanel>
+
+            <TextBox Text="Username"
+                     TextAlignment="Center"/>
+                <!--Text="{Binding UsernameInputCommand.UsernameInput, UpdateSourceTrigger=PropertyChanged}"-->
+                     
+
+            <TextBox Text="Password"
+                     TextAlignment="Center"/>
+            <!--Text="{Binding PasswordInputCommand.PasswordInput, UpdateSourceTrigger=PropertyChanged}"
+                     />-->
+
+            <Button Command="{Binding SignInCommand}"
+                    Content="Sign in"/>
+
+            <Button Command="{Binding RegisterCommand}"
+                    Content="Register"/>
+            
+        </StackPanel>
+
     </Grid>
 </Window>
