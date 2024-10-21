@@ -8,12 +8,12 @@ namespace FitTrack.Model
 {
     public class User : Person
     {
-        // ---------- Egenskaper ---------- //
+        // ------------------------------ Egenskaper ------------------------------ //
         public string Country {  get; set; }
         public string SecurityQuestion {  get; set; }
         public string SecurityAnswer {  get; set; }
 
-        // ---------- Konstruktor ---------- //
+        // ------------------------------ Konstruktor ------------------------------ //
         public User(string Username, string Password, string Country, string SecurityQuestion, string SecurityAnswer) : base(Username, Password)
         {
             this.Username = Username;

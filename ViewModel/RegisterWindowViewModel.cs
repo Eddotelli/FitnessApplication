@@ -16,23 +16,20 @@ namespace FitTrack.ViewModel
         // Deklaration av userManager. //
         private UserManager userManager;
 
-        // ---------- Egenskaper ---------- //
-        public string UsernameInput{ get; set; }
-        public string PasswordInput{ get; set; }
+        // ------------------------------ Egenskaper ------------------------------ //
+        public string UsernameInput { get; set; }
+        public string PasswordInput { get; set; }
         public string ConfirmPasswordInput { get; set; }
         public string CountryComboBox { get; set; }
 
-        // ---------- Konstruktor ---------- //
+        // ------------------------------ Konstruktor ------------------------------ //
 
         // Konstruktor som skapar en ny instans av UserManager. //
-        public RegisterWindowViewModel()
+        public RegisterWindowViewModel() // <--------- Förstå detta bättre.
         {
-            userManager = new UserManager();
+            userManager = UserManager.Instance;
         }
 
-        // Lista för användarna. //
-        public ObservableCollection<ListOfUsers> User => userManager.Users;
-        
         // Lista för olika länder (fasta värden). //
         public ObservableCollection<string> Countries { get; set; } = new ObservableCollection<string>
         {
@@ -42,18 +39,21 @@ namespace FitTrack.ViewModel
             "Denmark",
         };
 
-        // ---------- Kommando ---------- //
+        // ------------------------------ Kommando ------------------------------ //
         public RelayCommand RegisterCommand => new RelayCommand(execute => RegisterNewUser());
 
         // ------------------------------ Metoder ------------------------------ //
-        
+
         // Metod för att lägga till ny användare. //
         public void RegisterNewUser()
         {
-            if( PasswordInput == ConfirmPasswordInput)
+            if (PasswordInput == ConfirmPasswordInput)
             {
+                // Skapar en instans för nya registrerade användare. //
+                var newUser = new UserAccount(UsernameInput, PasswordInput, CountryComboBox);
+                
                 // Lägger in Username och Password i listan UserManager. //
-                userManager.AddUser(UsernameInput, PasswordInput, CountryComboBox);
+                userManager.AddUser(newUser);
 
                 // Rensa fälten efter registrering. //
                 UsernameInput = string.Empty;
@@ -68,7 +68,7 @@ namespace FitTrack.ViewModel
                 OnPropertyChanged(nameof(CountryComboBox));
 
                 MessageBox.Show("Registration successful!");
-            } 
+            }
             else
             {
                 MessageBox.Show("Password didn't match, try again!");

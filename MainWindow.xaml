@@ -5,27 +5,45 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FitTrack"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="400">
     <Grid>
 
         <StackPanel>
 
-            <TextBox Text="Username"
-                     TextAlignment="Center"/>
-                <!--Text="{Binding UsernameInputCommand.UsernameInput, UpdateSourceTrigger=PropertyChanged}"-->
-                     
+            <Label Content="Username"
+                   HorizontalContentAlignment="Center"
+                   Width="200"/>
+            
+            <TextBox Text="{Binding UsernameInput, UpdateSourceTrigger=PropertyChanged}"
+                     TextAlignment="Center"
+                     Width="200"
+                     Margin="10"/>
 
-            <TextBox Text="Password"
-                     TextAlignment="Center"/>
-            <!--Text="{Binding PasswordInputCommand.PasswordInput, UpdateSourceTrigger=PropertyChanged}"
-                     />-->
+            <Label Content="Password"
+                   HorizontalContentAlignment="Center"
+                   Width="200"/>
+
+            <TextBox Text="{Binding PasswordInput, UpdateSourceTrigger=PropertyChanged}"
+                     TextAlignment="Center"
+                     Width="200"
+                     Margin="10"/>
 
             <Button Command="{Binding SignInCommand}"
-                    Content="Sign in"/>
+                    Width="200"
+                    Content="Sign in"
+                    Margin="10"/>
 
             <Button Command="{Binding RegisterCommand}"
+                    Width="200"
                     Content="Register"/>
-            
+
+            <Label Content="FitTRACK"
+                   HorizontalContentAlignment="Center"
+                   FontSize="20"
+                   Background="DarkRed"
+                   Foreground="Wheat"
+                   Margin="20"/>
+
         </StackPanel>
 
     </Grid>

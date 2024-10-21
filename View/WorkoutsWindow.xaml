@@ -7,6 +7,10 @@
         mc:Ignorable="d"
         Title="WorkoutsWindow" Height="450" Width="800">
     <Grid>
+        <StackPanel>
+            <Label Content="Hej!"
+                   FontSize="50"/>
+        </StackPanel>
         
     </Grid>
 </Window>

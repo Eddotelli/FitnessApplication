@@ -5,65 +5,55 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FitTrack.View"
         mc:Ignorable="d"
-        Title="RegisterWindow" Height="450" Width="800">
+        Title="RegisterWindow" Height="450" Width="400">
     <Grid>
  
         <StackPanel>
-            
+
+            <Label Content="Username"
+                   HorizontalContentAlignment="Center"
+                   Width="200"/>
+
             <TextBox x:Name="tbUsername"      
                      Text="{Binding UsernameInput, UpdateSourceTrigger=PropertyChanged}"
                      TextAlignment="Center"
+                     Width="200"
                      Margin="10"
                      />
+
+            <Label Content="Password"
+                   HorizontalContentAlignment="Center"
+                   Width="200"/>
 
             <TextBox x:Name="tbPassword"
                      Text="{Binding PasswordInput, UpdateSourceTrigger=PropertyChanged}"
                      TextAlignment="Center"
+                     Width="200"
                      Margin="10"
                      />
+
+            <Label Content="Confirm Password"
+                   HorizontalContentAlignment="Center"
+                   Width="200"/>
 
             <TextBox x:Name="tbConfirmPassword"
                      Text="{Binding ConfirmPasswordInput, UpdateSourceTrigger=PropertyChanged}"
                      TextAlignment="Center"
+                     Width="200"
                      Margin="10"
                      />
 
             <ComboBox Name="cbCountrys"
                       ItemsSource="{Binding Countries}"
                       SelectedItem="{Binding CountryComboBox}"
+                      Width="200"
                       Margin="10"
                       />
 
             <Button Command="{Binding RegisterCommand}"
                     Content="Register"
+                    Width="200"
                     Margin="10"/>
-
-            <ListBox ItemsSource="{Binding User}"
-                     Height="200"
-                     Width="400"
-                     Foreground="Black"
-                     Background="LightGray"
-                     Margin="10">
-
-                <ListBox.ItemTemplate>
-
-                    <DataTemplate>
-
-                        <StackPanel Orientation="Horizontal">
-
-                            <TextBlock Text="{Binding Username}" Margin="5"/>
-                            <TextBlock Text=" | "/>
-                            <TextBlock Text="{Binding Password}" Margin="5"/>
-                            <TextBlock Text=" | "/>
-                            <TextBlock Text="{Binding Country}" Margin="5"/>
-
-                        </StackPanel>
-
-                    </DataTemplate>
-
-                </ListBox.ItemTemplate>
-
-            </ListBox>
 
         </StackPanel>
         
