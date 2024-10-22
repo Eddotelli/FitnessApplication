@@ -86,22 +86,44 @@ namespace FitTrack.Model
         }
 
         // För att hålla koll på inloggande användare. //
-        public void CurrentUser(string username) // <--- Granska detta.
+        //public void CurrentUser(string username) // <--- Granska detta.
+        //{
+        //    // Sätts till null då vi antar att ingen är användare är inloggad. //
+        //    LoggedInUser = null;
+
+        //    // Loppar igenom listan. //
+        //    foreach (var user in users)
+        //    {
+        //        // Kontrollerar om en match finns, då sätts värdet(användaren) i LoggedInUser. //
+        //        if (user.Username == username)
+        //        {
+        //            LoggedInUser = user;
+        //            break;
+        //        }
+        //    }
+        //}
+
+        // ============== TEST - för att se om användaren sparas i CurrentUser metoden. ============== //
+        public bool CurrentUser(string username)
         {
-            // Sätts till null då vi antar att ingen är användare är inloggad. //
+            // Sätts till null då vi antar att ingen användare är inloggad.
             LoggedInUser = null;
 
-            // Loppar igenom listan. //
+            // Lopp genom listan.
             foreach (var user in users)
             {
-                // Kontrollerar om en match finns, då sätts värdet(användaren) i LoggedInUser. //
+                // Kontrollera om en match finns, då sätts värdet (användaren) i LoggedInUser.
                 if (user.Username == username)
                 {
                     LoggedInUser = user;
-                    break;
+                    return true; // Inloggningen lyckades
                 }
             }
+
+            return false; // Inloggningen misslyckades
         }
+        // =============== TEST =============== //
+
 
         // Lägger till användare träningspass i listan för träningspass. //
         public void AddWorkout(WorkoutInfo workoutInfo) 

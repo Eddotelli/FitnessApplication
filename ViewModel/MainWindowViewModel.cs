@@ -34,11 +34,37 @@ namespace FitTrack.ViewModel
         {
             // Ser till så att den används en och samma UserManager-instans varje gång den anropas. //
             userManager = UserManager.Instance; // Använda Singelton-instansen. //
+
+            
+
         }
 
         // ------------------------------ Metoder ------------------------------ //
         private void LogIn()
         {
+            // ============== TEST - för att se om användaren sparas i CurrentUser metoden. ============== //
+            UserManager.Instance.CurrentUser("test"); // <---- Test
+            if (UserManager.Instance.LoggedInUser == null)
+            {
+                Console.WriteLine("Ingen användare är inloggad."); // Debug-utskrift
+            }
+            else
+            {
+                Console.WriteLine("Inloggad användare: " + UserManager.Instance.LoggedInUser.Username); // Debug-utskrift
+            }
+
+            bool loggedIn = UserManager.Instance.CurrentUser("test");
+            if (loggedIn)
+            {
+                Console.WriteLine("Inloggning lyckades!");
+            }
+            else
+            {
+                Console.WriteLine("Inloggning misslyckades.");
+            }
+
+            // ===================================== TEST ===================================== //
+
             // Kontrollera om användarnamn och lösenord matchar en användare i listan. //
             bool isAuthenticated = false;
 

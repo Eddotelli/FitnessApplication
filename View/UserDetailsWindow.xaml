@@ -56,7 +56,7 @@
 
             <ComboBox Name="cbCountrys"
                       ItemsSource="{Binding Countries}"
-                      SelectedItem="{Binding CountryComboBox}"
+                      SelectedItem="{Binding CountryComboBox, UpdateSourceTrigger=PropertyChanged}"
                       Width="200"
                       Margin="5"
                       />

@@ -26,6 +26,7 @@ namespace FitTrack.ViewModel
         public int CaloriesBurnedInput { get; set; }
         public string NotesInput { get; set; }
 
+        // Privata egenskaper som original information sparas(kopieras) till. //
         private string originalName;
         private string originalWorkoutType;
         private TimeSpan originalDuration;
@@ -111,12 +112,12 @@ namespace FitTrack.ViewModel
 
 
                     // Notifiera UI om att värdena har ändrats
-                    OnPropertyChanged(nameof(SelectedItem));
-                    OnPropertyChanged(nameof(SelectedItem.Name));
-                    OnPropertyChanged(nameof(SelectedItem.Type));
-                    OnPropertyChanged(nameof(SelectedItem.Duration));
-                    OnPropertyChanged(nameof(SelectedItem.Notes));
-                    OnPropertyChanged(nameof(SelectedItem.Date)); // Alternativet med OnPropertyChanged.
+                    //OnPropertyChanged(nameof(SelectedItem));
+                    //OnPropertyChanged(nameof(SelectedItem.Name));
+                    //OnPropertyChanged(nameof(SelectedItem.Type));
+                    //OnPropertyChanged(nameof(SelectedItem.Duration));
+                    //OnPropertyChanged(nameof(SelectedItem.Notes));
+                    //OnPropertyChanged(nameof(SelectedItem.Date)); // Alternativet med OnPropertyChanged.
                 }
             }
             else if (result == MessageBoxResult.No) 
