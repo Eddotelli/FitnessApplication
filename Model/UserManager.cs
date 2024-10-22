@@ -36,13 +36,14 @@ namespace FitTrack.Model
             //Fast(test)-användare. //
             users.Add(new UserAccount("test", "test", "test" ));
         }
+
         // ============================================================================== //
 
 
         // ------------------------------ Publika egenskaper för att få tillgång till listorna ------------------------------ //
         // Låter andra klsser att läsa och observera listan, men kan ej ersätta den utan att gå igenom kontrollerade  metoder.//
 
-                         // ----  => - uttryckspil för definera en get-metod på ett kompakt sätt ---- //
+                         // ----  '=>' är ett uttryckspil för definera en get-metod på ett kompakt sätt ---- //
 
         // Listan med användaren. //
         public ObservableCollection<UserAccount> Users => users;
@@ -53,6 +54,7 @@ namespace FitTrack.Model
         // Publik egenskap för att hålla koll samt ev. ändra på den inloggade användaren. //
         public UserAccount LoggedInUser { get; set; } // <------------------------------------------ Granska detta.
 
+        
         // ============================================================================== //
         // 
 

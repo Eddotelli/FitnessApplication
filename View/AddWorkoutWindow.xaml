@@ -41,12 +41,7 @@
                     Command="{Binding AddCommand}"
                     Width="200"
                     Margin="5"/>
-            
-            <Button Content="Cancel"
-                    Command="{Binding CancelCommand}"
-                    Width="200"
-                    Margin="5"/>
-            
+
             <Button Content="Save"
                     Command="{Binding SaveCommand}"
                     Width="200"
@@ -54,6 +49,11 @@
 
             <Button Content="Remove"
                     Command="{Binding RemoveCommand}"
+                    Width="200"
+                    Margin="5"/>
+
+            <Button Content="Cancel"
+                    Command="{Binding CancelCommand}"
                     Width="200"
                     Margin="5"/>
 

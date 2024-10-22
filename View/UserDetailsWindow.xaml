@@ -32,7 +32,7 @@
                    Width="200"
                    />
 
-            <TextBox Text="{Binding PasswordInput, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox Text="{Binding OldPasswordInput, UpdateSourceTrigger=PropertyChanged}"
                      TextAlignment="Center"
                      Width="200"
                      Margin="5"
@@ -43,7 +43,7 @@
                    Width="200"
                    />
 
-            <TextBox Text="{Binding ConfirmPasswordInput, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox Text="{Binding NewPasswordInput, UpdateSourceTrigger=PropertyChanged}"
                      TextAlignment="Center"
                      Width="200"
                      Margin="5"

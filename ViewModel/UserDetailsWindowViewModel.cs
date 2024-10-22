@@ -13,8 +13,6 @@ namespace FitTrack.ViewModel
         // Singleton-instans av UserManager, används för att hantera gemensam lista mellan olika fönster. //
         private UserManager userManager;
 
-        public ObservableCollection<User> users { get; set; }
-
         // ---------- Egenskaper ---------- //
         public string UsernameInput {  get; set; }
         public string PasswordInput { get; set; }

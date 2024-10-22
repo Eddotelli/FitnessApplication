@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace FitTrack.ViewModel
 {
@@ -25,6 +26,12 @@ namespace FitTrack.ViewModel
         public int CaloriesBurnedInput { get; set; }
         public string NotesInput { get; set; }
 
+        private string originalName;
+        private string originalWorkoutType;
+        private TimeSpan originalDuration;
+        private int originalCaloriesBurned;
+        private string originalNotes;
+
         // Egenskap för vald träningspass. //
         // Privat fält som lagrar den valda träningspasset. //
         private WorkoutInfo selectedItem;
@@ -33,8 +40,22 @@ namespace FitTrack.ViewModel
             get { return selectedItem; } // Returnerar värdet av selectedItem. //
             set
             {
-                selectedItem = value; // Sätter värdet av selectedItem till det nya värdet. //
-                OnPropertyChanged(nameof(SelectedItem)); // Meddelar att SelectedItem har ändrats, så UI kan uppdateras. //
+                if (selectedItem != value) 
+                {
+                    selectedItem = value; // Sätter värdet av selectedItem till det nya värdet. //
+
+                    // Spara ursprungliga värden när ett nytt objekt väljs. //
+                    if (selectedItem != null) 
+                    {
+                        originalName = selectedItem.Name;
+                        originalWorkoutType = selectedItem.Type;
+                        originalDuration = selectedItem.Duration;
+                        originalCaloriesBurned = selectedItem.Calories;
+                        originalNotes = selectedItem.Notes;
+                    }
+
+                    OnPropertyChanged(nameof(SelectedItem)); // Meddelar att SelectedItem har ändrats, så UI kan uppdateras. // 
+                }      
             }
         }
 
@@ -51,7 +72,8 @@ namespace FitTrack.ViewModel
         public AddWorkoutWindowViewModel()
         {
             userManager = UserManager.Instance; // Använda Singelton-instansen. //
-            LocalWorkoutsInfo = new ObservableCollection<WorkoutInfo>(); // Använd lokal lista istället.
+            LocalWorkoutsInfo = new ObservableCollection<WorkoutInfo>(); // Använda lokala listan. //
+            
         }
 
 
@@ -60,15 +82,47 @@ namespace FitTrack.ViewModel
         // Lägger till "tom" rad för att fylla i ett träningspass, som sedan läggs till i Lokala workout-listan. //
         public void AddWorkout()
         {
-            LocalWorkoutsInfo.Add(new WorkoutInfo { Name = "XXX", Type = "XXX", Duration = TimeSpan.FromSeconds(0), Calories = 0, Notes = "XXX", Date = DateTime.Now });
+            LocalWorkoutsInfo.Add(new WorkoutInfo { Name = "", Type = "", Duration = TimeSpan.FromSeconds(0), Calories = 0, Notes = "", Date = DateTime.Now });
         }
 
         public void CancelWorkout()
         {
-            if (SelectedItem != null) 
+            MessageBoxResult result = MessageBox.Show("Are you sure to cancel and reset?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes) 
             {
-                //var currentWorkout = new loc
+                if (SelectedItem != null)
+                {
+                    // Återställ ursprungliga värden. // <---- Be om hjälp till denna.
+                    selectedItem.Name = originalName;
+                    selectedItem.Type = originalWorkoutType;
+                    selectedItem.Duration = originalDuration;
+                    selectedItem.Calories = originalCaloriesBurned;
+                    selectedItem.Notes = originalNotes;
+
+                    // Skapar en temporär kopia för att trigga ändringarna i UI. //
+                    var tempItem = SelectedItem;
+                    SelectedItem = null;
+                    OnPropertyChanged(nameof(SelectedItem));
+
+                    // Återställ till den ursprungliga vald objekt så att UI uppdateras korrekt. //
+                    SelectedItem = tempItem;
+                    OnPropertyChanged(nameof(SelectedItem));
+
+
+                    // Notifiera UI om att värdena har ändrats
+                    OnPropertyChanged(nameof(SelectedItem));
+                    OnPropertyChanged(nameof(SelectedItem.Name));
+                    OnPropertyChanged(nameof(SelectedItem.Type));
+                    OnPropertyChanged(nameof(SelectedItem.Duration));
+                    OnPropertyChanged(nameof(SelectedItem.Notes));
+                    OnPropertyChanged(nameof(SelectedItem.Date)); // Alternativet med OnPropertyChanged.
+                }
             }
+            else if (result == MessageBoxResult.No) 
+            {
+                
+            }   
         }
 
         public void SaveWorkout()
@@ -91,7 +145,5 @@ namespace FitTrack.ViewModel
                 LocalWorkoutsInfo.Remove(selectedItem);
             }
         }
-
-
     }
 }
