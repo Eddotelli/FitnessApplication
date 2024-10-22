@@ -8,6 +8,7 @@ namespace FitTrack.Model
 {
     public class WorkoutInfo
     {
+        // ------------------------------ Egenskaper ------------------------------ //
         public string Name { get; set; }
         public string Type { get; set; }
         public TimeSpan Duration { get; set; }

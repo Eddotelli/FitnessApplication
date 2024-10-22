@@ -10,7 +10,7 @@ namespace FitTrack.ViewModel
 {
     public class UserDetailsWindowViewModel
     {
-        // Singleton-instans av UserManager, används för att hantera gemensam lista av träningspass mellan olika fönster. //
+        // Singleton-instans av UserManager, används för att hantera gemensam lista mellan olika fönster. //
         private UserManager userManager;
 
         public ObservableCollection<User> users { get; set; }

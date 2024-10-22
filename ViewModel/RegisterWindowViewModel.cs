@@ -13,7 +13,7 @@ namespace FitTrack.ViewModel
 {
     public class RegisterWindowViewModel : ViewModelBase
     {
-        // Singleton-instans av UserManager, används för att hantera gemensam lista av träningspass mellan olika fönster. //
+        // Singleton-instans av UserManager, används för att hantera gemensam lista mellan olika fönster. //
         private UserManager userManager;
 
         // ------------------------------ Egenskaper ------------------------------ //
@@ -27,6 +27,7 @@ namespace FitTrack.ViewModel
         // Konstruktor som skapar en ny instans av UserManager. //
         public RegisterWindowViewModel()
         {
+            // Ser till så att den används en och samma UserManager-instans varje gång den anropas. //
             userManager = UserManager.Instance; // Använda Singelton-instansen. //
         }
 
@@ -47,6 +48,9 @@ namespace FitTrack.ViewModel
         // Metod för att lägga till ny användare. //
         public void RegisterNewUser()
         {
+            // Skapa en logik som kontrollerar om användarnamnet redan finns.
+            
+            // Kontrollerar så att lösenorden matchar. //
             if (PasswordInput == ConfirmPasswordInput)
             {
                 // Skapar en instans för nya registrerade användare. //
@@ -61,7 +65,7 @@ namespace FitTrack.ViewModel
                 ConfirmPasswordInput = string.Empty;
                 CountryComboBox = string.Empty;
 
-                // Meddelar UI att något har ändrats efter att värdena är tomma. //
+                // Meddelar UI att något har ändrats och visar upp dem nua värdena efter att värdena är tomma. //
                 OnPropertyChanged(nameof(UsernameInput));
                 OnPropertyChanged(nameof(PasswordInput));
                 OnPropertyChanged(nameof(ConfirmPasswordInput));

@@ -14,7 +14,7 @@ namespace FitTrack.ViewModel
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        // Singleton-instans av UserManager, används för att hantera gemensam lista av träningspass mellan olika fönster. //
+        // Singleton-instans av UserManager som deklareras, används för att hantera gemensam lista mellan olika fönster. //
         private UserManager userManager;
 
         // ------------------------------ Egenskaper ------------------------------ //
@@ -32,6 +32,7 @@ namespace FitTrack.ViewModel
         // Konstruktor som skapar en ny instans av UserManager. //
         public MainWindowViewModel()
         {
+            // Ser till så att den används en och samma UserManager-instans varje gång den anropas. //
             userManager = UserManager.Instance; // Använda Singelton-instansen. //
         }
 

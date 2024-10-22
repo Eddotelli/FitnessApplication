@@ -42,6 +42,8 @@ namespace FitTrack.Model
         // ------------------------------ Publika egenskaper för att få tillgång till listorna ------------------------------ //
         // Låter andra klsser att läsa och observera listan, men kan ej ersätta den utan att gå igenom kontrollerade  metoder.//
 
+                         // ----  => - uttryckspil för definera en get-metod på ett kompakt sätt ---- //
+
         // Listan med användaren. //
         public ObservableCollection<UserAccount> Users => users;
 
@@ -52,13 +54,11 @@ namespace FitTrack.Model
         public UserAccount LoggedInUser { get; set; } // <------------------------------------------ Granska detta.
 
         // ============================================================================== //
+        // 
 
-
-        
-
-        // Proccesen för att hämta instancen. //
+        // Proccesen för att hämta instansen. //
         // 1. Kontollerar om instancen är null när egenskapen Instance nås. //
-        // 2. Om instancen är null, går den i ett lock-block för att säkerhetställa trådsäkerheten. //
+        // 2. Om instansen är null, går den i ett lock-block för att säkerhetställa trådsäkerheten. //
         // 3. Kontollerar inuti samma block om instansen återigen är null innan ny instans av UserManager skapas. //
         public static UserManager Instance
         {
@@ -77,18 +77,22 @@ namespace FitTrack.Model
 
         // ------------------------------ Metoder ------------------------------- //
 
-        // Lägger till en användare i listan. //
+        // Lägger till en användare i listan för användare. //
         public void AddUser (UserAccount user)
         {
             users.Add(user);
         }
 
-        // Publika egenskaper för att få tillgång till listorna. //
+        // För att hålla koll på inloggande användare. //
         public void CurrentUser(string username) // <--- Granska detta.
         {
+            // Sätts till null då vi antar att ingen är användare är inloggad. //
             LoggedInUser = null;
+
+            // Loppar igenom listan. //
             foreach (var user in users)
             {
+                // Kontrollerar om en match finns, då sätts värdet(användaren) i LoggedInUser. //
                 if (user.Username == username)
                 {
                     LoggedInUser = user;
@@ -97,8 +101,10 @@ namespace FitTrack.Model
             }
         }
 
+        // Lägger till användare träningspass i listan för träningspass. //
         public void AddWorkout(WorkoutInfo workoutInfo) 
         {
+            // Kontrollera om ett träningspass redan finns i listan. //
             if (!workoutsInfo.Contains(workoutInfo))
             {
                 workoutsInfo.Add(workoutInfo );

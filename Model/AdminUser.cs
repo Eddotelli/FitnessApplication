@@ -8,7 +8,7 @@ namespace FitTrack.Model
 {
     public class AdminUser : User
     {
-        // ---------- Konstruktor ---------- //
+        // ------------------------------ Konstruktor ------------------------------ //
         public AdminUser(string Username, string Password, string Country, string SecurityQuestion, string SecurityAnswer) : base(Username, Password, Country, SecurityQuestion, SecurityAnswer)
         {
             this.Username = Username;

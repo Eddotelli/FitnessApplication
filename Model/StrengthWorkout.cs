@@ -8,11 +8,11 @@ namespace FitTrack.Model
 {
     public class StrengthWorkout : Workout
     {
-        // ---------- Egenskaper ---------- //
+        // ------------------------------ Egenskaper ------------------------------ //
         public int Repetitions {  get; set; }
 
 
-        // ---------- Konstruktor ---------- //
+        // ------------------------------ Konstruktor ------------------------------ //
         public StrengthWorkout(int Repetitions, DateTime Date, string Type, TimeSpan Duration, int CaloriesBurned, string Notes) : base(Date, Type, Duration, CaloriesBurned, Notes)
         {
             this.Repetitions = Repetitions;

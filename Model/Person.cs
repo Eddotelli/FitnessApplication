@@ -8,11 +8,11 @@ namespace FitTrack.Model
 {
     public abstract class Person
     {
-        // ---------- Egenskaper ---------- //
+        // ------------------------------ Egenskaper ------------------------------ //
         public string Username { get; set; }
         public string Password { get; set; }
 
-        // ---------- Konstruktor ---------- //
+        // ------------------------------ Konstruktor ------------------------------ //
         public Person(string Username, string Password)
         {
             this.Username = Username;

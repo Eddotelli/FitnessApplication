@@ -52,6 +52,11 @@
                     Width="200"
                     Margin="5"/>
 
+            <Button Content="Remove"
+                    Command="{Binding RemoveCommand}"
+                    Width="200"
+                    Margin="5"/>
+
         </StackPanel>
         
     </Grid>

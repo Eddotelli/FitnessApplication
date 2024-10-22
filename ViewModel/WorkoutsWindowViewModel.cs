@@ -9,24 +9,27 @@ namespace FitTrack.ViewModel
 {
     public class WorkoutsWindowViewModel : ViewModelBase
     {
-        // Singleton-instans av UserManager, används för att hantera gemensam lista av träningspass mellan olika fönster. //
+        // Singleton-instans av UserManager, används för att hantera gemensam lista mellan olika fönster. //
         private UserManager userManager;
 
-        // Binda till den gemensamma listan med träningspass med info från UserManager. //
+        // Privat variabel som håller träningsinformation. //
         private ObservableCollection<WorkoutInfo> workoutsInfo;
+        //Public egenskap som ger kontrollerad åtkomst till träningsinformationen. //
         public ObservableCollection<WorkoutInfo> WorkoutsInfo
         {
-            get { return workoutsInfo; }
+            get { return workoutsInfo; } // Returnerar den privata listan med träningsinformation. //
             set
             {
+                // Sätter det nya värdet för träningsinformationen. //
                 workoutsInfo = value;
+                //Berättar för UI om att WorkoutsInfo har ändrats. //
                 OnPropertyChanged(nameof(WorkoutsInfo));
             }
         }
 
 
         // ------------------------------ Egenskaper ------------------------------ //
-        public User User{ get; set; }
+
 
         // ------------------------------ Kommando ------------------------------ //
         public RelayCommand UserCommand => new RelayCommand(execute => UserDetails());
@@ -35,14 +38,15 @@ namespace FitTrack.ViewModel
         //public RelayCommand OpenCommand => new RelayCommand(execute => OpenDetails());
 
         // Egenskap för vald träningspass. //
+        // Privat fält som lagrar den valda träningspasset. //
         private WorkoutInfo selectedItem;
         public WorkoutInfo SelectedItem
         {
-            get { return selectedItem; }
+            get { return selectedItem; } // Returnerar värdet av selectedItem. //
             set
             {
-                selectedItem = value;
-                OnPropertyChanged(nameof(SelectedItem));
+                selectedItem = value; // Sätter värdet av selectedItem till det nya värdet. //
+                OnPropertyChanged(nameof(SelectedItem)); // Meddelar att SelectedItem har ändrats, så UI kan uppdateras. //
             }
         }
 
@@ -52,7 +56,7 @@ namespace FitTrack.ViewModel
         public WorkoutsWindowViewModel()
         {
             userManager = UserManager.Instance; // Använda Singelton-instansen. //
-            workoutsInfo = userManager.WorkoutsInfo; // Länka direkt till listan från UserManager. //
+            workoutsInfo = userManager.WorkoutsInfo; // Länkar direkt till listan från UserManager. //
         }
 
         // ------------------------------ Metoder ------------------------------ //
