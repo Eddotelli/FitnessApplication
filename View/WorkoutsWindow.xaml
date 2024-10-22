@@ -5,11 +5,52 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FitTrack.View"
         mc:Ignorable="d"
-        Title="WorkoutsWindow" Height="450" Width="800">
+        Title="WorkoutsWindow" Height="450" Width="400">
     <Grid>
         <StackPanel>
-            <Label Content="Hej!"
-                   FontSize="50"/>
+            <Label Content="Workout Window"
+                   HorizontalContentAlignment="Center"
+                   FontSize="20"
+                   Background="Crimson"
+                   Foreground="LightGray"
+                   Margin="10"/>
+
+            <Button Content="User"
+                    Command="{Binding UserCommand}"
+                    Width="200"
+                    Margin="5"/>
+
+            <Button Content="Edit workout list"
+                    Command="{Binding EditCommand}"
+                    Width="200"
+                    Margin="5"/>
+
+            <DataGrid CanUserAddRows="False" 
+                      CanUserDeleteRows="False"
+                      AutoGenerateColumns="False"
+                      ItemsSource="{Binding WorkoutsInfo}"
+                      SelectedItem="{Binding SelectedItem}"
+                      Width="350"
+                      Height="150"
+                      Margin="5">
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="4*"/>
+                    <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="4*"/>
+                    <DataGridTextColumn Header="Duration" Binding="{Binding Duration}" Width="4*"/>
+                </DataGrid.Columns>
+
+            </DataGrid>
+
+            <Button Content="Remove selected workout"
+                    Command="{Binding RemoveCommand}"
+                    Width="200"/>
+
+            <Button Content="Open details"
+                    Command="{Binding OpenCommand}"
+                    Width="200"
+                    Margin="10"/>
+            
         </StackPanel>
         
     </Grid>

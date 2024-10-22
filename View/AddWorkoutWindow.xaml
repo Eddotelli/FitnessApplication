@@ -5,8 +5,54 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FitTrack.View"
         mc:Ignorable="d"
-        Title="AddWorkoutWindow" Height="450" Width="800">
+        Title="AddWorkoutWindow" Height="450" Width="400">
     <Grid>
+
+        <StackPanel>
+
+            <Label Content="Add Workout Window"
+                   HorizontalContentAlignment="Center"
+                   FontSize="20"
+                   Background="Crimson"
+                   Foreground="LightGray"
+                   Margin="10"/>
+
+            <DataGrid CanUserAddRows="False" 
+                      CanUserDeleteRows="False"
+                      AutoGenerateColumns="False"
+                      ItemsSource="{Binding LocalWorkoutsInfo}"
+                      SelectedItem="{Binding SelectedItem}"
+                      Width="350"
+                      Height="150"
+                      Margin="5">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="4*"/>
+                <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="4*"/>
+                <DataGridTextColumn Header="Duration" Binding="{Binding Duration}" Width="4*"/>
+                <DataGridTextColumn Header="Calories" Binding="{Binding Calories}" Width="4*"/>
+                <DataGridTextColumn Header="Notes" Binding="{Binding Notes}" Width="4*"/>
+                <DataGridTextColumn Header="Date" Binding="{Binding Date}" Width="4*"/>
+                </DataGrid.Columns>
+
+            </DataGrid>
+
+            <Button Content="Add"
+                    Command="{Binding AddCommand}"
+                    Width="200"
+                    Margin="5"/>
+            
+            <Button Content="Cancel"
+                    Command="{Binding CancelCommand}"
+                    Width="200"
+                    Margin="5"/>
+            
+            <Button Content="Save"
+                    Command="{Binding SaveCommand}"
+                    Width="200"
+                    Margin="5"/>
+
+        </StackPanel>
         
     </Grid>
 </Window>

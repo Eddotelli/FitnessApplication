@@ -12,24 +12,54 @@ namespace FitTrack.Model
 {
     public class UserManager
     {
-        // Alternativ 1. //
         //private static UserManager instance;
         //public static UserManager => Instance ?? =new UserManager(); // Alternativ 1. //
 
         // Alternativ 2. //
-        private static UserManager instance = null;
-        private static readonly object padlock = new object();
+        // Singleton implementation. //
+        private static UserManager instance = null; // Håller den enda instansen av UserManager, och är initialiserad till null för att inte ska skapas direkt utan när den faktiskt behövs. //
+        private static readonly object padlock = new object(); // <---  Padlock-objekt. Ett objekt som säkerställer att endast en tråd åt gången kan skapa instansen. //
+
+
+        // ------------------------------ Privata Listor ------------------------------ //
+           // Hanteras endast inom klassen. Ingen utanför klassen kan ändra listan. // 
 
         // Privat lista som innehåller användarkonton. //
         private ObservableCollection<UserAccount> users = new ObservableCollection<UserAccount>();
 
-        // Skapa en ny, tom lista till en ny användare för hålla användarkonton. //
-        private UserManager() { }
+        // Privat lista som innehåller träningspass med kort info. //
+        private ObservableCollection<WorkoutInfo> workoutsInfo = new ObservableCollection<WorkoutInfo>();
 
-        // Publik egenskap för att få tillgång till listan med användaren. //
+        // Privat konstruktor förhindrar skapande av fler instanser. //
+        private UserManager() 
+        {
+            //Fast(test)-användare. //
+            users.Add(new UserAccount("test", "test", "test" ));
+        }
+        // ============================================================================== //
+
+
+        // ------------------------------ Publika egenskaper för att få tillgång till listorna ------------------------------ //
+        // Låter andra klsser att läsa och observera listan, men kan ej ersätta den utan att gå igenom kontrollerade  metoder.//
+
+        // Listan med användaren. //
         public ObservableCollection<UserAccount> Users => users;
 
-        // Metod för att hämta den enda instansen. //
+        // Publik egenskap för att få tillgång till listan med träningspass för kort info. //
+        public ObservableCollection<WorkoutInfo> WorkoutsInfo => workoutsInfo;
+
+        // Publik egenskap för att hålla koll samt ev. ändra på den inloggade användaren. //
+        public UserAccount LoggedInUser { get; set; } // <------------------------------------------ Granska detta.
+
+        // ============================================================================== //
+
+
+        
+
+        // Proccesen för att hämta instancen. //
+        // 1. Kontollerar om instancen är null när egenskapen Instance nås. //
+        // 2. Om instancen är null, går den i ett lock-block för att säkerhetställa trådsäkerheten. //
+        // 3. Kontollerar inuti samma block om instansen återigen är null innan ny instans av UserManager skapas. //
         public static UserManager Instance
         {
             get
@@ -45,36 +75,34 @@ namespace FitTrack.Model
             }
         }
 
+        // ------------------------------ Metoder ------------------------------- //
+
         // Lägger till en användare i listan. //
         public void AddUser (UserAccount user)
         {
-            Users.Add(user);
+            users.Add(user);
         }
 
-        //// Konstruktor som skapar en ny instans av en UserManager och intitierar en tom lista av användarkonton. //
-        //public UserManager()
-        //{
-        //    // Skapa en ny, tom lista till en ny användare för hålla användarkonton. //
-        //    users = new ObservableCollection<UserAccount>();
-        //}
+        // Publika egenskaper för att få tillgång till listorna. //
+        public void CurrentUser(string username) // <--- Granska detta.
+        {
+            LoggedInUser = null;
+            foreach (var user in users)
+            {
+                if (user.Username == username)
+                {
+                    LoggedInUser = user;
+                    break;
+                }
+            }
+        }
 
-        //// För att få tillgång till listan med användare. //
-        //public ObservableCollection<UserAccount> Users => users;
-
-        //// Lägg till en användare i listan.
-        //public void AddUser(string username, string password, string country)
-        //{
-        //    // Kontrollera om användarnamnet redan finns.
-        //    if (users.Any(u => u.Username == username)) // <---- Förstå denna bättre!
-        //    {
-        //        MessageBox.Show("Användarnamnet finns redan. Välj ett annat.");
-        //        return; // Avsluta metoden om användarnamnet redan existerar.
-        //    }
-
-        //    // Lägg till användaren om användarnamnet är unikt.
-        //    users.Add(new UserAccount(username, password, country));
-        //}
-
-        // Lägg till andra användarrelaterade metoder här, t.ex. borttagning, uppdatering, etc.
+        public void AddWorkout(WorkoutInfo workoutInfo) 
+        {
+            if (!workoutsInfo.Contains(workoutInfo))
+            {
+                workoutsInfo.Add(workoutInfo );
+            }
+        }
     }
 }

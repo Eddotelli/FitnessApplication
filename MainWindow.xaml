@@ -40,8 +40,8 @@
             <Label Content="FitTRACK"
                    HorizontalContentAlignment="Center"
                    FontSize="20"
-                   Background="DarkRed"
-                   Foreground="Wheat"
+                   Background="Crimson"
+                   Foreground="LightGray"
                    Margin="20"/>
 
         </StackPanel>

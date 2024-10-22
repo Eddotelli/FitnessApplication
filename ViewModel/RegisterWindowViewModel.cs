@@ -13,7 +13,7 @@ namespace FitTrack.ViewModel
 {
     public class RegisterWindowViewModel : ViewModelBase
     {
-        // Deklaration av userManager. //
+        // Singleton-instans av UserManager, används för att hantera gemensam lista av träningspass mellan olika fönster. //
         private UserManager userManager;
 
         // ------------------------------ Egenskaper ------------------------------ //
@@ -25,9 +25,9 @@ namespace FitTrack.ViewModel
         // ------------------------------ Konstruktor ------------------------------ //
 
         // Konstruktor som skapar en ny instans av UserManager. //
-        public RegisterWindowViewModel() // <--------- Förstå detta bättre.
+        public RegisterWindowViewModel()
         {
-            userManager = UserManager.Instance;
+            userManager = UserManager.Instance; // Använda Singelton-instansen. //
         }
 
         // Lista för olika länder (fasta värden). //

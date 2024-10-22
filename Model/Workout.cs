@@ -25,7 +25,6 @@ namespace FitTrack.Model
             this.Notes = Notes;
         }
 
-
         // ------------------------------ Metoder ------------------------------ //
         public abstract int CalculateCaloriesBurned();
     }

@@ -14,7 +14,7 @@ namespace FitTrack.ViewModel
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        // Deklaration av userManager. //
+        // Singleton-instans av UserManager, används för att hantera gemensam lista av träningspass mellan olika fönster. //
         private UserManager userManager;
 
         // ------------------------------ Egenskaper ------------------------------ //
@@ -22,6 +22,7 @@ namespace FitTrack.ViewModel
         public string UsernameInput { get; set; }
         public string PasswordInput { get; set; }
 
+        // ------------------------------ Kommando ------------------------------ //
         public RelayCommand SignInCommand => new RelayCommand(execute => LogIn());
         public RelayCommand RegisterCommand => new RelayCommand(execute => Register());
 
@@ -33,9 +34,6 @@ namespace FitTrack.ViewModel
         {
             userManager = UserManager.Instance; // Använda Singelton-instansen. //
         }
-
-        // Lista för användarna. //
-        public ObservableCollection<UserAccount> User => userManager.Users;
 
         // ------------------------------ Metoder ------------------------------ //
         private void LogIn()
@@ -67,6 +65,8 @@ namespace FitTrack.ViewModel
                 OnPropertyChanged(nameof(UsernameInput));
                 OnPropertyChanged(nameof(PasswordInput));
 
+                // Sparar ner användarens Username. //
+                userManager.CurrentUser(UsernameInput);
                 
                 WorkoutsWindow workoutsWindow = new WorkoutsWindow();
                 workoutsWindow.Show();
@@ -80,7 +80,7 @@ namespace FitTrack.ViewModel
         // Metod för att öppna upp registrerings-fönstret. //
         private void Register()
         {
-            // Skapa RegisterWindow och skicka med samma instans av UserManager till konstruktorn. //
+            // Skapar upp RegisterWindow. //
             RegisterWindow register = new RegisterWindow();
             register.Show();
         }

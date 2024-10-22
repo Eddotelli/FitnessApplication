@@ -10,6 +10,13 @@
  
         <StackPanel>
 
+            <Label Content="Register Window"
+                   HorizontalContentAlignment="Center"
+                   FontSize="20"
+                   Background="Crimson"
+                   Foreground="LightGray"
+                   Margin="10"/>
+
             <Label Content="Username"
                    HorizontalContentAlignment="Center"
                    Width="200"/>
