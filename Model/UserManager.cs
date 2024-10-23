@@ -85,45 +85,26 @@ namespace FitTrack.Model
             users.Add(user);
         }
 
-        // För att hålla koll på inloggande användare. //
-        //public void CurrentUser(string username) // <--- Granska detta.
-        //{
-        //    // Sätts till null då vi antar att ingen är användare är inloggad. //
-        //    LoggedInUser = null;
-
-        //    // Loppar igenom listan. //
-        //    foreach (var user in users)
-        //    {
-        //        // Kontrollerar om en match finns, då sätts värdet(användaren) i LoggedInUser. //
-        //        if (user.Username == username)
-        //        {
-        //            LoggedInUser = user;
-        //            break;
-        //        }
-        //    }
-        //}
-
-        // ============== TEST - för att se om användaren sparas i CurrentUser metoden. ============== //
         public bool CurrentUser(string username)
         {
-            // Sätts till null då vi antar att ingen användare är inloggad.
+            // Sätts till null innan vi börjar leta efter användare. //
             LoggedInUser = null;
 
-            // Lopp genom listan.
+            // Loopa igenom användarlistan för att hitta användaren. //
             foreach (var user in users)
             {
-                // Kontrollera om en match finns, då sätts värdet (användaren) i LoggedInUser.
+                // Om en match finns, ger `LoggedInUser` värdet username-inputet och returnerar true. //
                 if (user.Username == username)
                 {
                     LoggedInUser = user;
-                    return true; // Inloggningen lyckades
+                    Console.WriteLine($"{LoggedInUser.Username} är inloggad!!"); // Kontroll-utskrift för att se att det funkar. //
+                    return true;
                 }
             }
 
-            return false; // Inloggningen misslyckades
+            // Om ingen match hittas, returnerar false. //
+            return false;
         }
-        // =============== TEST =============== //
-
 
         // Lägger till användare träningspass i listan för träningspass. //
         public void AddWorkout(WorkoutInfo workoutInfo) 

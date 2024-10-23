@@ -34,52 +34,26 @@ namespace FitTrack.ViewModel
         {
             // Ser till så att den används en och samma UserManager-instans varje gång den anropas. //
             userManager = UserManager.Instance; // Använda Singelton-instansen. //
-
-            
-
         }
 
         // ------------------------------ Metoder ------------------------------ //
         private void LogIn()
         {
-            // ============== TEST - för att se om användaren sparas i CurrentUser metoden. ============== //
-            UserManager.Instance.CurrentUser("test"); // <---- Test
-            if (UserManager.Instance.LoggedInUser == null)
-            {
-                Console.WriteLine("Ingen användare är inloggad."); // Debug-utskrift
-            }
-            else
-            {
-                Console.WriteLine("Inloggad användare: " + UserManager.Instance.LoggedInUser.Username); // Debug-utskrift
-            }
-
-            bool loggedIn = UserManager.Instance.CurrentUser("test");
-            if (loggedIn)
-            {
-                Console.WriteLine("Inloggning lyckades!");
-            }
-            else
-            {
-                Console.WriteLine("Inloggning misslyckades.");
-            }
-
-            // ===================================== TEST ===================================== //
-
-            // Kontrollera om användarnamn och lösenord matchar en användare i listan. //
+            // Kontrollerar om användarnamn och lösenord matchar en användare i listan direkt med hjälp av CurrentUser. //
             bool isAuthenticated = false;
 
-            //Loppar igenom användarlistam från UserManager. //
-            foreach (var user in userManager.Users) 
+            // Kontrollerar om användaren finns och bekräftar användaren. //
+            foreach (var user in userManager.Users)
             {
-                // Kontrollerar om inmatade användare finns. //
                 if (user.Username == UsernameInput && user.Password == PasswordInput)
                 {
-                    isAuthenticated = true;
-                    break; // Avsluta loopen när inloggningen är lyckad. //
+                    // isAuthenticated får värdet 'true' genom metoden CurrentUser i UserManager-klassen. //
+                    isAuthenticated = userManager.CurrentUser(UsernameInput); // Detta ger även LoggedInUser username-inputet som värde. //
+                    break;
                 }
             }
 
-            // Kontrollera om inloggningen går igenom eller ej. //
+            // Kontrollera om inloggningen gick igenom eller ej.
             if (isAuthenticated)
             {
                 MessageBox.Show("Login successful!");
@@ -92,9 +66,7 @@ namespace FitTrack.ViewModel
                 OnPropertyChanged(nameof(UsernameInput));
                 OnPropertyChanged(nameof(PasswordInput));
 
-                // Sparar ner användarens Username. //
-                userManager.CurrentUser(UsernameInput);
-                
+                // Öppna WorkoutsWindow. //
                 WorkoutsWindow workoutsWindow = new WorkoutsWindow();
                 workoutsWindow.Show();
             }

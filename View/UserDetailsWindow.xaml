@@ -62,11 +62,13 @@
                       />
 
             <Button Content="Save edit"
+                    Command="{Binding SaveCommand}"
                     Width="100"
                     Margin="5"
                     />
 
             <Button Content="Cancel edit"
+                    Command="{Binding CancelCommand}"
                     Width="100"
                     />
 

@@ -77,8 +77,13 @@ namespace FitTrack.ViewModel
             }
         }
 
-        // ------------------------------ Konstruktor ------------------------------ //
+        // ------------------------------ Kommando ------------------------------ //
+        public RelayCommand SaveCommand => new RelayCommand(execute => SaveUserDetails());
+        public RelayCommand CancelCommand => new RelayCommand(execute => Cancel());
         
+
+        // ------------------------------ Konstruktor ------------------------------ //
+
         // Konstruktor som skapar en ny instans av UserManager. //
         public UserDetailsWindowViewModel()
         {

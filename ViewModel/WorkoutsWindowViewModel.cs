@@ -14,14 +14,17 @@ namespace FitTrack.ViewModel
 
         // Privat variabel som håller träningsinformation. //
         private ObservableCollection<WorkoutInfo> workoutsInfo;
+
         //Public egenskap som ger kontrollerad åtkomst till träningsinformationen. //
         public ObservableCollection<WorkoutInfo> WorkoutsInfo
+
         {
             get { return workoutsInfo; } // Returnerar den privata listan med träningsinformation. //
             set
             {
                 // Sätter det nya värdet för träningsinformationen. //
                 workoutsInfo = value;
+
                 //Berättar för UI om att WorkoutsInfo har ändrats. //
                 OnPropertyChanged(nameof(WorkoutsInfo));
             }

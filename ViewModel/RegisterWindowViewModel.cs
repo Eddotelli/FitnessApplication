@@ -48,7 +48,7 @@ namespace FitTrack.ViewModel
         // Metod för att lägga till ny användare. //
         public void RegisterNewUser()
         {
-            // Skapa en logik som kontrollerar om användarnamnet redan finns.
+            // Skapa en logik som kontrollerar om användarnamnet redan finns. <--- Se över om du kan lägga denna i UserManager direkt istället.
             
             // Kontrollerar så att lösenorden matchar. //
             if (PasswordInput == ConfirmPasswordInput)

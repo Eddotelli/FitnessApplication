@@ -22,6 +22,13 @@ namespace FitTrack
             InitializeComponent();
             MainWindowViewModel viewModel = new MainWindowViewModel();
             DataContext = viewModel;
+
+            AllocConsole(); // Skapar ett konsolfönster. //
         }
+
+        // Kod för att öppna upp konsolfönster. //
+        [System.Runtime.InteropServices.DllImport("kernel32.dll")]
+        private static extern bool AllocConsole();
+
     }
 }
