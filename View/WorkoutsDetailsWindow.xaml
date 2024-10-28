@@ -7,6 +7,91 @@
         mc:Ignorable="d"
         Title="WorkoutsDetailsWindow" Height="450" Width="400">
     <Grid>
+
+        <StackPanel>
+            <!-- Titel för fönstret -->
+            <Label Content="Workout Details Window"
+                   HorizontalContentAlignment="Center"
+                   FontSize="20"
+                   Background="Crimson"
+                   Foreground="LightGray"
+                   Margin="10"/>
+
+            <!-- Textfält och etiketter för varje träningsattribut -->
+            <TextBlock Text="Name"
+                       TextAlignment="Center"
+                       Width="200"
+                       />
+            
+            <TextBox Text="{Binding Name}"
+                     IsReadOnly="{Binding IsReadOnly}"
+                     Width="200"
+                     Margin="5"/>
+
+            <TextBlock Text="Type"
+                       TextAlignment="Center"
+                       Width="200"
+                       />
+            
+            <TextBox Text="{Binding Type}"
+                     IsReadOnly="{Binding IsReadOnly}"
+                     Width="200"
+                     Margin="5"/>
+
+            <TextBlock Text="Duration"
+                       TextAlignment="Center"
+                       Width="200"
+                       />
+            
+            <TextBox Text="{Binding Duration}"
+                     IsReadOnly="{Binding IsReadOnly}"
+                     Width="200"
+                     Margin="5"/>
+
+            <TextBlock Text="Calories Burned"
+                       TextAlignment="Center"
+                       Width="200"
+                       />
+            
+            <TextBox Text="{Binding CaloriesBurned}"
+                     IsReadOnly="{Binding IsReadOnly}"
+                     Width="200"
+                     Margin="5"/>
+
+            <TextBlock Text="Notes"
+                       TextAlignment="Center"
+                       Width="200"
+                       />
+            
+            <TextBox Text="{Binding Notes}"
+                     IsReadOnly="{Binding IsReadOnly}"
+                     Width="200"
+                     Margin="5"/>
+
+            <TextBlock Text="Date"
+                       TextAlignment="Center"
+                       Width="200"
+                       />
+            
+            <TextBox Text="{Binding Date}"
+                     IsReadOnly="{Binding IsReadOnly}"
+                     TextAlignment="Center"
+                     Width="200"
+                     Margin="5"/>
+
+            <!-- Knappar för att redigera och spara data -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
+                
+                <Button Content="Edit"
+                        Command="{Binding EditCommand}"
+                        Margin="5"/>
+                
+                <Button Content="Save"
+                        Command="{Binding SaveCommand}"
+                        Margin="5"/>
+            </StackPanel>
+            
+        </StackPanel>
         
     </Grid>
 </Window>

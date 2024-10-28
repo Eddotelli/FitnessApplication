@@ -20,21 +20,23 @@ namespace FitTrack.ViewModel
 
 
         // ------------------------------ Egenskaper ------------------------------ //
-        public string Name { get; set; }
-        public string WorkoutTypeComboBox { get; set; }
+        public string NameInput { get; set; }
+        public string WorkoutTypeComboBoxInput { get; set; }
         public TimeSpan DurationInput { get; set; }
         public int CaloriesBurnedInput { get; set; }
         public string NotesInput { get; set; }
+        public DateTime DateInput { get; set; }
 
         // Privata egenskaper som original information sparas(kopieras) till. //
-        private string originalName;
-        private string originalWorkoutType;
-        private TimeSpan originalDuration;
-        private int originalCaloriesBurned;
-        private string originalNotes;
+        private string originalNameInput;
+        private string originalWorkoutTypeComboBoxInput;
+        private TimeSpan originalDurationInput;
+        private int originalCaloriesBurnedInput;
+        private string originalNotesInput;
+        private DateTime originalDateInput;
 
         // Egenskap för vald träningspass. //
-        // Privat fält som lagrar den valda träningspasset. //
+        // Privat fält som lagrar den valda träningspasset (via datagrid?). //
         private WorkoutInfo selectedItem;
         public WorkoutInfo SelectedItem
         {
@@ -48,11 +50,12 @@ namespace FitTrack.ViewModel
                     // Spara ursprungliga värden när ett nytt objekt väljs. //
                     if (selectedItem != null) 
                     {
-                        originalName = selectedItem.Name;
-                        originalWorkoutType = selectedItem.Type;
-                        originalDuration = selectedItem.Duration;
-                        originalCaloriesBurned = selectedItem.Calories;
-                        originalNotes = selectedItem.Notes;
+                        originalNameInput = SelectedItem.NameInput;
+                        originalWorkoutTypeComboBoxInput = SelectedItem.TypeInput;
+                        originalDurationInput = SelectedItem.DurationInput;
+                        originalCaloriesBurnedInput = SelectedItem.CaloriesBurnedInput;
+                        originalNotesInput = SelectedItem.NotesInput;
+                        originalDateInput = SelectedItem.DateInput;
                     }
 
                     OnPropertyChanged(nameof(SelectedItem)); // Meddelar att SelectedItem har ändrats, så UI kan uppdateras. // 
@@ -73,8 +76,7 @@ namespace FitTrack.ViewModel
         public AddWorkoutWindowViewModel()
         {
             userManager = UserManager.Instance; // Använda Singelton-instansen. //
-            LocalWorkoutsInfo = new ObservableCollection<WorkoutInfo>(); // Använda lokala listan. //
-            
+            LocalWorkoutsInfo = new ObservableCollection<WorkoutInfo>(); // Använda lokala listan. //     
         }
 
 
@@ -83,10 +85,45 @@ namespace FitTrack.ViewModel
         // Lägger till "tom" rad för att fylla i ett träningspass, som sedan läggs till i Lokala workout-listan. //
         public void AddWorkout()
         {
-            LocalWorkoutsInfo.Add(new WorkoutInfo { Name = "", Type = "", Duration = TimeSpan.FromSeconds(0), Calories = 0, Notes = "", Date = DateTime.Now });
+            LocalWorkoutsInfo.Add(new WorkoutInfo { NameInput = "", TypeInput = "", DurationInput = TimeSpan.FromSeconds(0), CaloriesBurnedInput = 0, NotesInput = "", DateInput = DateTime.Now });
         }
 
-        public void CancelWorkout()
+        public void SaveWorkout()
+        {
+
+            try
+            {
+                // Skapa en kontroll som kontrollerar om träningspasset redan finns i listan. //
+
+                //Loppar igenom varje träningspass i listan och sparar ner i instans-listan som finns i UserManager. // <--- Återkom och förstå denna bättre.
+                // --- Förbättrad version? --- //
+                foreach (var workout in LocalWorkoutsInfo)
+                {
+                    //// Validering/kontroll för inmatningen. //
+                    //if (string.IsNullOrWhiteSpace(workout.NameInput) || string.IsNullOrWhiteSpace(workout.TypeInput) || workout.DurationInput == null ||
+                    //    workout.CaloriesBurnedInput < 0 || // Kontrollera att kalorier är ett positivt värde
+                    //    workout.DateInput == default) // Kontrollera att ett giltigt datum har valts
+                    //{
+                    //    MessageBox.Show("Please ensure all fields are filled correctly.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    //    return; // Avbryt om validering misslyckas
+                    //}
+
+                    if (!userManager.WorkoutsInfo.Contains(workout))
+                    {
+                        userManager.AddWorkout(workout);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred while saving the workout: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            
+            // Uppdatera listan så att träningspassen är synkroniserade.
+            //userManager.WorkoutsInfo = new ObservableCollection<WorkoutInfo>(LocalWorkoutsInfo);
+        }
+
+        public void CancelWorkout() // <------------- Återkom och se över denna knappen!!
         {
             MessageBoxResult result = MessageBox.Show("Are you sure to cancel and reset?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
@@ -95,55 +132,50 @@ namespace FitTrack.ViewModel
                 if (SelectedItem != null)
                 {
                     // Återställ ursprungliga värden. // <---- Be om hjälp till denna.
-                    selectedItem.Name = originalName;
-                    selectedItem.Type = originalWorkoutType;
-                    selectedItem.Duration = originalDuration;
-                    selectedItem.Calories = originalCaloriesBurned;
-                    selectedItem.Notes = originalNotes;
+                    SelectedItem.NameInput = originalNameInput;
+                    SelectedItem.TypeInput = originalWorkoutTypeComboBoxInput;
+                    SelectedItem.DurationInput = originalDurationInput;
+                    SelectedItem.CaloriesBurnedInput = originalCaloriesBurnedInput;
+                    SelectedItem.NotesInput = originalNotesInput;
+                    SelectedItem.DateInput = originalDateInput;
 
                     // Skapar en temporär kopia för att trigga ändringarna i UI. //
                     var tempItem = SelectedItem;
                     SelectedItem = null;
                     OnPropertyChanged(nameof(SelectedItem));
 
-                    // Återställ till den ursprungliga vald objekt så att UI uppdateras korrekt. //
+                    // Återställer till den ursprungliga vald objekt så att UI uppdateras korrekt. //
                     SelectedItem = tempItem;
                     OnPropertyChanged(nameof(SelectedItem));
 
-
-                    // Notifiera UI om att värdena har ändrats
-                    //OnPropertyChanged(nameof(SelectedItem));
-                    //OnPropertyChanged(nameof(SelectedItem.Name));
-                    //OnPropertyChanged(nameof(SelectedItem.Type));
-                    //OnPropertyChanged(nameof(SelectedItem.Duration));
-                    //OnPropertyChanged(nameof(SelectedItem.Notes));
-                    //OnPropertyChanged(nameof(SelectedItem.Date)); // Alternativet med OnPropertyChanged.
+                    // Notifiera UI om att värdena har ändrats. //
+                    //OnPropertyChanged(nameof(selectedItem.NameInput));
+                    //OnPropertyChanged(nameof(selectedItem.TypeInput));
+                    //OnPropertyChanged(nameof(selectedItem.DurationInput));
+                    //OnPropertyChanged(nameof(selectedItem.CaloriesBurnedInput));
+                    //OnPropertyChanged(nameof(selectedItem.NotesInput));
+                    //OnPropertyChanged(nameof(selectedItem.DateInput));
                 }
             }
             else if (result == MessageBoxResult.No) 
             {
-                
+                // ------> Behövs det någon logik här? <------ //
             }   
-        }
-
-        public void SaveWorkout()
-        {
-
-            // Skapa en kontroll som kontrollerar om träningspasset redan finns i listan. //
-
-            //Loppar igenom varje träningspass i listan och sparar ner i instans-listan som finns i UserManager.
-            foreach (var workout in LocalWorkoutsInfo)
-            {
-                userManager.AddWorkout(workout);
-            }
         }
 
         // Tar bort vald träningspass från listan. //
         public void RemoveWorkout()
         {
-            if (selectedItem != null)
+            if (selectedItem != null && LocalWorkoutsInfo.Contains(selectedItem))
             {
+                // Ta bort träningspass från LocalWorkoutsInfo. //
                 LocalWorkoutsInfo.Remove(selectedItem);
+
+                // Ta även bort från UserManager:s lista, om den finns där. //
+                if (userManager.WorkoutsInfo.Contains(selectedItem))
+                {
+                    userManager.WorkoutsInfo.Remove(selectedItem);
+                }
             }
         }
     }

@@ -32,14 +32,6 @@ namespace FitTrack.ViewModel
 
 
         // ------------------------------ Egenskaper ------------------------------ //
-
-
-        // ------------------------------ Kommando ------------------------------ //
-        public RelayCommand UserCommand => new RelayCommand(execute => UserDetails());
-        public RelayCommand EditCommand => new RelayCommand(execute => AddWorkout());
-        public RelayCommand RemoveCommand => new RelayCommand(execute => RemoveWorkout());
-        //public RelayCommand OpenCommand => new RelayCommand(execute => OpenDetails());
-
         // Egenskap för vald träningspass. //
         // Privat fält som lagrar den valda träningspasset. //
         private WorkoutInfo selectedItem;
@@ -52,6 +44,13 @@ namespace FitTrack.ViewModel
                 OnPropertyChanged(nameof(SelectedItem)); // Meddelar att SelectedItem har ändrats, så UI kan uppdateras. //
             }
         }
+
+        // ------------------------------ Kommando ------------------------------ //
+        public RelayCommand UserCommand => new RelayCommand(execute => UserDetails());
+        public RelayCommand EditCommand => new RelayCommand(execute => AddWorkout());
+        public RelayCommand RemoveCommand => new RelayCommand(execute => RemoveWorkout());
+        public RelayCommand OpenCommand => new RelayCommand(execute => OpenDetails(SelectedItem));
+  
 
         // ------------------------------ Konstruktor ------------------------------ //
 
@@ -86,13 +85,13 @@ namespace FitTrack.ViewModel
             }
         }
 
-        public void OpenDetails(Workout workout) 
+        public void OpenDetails(WorkoutInfo workoutInfo) 
         {
             // Öppnar upp WorkoutsDetailsWindow-fönstret. //
-            if (selectedItem != null)
+            if (workoutInfo != null)
             {
-                WorkoutsDetailsWindow work = new WorkoutsDetailsWindow();
-                work.Show();
+                WorkoutsDetailsWindow detailsWindow = new WorkoutsDetailsWindow(SelectedItem);
+                detailsWindow.Show();
             } 
         }
     }

@@ -9,11 +9,11 @@ namespace FitTrack.Model
     public class WorkoutInfo
     {
         // ------------------------------ Egenskaper ------------------------------ //
-        public string Name { get; set; }
-        public string Type { get; set; }
-        public TimeSpan Duration { get; set; }
-        public int Calories { get; set; }
-        public string Notes { get; set; }
-        public DateTime Date { get; set; }
+        public string NameInput { get; set; }
+        public string TypeInput { get; set; } // <--- Återkom och gör om till ComboBox.
+        public TimeSpan DurationInput { get; set; }
+        public int CaloriesBurnedInput { get; set; }
+        public string NotesInput { get; set; }
+        public DateTime DateInput { get; set; }
     }   
 }

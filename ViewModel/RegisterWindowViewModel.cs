@@ -53,7 +53,7 @@ namespace FitTrack.ViewModel
             // Kontrollerar så att lösenorden matchar. //
             if (PasswordInput == ConfirmPasswordInput)
             {
-                // Skapar en instans för nya registrerade användare. //
+                // Skapar en instans som skapar ett nytt objekt av typen UserAccount, för nya registrerade användare. //
                 var newUser = new UserAccount(UsernameInput, PasswordInput, CountryComboBox);
                 
                 // Lägger in Username och Password i listan UserManager. //
@@ -65,7 +65,7 @@ namespace FitTrack.ViewModel
                 ConfirmPasswordInput = string.Empty;
                 CountryComboBox = string.Empty;
 
-                // Meddelar UI att något har ändrats och visar upp dem nua värdena efter att värdena är tomma. //
+                // Meddelar UI att något har ändrats och visar upp dem nya värdena efter att värdena är tomma. //
                 OnPropertyChanged(nameof(UsernameInput));
                 OnPropertyChanged(nameof(PasswordInput));
                 OnPropertyChanged(nameof(ConfirmPasswordInput));
