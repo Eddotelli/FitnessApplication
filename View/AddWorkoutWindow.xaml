@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FitTrack.View"
         mc:Ignorable="d"
-        Title="AddWorkoutWindow" Height="450" Width="400">
+        Title="AddWorkoutWindow" Height="450" Width="800">
     <Grid>
-
+        
         <StackPanel>
-
+            
             <Label Content="Add Workout Window"
                    HorizontalContentAlignment="Center"
                    FontSize="20"
@@ -17,47 +17,92 @@
                    Foreground="LightGray"
                    Margin="10"/>
 
-            <DataGrid CanUserAddRows="False" 
-                      CanUserDeleteRows="False"
-                      AutoGenerateColumns="False"
-                      ItemsSource="{Binding LocalWorkoutsInfo}"
-                      SelectedItem="{Binding SelectedItem}"
-                      Width="350"
-                      Height="150"
-                      Margin="5">
+            <!-- ComboBox för att välja WorkoutType -->
+            <ComboBox Text="Type"
+                      ItemsSource="{Binding WorkoutTypes}"
+                      SelectedItem="{Binding WorkoutTypeComboBox}"
+                      Width="80"
+                      Margin="5"
+                      />
 
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Binding="{Binding NameInput}" Width="4*"/>
-                    <DataGridTextColumn Header="Type" Binding="{Binding TypeInput}" Width="4*"/>
-                    <DataGridTextColumn Header="Duration" Binding="{Binding DurationInput}" Width="4*"/>
-                    <DataGridTextColumn Header="Calories" Binding="{Binding CaloriesBurnedInput}" Width="4*"/>
-                    <DataGridTextColumn Header="Notes" Binding="{Binding NotesInput}" Width="4*"/>
-                    <DataGridTextColumn Header="Date" Binding="{Binding DateInput}" Width="4*"/>
-                </DataGrid.Columns>
+            <!-- ListBox för att visa och redigera träningspass -->
+            <ListBox ItemsSource="{Binding WorkoutsInfo}"
+                     SelectedItem="{Binding SelectedItem}"
+                     Width="650"
+                     Height="200"
+                     Margin="5">
 
-            </DataGrid>
+                <ListBox.ItemTemplate>
 
-            <Button Content="Add"
-                    Command="{Binding AddCommand}"
-                    Width="200"
-                    Margin="5"/>
+                    <DataTemplate>
 
-            <Button Content="Save"
-                    Command="{Binding SaveCommand}"
-                    Width="200"
-                    Margin="5"/>
+                        <StackPanel Orientation="Horizontal">
 
-            <Button Content="Remove"
-                    Command="{Binding RemoveCommand}"
-                    Width="200"
-                    Margin="5"/>
+                            <!-- TextBox för Name -->
+                            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                     Width="100"
+                                     Margin="5"/>
 
-            <Button Content="Cancel"
-                    Command="{Binding CancelCommand}"
-                    Width="200"
-                    Margin="5"/>
+                            <!-- ComboBox för Type med WorkoutTypes som ItemsSource -->
+                            <ComboBox ItemsSource="{Binding DataContext.WorkoutTypes, RelativeSource={RelativeSource AncestorType=Window}}"
+                                      SelectedItem="{Binding TypeInput, UpdateSourceTrigger=PropertyChanged}"
+                                      Width="100"
+                                      Margin="5"/>
+
+                            <!-- TextBox för Duration -->
+                            <TextBox Text="{Binding Duration, StringFormat=\{0:hh\\:mm\\:ss\}, UpdateSourceTrigger=PropertyChanged}"
+                                     Width="50"
+                                     Margin="5"/>
+
+                            <!-- TextBox för CaloriesBurned -->
+                            <TextBox Text="{Binding CaloriesBurned, UpdateSourceTrigger=PropertyChanged}"
+                                     Width="50"
+                                     Margin="5"/>
+
+                            <!-- TextBox för Notes -->
+                            <TextBox Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}"
+                                     Width="150"
+                                     Margin="5"/>
+
+                            <!-- DatePicker för Date -->
+                            <DatePicker SelectedDate="{Binding Date, UpdateSourceTrigger=PropertyChanged}"
+                                        Width="100"
+                                        Margin="5"/>
+
+                        </StackPanel>
+
+                    </DataTemplate>
+
+                </ListBox.ItemTemplate>
+
+            </ListBox>
+
+            <StackPanel Orientation ="Horizontal" HorizontalAlignment="Center">
+                <!-- Buttons for actions -->
+                <Button Content="Add"
+                        Command="{Binding AddCommand}"
+                        Width="100"
+                        Margin="5"/>
+
+                <Button Content="Save"
+                        Command="{Binding SaveCommand}"
+                        Width="100"
+                        Margin="5"/>
+
+                <Button Content="Remove"
+                        Command="{Binding RemoveCommand}"
+                        Width="100"
+                        Margin="5"/>
+
+                <Button Content="Cancel"
+                        Command="{Binding CancelCommand}"
+                        Width="100"
+                        Margin="5"/>
+                
+            </StackPanel>
 
         </StackPanel>
         
     </Grid>
+      
 </Window>

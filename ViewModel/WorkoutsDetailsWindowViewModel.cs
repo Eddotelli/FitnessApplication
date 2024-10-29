@@ -14,8 +14,11 @@ namespace FitTrack.ViewModel
         // Singleton-instans av UserManager, används för att få tillgång till träningspassen
         private UserManager userManager;
 
+        // Bunden till UserManager's WorkoutsInfo direkt för synkronisering med andra fönster. //
+        public ObservableCollection<Workout> WorkoutsInfo => userManager.WorkoutsInfo;
+
         // Lokal kopia av träningspasset som redigeras
-        private WorkoutInfo localWorkout;
+        private Workout localWorkout;
 
         // Fält för att styra om fälten ska vara låsta för redigering (default är låst)
         private bool isReadOnly = true;
@@ -33,43 +36,14 @@ namespace FitTrack.ViewModel
 
 
         // ------------------------------ Egenskaper ------------------------------ //
-        //public Workout Workout { get; set; } // Se över nedan och i AddworkoutWindow-fönstret gällande WorkoutInfo-parameterna mot Workout-parameterna.
-
-        //// Privat variabel som håller träningsinformation. //
-        //private ObservableCollection<WorkoutInfo> workoutsInfo;
-
-        ////Public egenskap som ger kontrollerad åtkomst till träningsinformationen. //
-        //public ObservableCollection<WorkoutInfo> WorkoutsInfo
-
-        //{
-        //    get { return workoutsInfo; } // Returnerar den privata listan med träningsinformation. //
-        //    set
-        //    {
-        //        // Sätter det nya värdet för träningsinformationen. //
-        //        workoutsInfo = value;
-
-        //        //Berättar för UI om att WorkoutsInfo har ändrats. //
-        //        OnPropertyChanged(nameof(WorkoutsInfo));
-        //    }
-        //}
-
-        // ------------------------------ Konstruktor ------------------------------ //
-        // Konstruktorn tar emot det träningspass som ska redigeras
-        public WorkoutsDetailsWindowViewModel(WorkoutInfo workout)
-        {
-            userManager = UserManager.Instance; // Använd befintlig instans av UserManager
-            localWorkout = workout; // Spara träningspasset som skickats in
-        }
-
-
-        // Bindningsbara egenskaper för att visa och ändra information i UI
+        // Bindningsbara egenskaper för att visa och ändra information i UI. //
         public string Name
         {
-            get { return localWorkout.NameInput; } // Hämtar namnet från träningspasset
+            get { return localWorkout.Name; } // Hämtar namnet från träningspasset
             set
             {
-                localWorkout.NameInput = value; // Uppdaterar namnet
-                OnPropertyChanged(nameof(Name)); // Meddelar UI om ändringen
+                localWorkout.Name = value; // Uppdaterar namnet. //
+                OnPropertyChanged(nameof(Name)); // Meddelar UI om ändringen. //
             }
         }
 
@@ -85,43 +59,51 @@ namespace FitTrack.ViewModel
 
         public TimeSpan Duration
         {
-            get { return localWorkout.DurationInput; }
+            get { return localWorkout.Duration; }
             set
             {
-                localWorkout.DurationInput = value;
+                localWorkout.Duration = value;
                 OnPropertyChanged(nameof(Duration));
             }
         }
 
         public int CaloriesBurned
         {
-            get { return localWorkout.CaloriesBurnedInput; }
+            get { return localWorkout.CaloriesBurned; }
             set
             {
-                localWorkout.CaloriesBurnedInput = value;
+                localWorkout.CaloriesBurned = value;
                 OnPropertyChanged(nameof(CaloriesBurned));
             }
         }
 
         public string Notes
         {
-            get { return localWorkout.NotesInput; }
+            get { return localWorkout.Notes; }
             set
             {
-                localWorkout.NotesInput = value;
+                localWorkout.Notes = value;
                 OnPropertyChanged(nameof(Notes));
             }
         }
 
         public DateTime Date
         {
-            get { return localWorkout.DateInput; }
+            get { return localWorkout.Date; }
             set
             {
-                localWorkout.DateInput = value;
+                localWorkout.Date = value;
                 OnPropertyChanged(nameof(Date));
             }
         }
+
+        // ------------------------------ Konstruktor ------------------------------ //
+        // Konstruktorn tar emot det träningspass som ska redigeras
+        public WorkoutsDetailsWindowViewModel(Workout workout)
+        {
+            userManager = UserManager.Instance; // Använd befintlig instans av UserManager. //
+            localWorkout = workout; // Spara träningspasset som skickats in. //
+        }  
 
         // ------------------------------ Kommando ------------------------------ //
         public RelayCommand EditCommand => new RelayCommand(execute => EditWorkout());
@@ -129,18 +111,19 @@ namespace FitTrack.ViewModel
 
 
         // ------------------------------ Metoder ------------------------------ //
-        // Metod för att låsa upp textfälten så att de kan redigeras.
+        // Metod för att låsa upp textfälten så att de kan redigeras. //
         public void EditWorkout()
         {
-            IsReadOnly = false; // Gör fälten redigerbara.
+            IsReadOnly = false; // Gör fälten redigerbara. //
         }
 
         // Metod för att spara ändringar.
         public void SaveWorkout()
         {
-            // Spara ändringarna till UserManager om så behövs.
-            //userManager.AddWorkout(localWorkout); // Exempelmetod för att spara uppdaterad information.
-            IsReadOnly = true; // Lås fälten igen.
+            IsReadOnly = true; // Lås fälten igen. //
+
+            // Använd UpdateWorkout för att meddela ändringen i UserManager
+            userManager.UpdateWorkout(localWorkout);
         }
     }
 }

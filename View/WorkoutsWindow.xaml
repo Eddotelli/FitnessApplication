@@ -7,7 +7,9 @@
         mc:Ignorable="d"
         Title="WorkoutsWindow" Height="450" Width="400">
     <Grid>
+        
         <StackPanel>
+            
             <Label Content="Workout Window"
                    HorizontalContentAlignment="Center"
                    FontSize="20"
@@ -25,22 +27,31 @@
                     Width="200"
                     Margin="5"/>
 
-            <DataGrid CanUserAddRows="False" 
-                      CanUserDeleteRows="False"
-                      AutoGenerateColumns="False"
-                      ItemsSource="{Binding WorkoutsInfo}"
-                      SelectedItem="{Binding SelectedItem}"
-                      Width="350"
-                      Height="150"
-                      Margin="5">
-
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Name" Binding="{Binding NameInput}" Width="4*"/>
-                    <DataGridTextColumn Header="Type" Binding="{Binding TypeInput}" Width="4*"/>
-                    <DataGridTextColumn Header="Duration" Binding="{Binding DurationInput}" Width="4*"/>
-                </DataGrid.Columns>
-
-            </DataGrid>
+            <!-- ListBox för att visa träningspassen -->
+            <ListBox ItemsSource="{Binding WorkoutsInfo}"
+                     SelectedItem="{Binding SelectedItem}"
+                     Width="350"
+                     Height="200"
+                     Margin="5">
+                
+                <!-- DataTemplate för varje objekt i ListBox -->
+                <ListBox.ItemTemplate>
+                    
+                    <DataTemplate>
+                        
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                            
+                            <TextBlock Text="{Binding Name}" Width="100"/>
+                            <TextBlock Text="{Binding TypeInput}" Width="100"/>
+                            <TextBlock Text="{Binding Duration}" Width="100"/>
+                            
+                        </StackPanel>
+                        
+                    </DataTemplate>
+                    
+                </ListBox.ItemTemplate>
+                
+            </ListBox>
 
             <Button Content="Remove selected workout"
                     Command="{Binding RemoveCommand}"
@@ -54,4 +65,5 @@
         </StackPanel>
         
     </Grid>
+    
 </Window>

@@ -21,7 +21,7 @@ namespace FitTrack.View
     /// </summary>
     public partial class WorkoutsDetailsWindow : Window
     {
-        public WorkoutsDetailsWindow(WorkoutInfo workout)
+        public WorkoutsDetailsWindow(Workout workout)
         {
             InitializeComponent();
             DataContext = new WorkoutsDetailsWindowViewModel(workout); // Skicka med workout till ViewModel

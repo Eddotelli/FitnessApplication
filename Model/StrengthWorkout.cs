@@ -11,24 +11,17 @@ namespace FitTrack.Model
         // ------------------------------ Egenskaper ------------------------------ //
         public int Repetitions {  get; set; }
 
-
         // ------------------------------ Konstruktor ------------------------------ //
-        public StrengthWorkout(int Repetitions, DateTime Date, string Type, TimeSpan Duration, int CaloriesBurned, string Notes) : base(Date, Type, Duration, CaloriesBurned, Notes)
-        {
+        public StrengthWorkout(string Name, int Repetitions, DateTime Date, string TypeInput, TimeSpan Duration, int CaloriesBurned, string Notes) : base(Name, Date, TypeInput, Duration, CaloriesBurned, Notes)
+        {           
             this.Repetitions = Repetitions;
-            this.Date = Date;
-            this.Type = Type;
-            this.Duration = Duration;
-            this.CaloriesBurned = CaloriesBurned;
-            this.Notes = Notes;
-
         }
-
 
         // ------------------------------ Metoder ------------------------------ //
         public override int CalculateCaloriesBurned()
         {
-            return 0;
+            // Exempelberäkning (anpassa enligt behov)
+            return (int)(Duration.TotalMinutes * 8); // Exempel: 8 kalorier per minut
         }
     }
 }

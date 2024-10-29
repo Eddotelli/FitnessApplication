@@ -28,7 +28,7 @@ namespace FitTrack.Model
         private ObservableCollection<UserAccount> users = new ObservableCollection<UserAccount>();
 
         // Privat lista som innehåller träningspass med kort info. //
-        private ObservableCollection<WorkoutInfo> workoutsInfo = new ObservableCollection<WorkoutInfo>();
+        private ObservableCollection<Workout> workoutsInfo = new ObservableCollection<Workout>();
 
         // Privat konstruktor förhindrar skapande av fler instanser. //
         private UserManager() 
@@ -65,7 +65,7 @@ namespace FitTrack.Model
         public ObservableCollection<UserAccount> Users => users;
 
         // Publik egenskap för att få tillgång till listan med träningspass för kort info. //
-        public ObservableCollection<WorkoutInfo> WorkoutsInfo => workoutsInfo;
+        public ObservableCollection<Workout> WorkoutsInfo => workoutsInfo;
 
         // Publik egenskap för att hålla koll samt ev. ändra på den inloggade användaren. //
         public UserAccount LoggedInUser { get; set; } // <------------------------------------------ Granska detta.
@@ -101,12 +101,23 @@ namespace FitTrack.Model
         }
 
         // Lägger till användare träningspass i listan för träningspass. //
-        public void AddWorkout(WorkoutInfo workoutInfo) 
+        public void AddWorkout(Workout workoutInfo) 
         {
             // Kontrollera om ett träningspass redan finns i listan. //
             if (!workoutsInfo.Contains(workoutInfo))
             {
                 workoutsInfo.Add(workoutInfo);
+            }
+        }
+
+        // Metod för att meddela ändring i enskilda objekt. //
+        public void UpdateWorkout(Workout workout)
+        {
+            // Temporär lösning för att signalera ändring för WorkoutWindow. //
+            int index = WorkoutsInfo.IndexOf(workout);
+            if (index >= 0)
+            {
+                WorkoutsInfo[index] = workout;
             }
         }
     }

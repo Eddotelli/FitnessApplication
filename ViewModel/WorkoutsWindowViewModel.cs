@@ -12,30 +12,14 @@ namespace FitTrack.ViewModel
         // Singleton-instans av UserManager, används för att hantera gemensam lista mellan olika fönster. //
         private UserManager userManager;
 
-        // Privat variabel som håller träningsinformation. //
-        private ObservableCollection<WorkoutInfo> workoutsInfo;
-
-        //Public egenskap som ger kontrollerad åtkomst till träningsinformationen. //
-        public ObservableCollection<WorkoutInfo> WorkoutsInfo
-
-        {
-            get { return workoutsInfo; } // Returnerar den privata listan med träningsinformation. //
-            set
-            {
-                // Sätter det nya värdet för träningsinformationen. //
-                workoutsInfo = value;
-
-                //Berättar för UI om att WorkoutsInfo har ändrats. //
-                OnPropertyChanged(nameof(WorkoutsInfo));
-            }
-        }
-
+        // Bunden till UserManager's WorkoutsInfo direkt för synkronisering. //
+        public ObservableCollection<Workout> WorkoutsInfo => userManager.WorkoutsInfo;
 
         // ------------------------------ Egenskaper ------------------------------ //
         // Egenskap för vald träningspass. //
         // Privat fält som lagrar den valda träningspasset. //
-        private WorkoutInfo selectedItem;
-        public WorkoutInfo SelectedItem
+        private Workout selectedItem;
+        public Workout SelectedItem
         {
             get { return selectedItem; } // Returnerar värdet av selectedItem. //
             set
@@ -58,7 +42,6 @@ namespace FitTrack.ViewModel
         public WorkoutsWindowViewModel()
         {
             userManager = UserManager.Instance; // Använda Singelton-instansen. //
-            workoutsInfo = userManager.WorkoutsInfo; // Länkar direkt till listan från UserManager. //
         }
 
         // ------------------------------ Metoder ------------------------------ //
@@ -81,16 +64,17 @@ namespace FitTrack.ViewModel
             // Tar bort vald träningspass från listan. //
             if (selectedItem != null) 
             {
-                workoutsInfo.Remove(selectedItem);
+                userManager.WorkoutsInfo.Remove(selectedItem);
+                SelectedItem = null; // Rensa SelectedItem för att förhindra referens till raderat objekt. //
             }
         }
 
-        public void OpenDetails(WorkoutInfo workoutInfo) 
+        public void OpenDetails(Workout workout) 
         {
             // Öppnar upp WorkoutsDetailsWindow-fönstret. //
-            if (workoutInfo != null)
+            if (workout != null)
             {
-                WorkoutsDetailsWindow detailsWindow = new WorkoutsDetailsWindow(SelectedItem);
+                WorkoutsDetailsWindow detailsWindow = new WorkoutsDetailsWindow(workout);
                 detailsWindow.Show();
             } 
         }

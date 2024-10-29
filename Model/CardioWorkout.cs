@@ -12,20 +12,16 @@ namespace FitTrack.Model
         public int Distance { get; set; }
 
         // ------------------------------ Konstruktor ------------------------------ //
-        public CardioWorkout(int Distance, DateTime Date, string Type, TimeSpan Duration, int CaloriesBurned, string Notes) : base(Date, Type, Duration, CaloriesBurned, Notes)
-        {
-            this.Distance = Distance;
-            this.Date = Date;
-            this.Type = Type;
-            this.Duration = Duration;
-            this.CaloriesBurned = CaloriesBurned;
-            this.Notes = Notes;
+        public CardioWorkout(string Name, int Distance, DateTime Date, string TypeInput, TimeSpan Duration, int CaloriesBurned, string Notes) : base(Name, Date, TypeInput, Duration, CaloriesBurned, Notes)
+        {          
+            this.Distance = Distance;           
         }
 
         // ------------------------------ Metoder ------------------------------ //
         public override int CalculateCaloriesBurned()
         {
-            return 0;
+            // Exempelberäkning (anpassa enligt behov)
+            return (int)(Duration.TotalMinutes * 8); // Exempel: 8 kalorier per minut
         }
     }
 }
