@@ -10,18 +10,21 @@
 
         <StackPanel>
 
-            <Label Content="Username"
+            <Label Content="Main Window"
                    HorizontalContentAlignment="Center"
-                   Width="200"/>
+                   FontSize="20"
+                   Background="Crimson"
+                   Foreground="LightGray"
+                   Margin="20"/>
+
+            <Label Content="Username" HorizontalContentAlignment="Center" Width="200"/>
             
             <TextBox Text="{Binding UsernameInput, UpdateSourceTrigger=PropertyChanged}"
                      TextAlignment="Center"
                      Width="200"
                      Margin="10"/>
 
-            <Label Content="Password"
-                   HorizontalContentAlignment="Center"
-                   Width="200"/>
+            <Label Content="Password" HorizontalContentAlignment="Center" Width="200"/>
 
             <TextBox Text="{Binding PasswordInput, UpdateSourceTrigger=PropertyChanged}"
                      TextAlignment="Center"
@@ -36,6 +39,11 @@
             <Button Command="{Binding RegisterCommand}"
                     Width="200"
                     Content="Register"/>
+
+            <Button Command="{Binding ResetPasswordCommand}"
+                    Width="200"
+                    Content="Reset password"
+                    Margin="10"/>
 
             <Label Content="FitTRACK"
                    HorizontalContentAlignment="Center"

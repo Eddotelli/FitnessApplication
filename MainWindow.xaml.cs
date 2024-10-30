@@ -20,8 +20,7 @@ namespace FitTrack
         public MainWindow()
         {
             InitializeComponent();
-            MainWindowViewModel viewModel = new MainWindowViewModel();
-            DataContext = viewModel;
+            this.DataContext = new MainWindowViewModel(this);
 
             AllocConsole(); // Skapar ett konsolfönster. //
         }

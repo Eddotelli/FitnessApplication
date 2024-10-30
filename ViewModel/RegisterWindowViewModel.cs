@@ -1,5 +1,6 @@
 ﻿using FitTrack.Model;
 using FitTrack.MVVM;
+using FitTrack.View;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,22 +17,32 @@ namespace FitTrack.ViewModel
         // Singleton-instans av UserManager, används för att hantera gemensam lista mellan olika fönster. //
         private UserManager userManager;
 
+        // Deklarerar en privat fältvariabel för att referera till det fönster där registreringen sker. //
+        // Denna referens används för att kunna stänga eller kontrollera fönstret från ViewModel. //
+        private readonly Window _registerWindow;
+
         // ------------------------------ Egenskaper ------------------------------ //
         public string UsernameInput { get; set; }
         public string PasswordInput { get; set; }
         public string ConfirmPasswordInput { get; set; }
         public string CountryComboBox { get; set; }
+        public string SecurityQuestionComboBox {  get; set; } // Vald säkerhetsfråga. //
+        public string SecurityAnswer { get; set; } // Svar på säkerhetsfrågan. //
 
         // ------------------------------ Konstruktor ------------------------------ //
 
         // Konstruktor som skapar en ny instans av UserManager. //
-        public RegisterWindowViewModel()
+        public RegisterWindowViewModel(Window registerWindow)
         {
             // Ser till så att den används en och samma UserManager-instans varje gång den anropas. //
             userManager = UserManager.Instance; // Använda Singelton-instansen. //
+
+            // Tilldelar den instans av Window (fönstret) som skickades in till konstruktorparametern `registerWindow`.
+            // Detta gör att ViewModel kan stänga fönstret när registreringen är klar.
+            _registerWindow = registerWindow;
         }
 
-        // Lista för olika länder (fasta värden). //
+        // Lista för val av land //
         public ObservableCollection<string> Countries { get; set; } = new ObservableCollection<string>
         {
             "Gambia",
@@ -40,43 +51,107 @@ namespace FitTrack.ViewModel
             "Denmark",
         };
 
+        // Lista för val av säkerhetsfråga. //
+        public ObservableCollection<string> SecurityQuestions { get; set; } = new ObservableCollection<string>
+        {
+            "What is your pet's name?",
+            "What is your mother's maiden name?",
+            "What was the name of your first school?",
+        };
+
         // ------------------------------ Kommando ------------------------------ //
         public RelayCommand RegisterCommand => new RelayCommand(execute => RegisterNewUser());
+        public RelayCommand CancelCommand => new RelayCommand(execute => Cancel());
 
         // ------------------------------ Metoder ------------------------------ //
 
         // Metod för att lägga till ny användare. //
         public void RegisterNewUser()
         {
-            // Skapa en logik som kontrollerar om användarnamnet redan finns. <--- Se över om du kan lägga denna i UserManager direkt istället.
-            
-            // Kontrollerar så att lösenorden matchar. //
-            if (PasswordInput == ConfirmPasswordInput)
+            // Kontrollerar om användarnamnet redan finns i UserManager. //
+            if (userManager.UserExists(UsernameInput))
             {
-                // Skapar en instans som skapar ett nytt objekt av typen UserAccount, för nya registrerade användare. //
-                var newUser = new UserAccount(UsernameInput, PasswordInput, CountryComboBox);
-                
-                // Lägger in Username och Password i listan UserManager. //
-                userManager.AddUser(newUser);
-
-                // Rensa fälten efter registrering. //
-                UsernameInput = string.Empty;
-                PasswordInput = string.Empty;
-                ConfirmPasswordInput = string.Empty;
-                CountryComboBox = string.Empty;
-
-                // Meddelar UI att något har ändrats och visar upp dem nya värdena efter att värdena är tomma. //
-                OnPropertyChanged(nameof(UsernameInput));
-                OnPropertyChanged(nameof(PasswordInput));
-                OnPropertyChanged(nameof(ConfirmPasswordInput));
-                OnPropertyChanged(nameof(CountryComboBox));
-
-                MessageBox.Show("Registration successful!");
+                MessageBox.Show("The username already exists, please choose another one.");
+                return;
             }
-            else
+
+            // Kontrollerar om användarnamnet är kortare än 3 bokstäver. //
+            if (UsernameInput.Length < 3)
             {
-                MessageBox.Show("Password didn't match, try again!");
+                MessageBox.Show("Username must be at least 3 characters long.");
             }
+
+            // Kontrollerar lösenordets styrka. //
+            if (!IsPasswordValid(PasswordInput))
+            {
+                MessageBox.Show("The password must be at least 8 characters long and contain at least one number and one special character.");
+                return;
+            }
+
+            // Kontrollera att ett land har valts. //
+            if (string.IsNullOrEmpty(CountryComboBox))
+            {
+                MessageBox.Show("Please select a country.");
+                return;
+            }
+
+            // Kontrollera att en säkerhetsfråga har valts och att ett svar har angivits. //
+            if (string.IsNullOrEmpty(SecurityQuestionComboBox) || string.IsNullOrWhiteSpace(SecurityAnswer))
+            {
+                MessageBox.Show("Please select a security question and provide an answer.");
+                return;
+            }
+
+            // Skapar ett nytt objekt av typen User för den nya användaren. //
+            var newUser = new User(UsernameInput, PasswordInput, CountryComboBox, SecurityQuestionComboBox, SecurityAnswer);
+
+            // Lägger till användaren i UserManager. //
+            userManager.AddUser(newUser);
+
+            // Rensar fälten efter registrering. //
+            UsernameInput = string.Empty;
+            PasswordInput = string.Empty;
+            ConfirmPasswordInput = string.Empty;
+            CountryComboBox = string.Empty;
+            SecurityQuestionComboBox = string.Empty;
+
+            // Meddelar UI att värdena har uppdaterats. //
+            OnPropertyChanged(nameof(UsernameInput));
+            OnPropertyChanged(nameof(PasswordInput));
+            OnPropertyChanged(nameof(ConfirmPasswordInput));
+            OnPropertyChanged(nameof(CountryComboBox));
+            OnPropertyChanged(nameof(SecurityQuestionComboBox));
+            OnPropertyChanged(nameof(SecurityAnswer));
+
+            MessageBox.Show("Registration successful!");
+
+            // Öppnar upp MainWindow-fönstret. //
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show();
+
+            _registerWindow.Close(); // Stänger ner RegisterWindow-fönstret. //
+        }
+
+        // Metod för att avbryta och gå tillbaka till MainWindow-fönstret. //
+        public void Cancel()
+        {
+            MessageBoxResult result = MessageBox.Show("Are you sure to cancel and go back?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                // Öppnar upp MainWindow-fönstret. //
+                MainWindow mainWindow = new MainWindow();
+                mainWindow.Show();
+
+                _registerWindow.Close(); // Stänger ner RegisterWindow-fönstret. //
+            }
+        }
+
+        // Metod för att validera lösenordets styrka. //
+        private bool IsPasswordValid(string password)
+        {
+            // Kontrollerar att lösenordet är minst 8 tecken, innehåller minst en siffra och ett specialtecken. //
+            return password.Length >= 8 && password.Any(char.IsDigit) && password.Any(ch => !char.IsLetterOrDigit(ch)); // <----- Förstå denna bättre!
         }
     }
 }

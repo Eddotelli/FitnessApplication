@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FitTrack.View"
         mc:Ignorable="d"
-        Title="UserDetailsWindow" Height="450" Width="400">
+        Title="UserDetailsWindow" Height="600" Width="400">
     <Grid>
+        
         <StackPanel>
 
             <Label Content="User Details Window"
@@ -16,21 +17,15 @@
                    Foreground="LightGray"
                    Margin="10"/>
 
-            <Label Content="Username"
-                   HorizontalContentAlignment="Left"
-                   Width="200"
-                   />
-
+            <Label Content="Username" HorizontalContentAlignment="Left" Width="200"/>
+            
             <TextBox Text="{Binding UsernameInput, UpdateSourceTrigger=PropertyChanged}"
                      TextAlignment="Center"
                      Width="200"
                      Margin="5"
                      />
 
-            <Label Content="Old Password"
-                   HorizontalContentAlignment="Left"
-                   Width="200"
-                   />
+            <Label Content="Old Password" HorizontalContentAlignment="Left" Width="200"/>
 
             <TextBox Text="{Binding OldPasswordInput, UpdateSourceTrigger=PropertyChanged}"
                      TextAlignment="Center"
@@ -38,10 +33,7 @@
                      Margin="5"
                      />
 
-            <Label Content="New Password"
-                   HorizontalContentAlignment="Left"
-                   Width="200"
-                   />
+            <Label Content="New Password" HorizontalContentAlignment="Left" Width="200"/>
 
             <TextBox Text="{Binding NewPasswordInput, UpdateSourceTrigger=PropertyChanged}"
                      TextAlignment="Center"
@@ -49,10 +41,7 @@
                      Margin="5"
                      />
 
-            <Label Content="Country"
-                   HorizontalContentAlignment="Left"
-                   Width="200"
-                   />
+            <Label Content="Country" HorizontalContentAlignment="Left" Width="200"/>
 
             <ComboBox Name="cbCountrys"
                       ItemsSource="{Binding Countries}"
@@ -67,12 +56,19 @@
                     Margin="5"
                     />
 
-            <Button Content="Cancel edit"
+            <Button Content="Cancel"
                     Command="{Binding CancelCommand}"
                     Width="100"
+                    />
+
+            <Button Content="Exit"
+                    Command="{Binding ExitCommand}"
+                    Width="100"
+                    Margin="5"
                     />
 
         </StackPanel>
         
     </Grid>
+    
 </Window>

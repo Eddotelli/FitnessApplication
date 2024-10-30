@@ -17,6 +17,8 @@
                    Foreground="LightGray"
                    Margin="10"/>
 
+            <Label Content="Choose a workout type" HorizontalContentAlignment="Center"/>
+
             <!-- ComboBox för att välja WorkoutType -->
             <ComboBox Text="Type"
                       ItemsSource="{Binding WorkoutTypes}"
@@ -84,21 +86,31 @@
                         Width="100"
                         Margin="5"/>
 
-                <Button Content="Save"
-                        Command="{Binding SaveCommand}"
-                        Width="100"
-                        Margin="5"/>
-
                 <Button Content="Remove"
                         Command="{Binding RemoveCommand}"
                         Width="100"
                         Margin="5"/>
 
-                <Button Content="Cancel"
-                        Command="{Binding CancelCommand}"
+                <Button Content="Save"
+                        Command="{Binding SaveCommand}"
                         Width="100"
                         Margin="5"/>
-                
+
+                <Button Content="Paste"
+                        Command="{Binding PasteCommand}"
+                        Width="100"
+                        Margin="5"/>
+
+                <Button Content="Restore"
+                        Command="{Binding RestoreCommand}"
+                        Width="100"
+                        Margin="5"/>
+
+                <Button Content="Exit"
+                        Command="{Binding ExitCommand}"
+                        Width="100"
+                        Margin="5"/>
+
             </StackPanel>
 
         </StackPanel>

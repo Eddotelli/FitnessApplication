@@ -1,5 +1,6 @@
 ﻿using FitTrack.Model;
 using FitTrack.MVVM;
+using FitTrack.View;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,6 +15,9 @@ namespace FitTrack.ViewModel
     {
         // Singleton-instans av UserManager, används för att hantera gemensam lista mellan olika fönster. //
         private UserManager userManager;
+
+        // Denna referens används för att kunna stänga eller kontrollera fönstret från ViewModel. //
+        private readonly Window _addWorkoutWindow;
 
         // Bunden till UserManager's WorkoutsInfo direkt för synkronisering med andra fönster. //
         public ObservableCollection<Workout> WorkoutsInfo => userManager.WorkoutsInfo;
@@ -72,17 +76,21 @@ namespace FitTrack.ViewModel
 
         // ------------------------------ Kommando ------------------------------ //
         public RelayCommand AddCommand => new RelayCommand(execute => AddWorkout());
-        public RelayCommand CancelCommand => new RelayCommand(execute => CancelWorkout());
+        public RelayCommand RestoreCommand => new RelayCommand(execute => RestoreWorkout());
         public RelayCommand SaveCommand => new RelayCommand(execute => SaveWorkout());
         public RelayCommand RemoveCommand => new RelayCommand(execute => RemoveWorkout());
+        public RelayCommand PasteCommand => new RelayCommand(execute => PasteWorkout());
+        public RelayCommand ExitCommand => new RelayCommand(execute => Exit());
 
 
         // ------------------------------ Konstruktor ------------------------------ //
 
         // Singleton-instansen av UserManager som hanterar gemensamma träningspass. //
-        public AddWorkoutWindowViewModel()
+        public AddWorkoutWindowViewModel(Window addWorkoutWindow)
         {
             userManager = UserManager.Instance; // Använda Singelton-instansen. //
+
+            _addWorkoutWindow = addWorkoutWindow; // Detta gör att ViewModel kan stänga fönstret när användaren är klar. //
 
             // Lista över typer som visas i ComboBox för "Type"-kolumnen
             WorkoutTypes = new ObservableCollection<string>
@@ -125,9 +133,16 @@ namespace FitTrack.ViewModel
             MessageBox.Show("Träningspassen har sparats!", "Sparat", MessageBoxButton.OK, MessageBoxImage.Information);
 
             OnPropertyChanged(nameof(WorkoutsInfo)); // Uppdatera UI vid sparande
+
+            // Öppnar upp WorkoutsWindow-fönstret. //
+            WorkoutsWindow add = new WorkoutsWindow();
+            add.Show();
+
+            // Stänger ner AddWorkoutWindow-fönstret. //
+            _addWorkoutWindow.Close();
         }
 
-        public void CancelWorkout() // <------------- Återkom och se över denna knappen!!
+        public void RestoreWorkout() // <------------- Återkom och se över denna knappen!!
         {
             MessageBoxResult result = MessageBox.Show("Are you sure to cancel and reset?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
@@ -147,7 +162,7 @@ namespace FitTrack.ViewModel
             else if (result == MessageBoxResult.No) 
             {
                 // ------> Behövs det någon logik här? <------ //
-            }   
+            }
         }
 
         // Tar bort vald träningspass från listan. //
@@ -157,6 +172,53 @@ namespace FitTrack.ViewModel
             {
                 UserManager.Instance.WorkoutsInfo.Remove(SelectedItem);
                 SelectedItem = null;
+            }
+        }
+
+        public void PasteWorkout()
+        {
+            if (userManager.CopiedWorkout != null)
+            {
+                Name = userManager.CopiedWorkout.Name;
+                WorkoutTypeComboBox = userManager.CopiedWorkout.TypeInput;
+                Duration = userManager.CopiedWorkout.Duration;
+                CaloriesBurned = userManager.CopiedWorkout.CaloriesBurned;
+                Notes = userManager.CopiedWorkout.Notes;
+                Date = userManager.CopiedWorkout.Date;
+
+                // Om det kopierade träningspasset är av typen StrengthWorkout
+                if (userManager.CopiedWorkout is StrengthWorkout strengthWorkout)
+                {
+                    Repetitions = strengthWorkout.Repetitions;
+                    WorkoutTypeComboBox = "Strength";
+                }
+                // Om det kopierade träningspasset är av typen CardioWorkout
+                else if (userManager.CopiedWorkout is CardioWorkout cardioWorkout)
+                {
+                    Distance = cardioWorkout.Distance;
+                    WorkoutTypeComboBox = "Cardio";
+                }
+
+                MessageBox.Show("Workout pasted successfully!");
+            }
+            else
+            {
+                MessageBox.Show("No workout to paste.");
+            }
+        }
+
+        // Metod för att avbryta och gå tillbaka till WorkoutsWindow-fönstret. //
+        public void Exit()
+        {
+            MessageBoxResult result = MessageBox.Show("Are you sure to exit and go back?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                // Öppnar upp WorkoutsWindow-fönstret. //
+                WorkoutsWindow work = new WorkoutsWindow();
+                work.Show();
+
+                _addWorkoutWindow.Close(); // Stänger ner AddWorkoutWindow-fönstret. //
             }
         }
     }

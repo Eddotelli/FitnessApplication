@@ -23,8 +23,7 @@ namespace FitTrack.View
         public WorkoutsWindow()
         {
             InitializeComponent();
-            WorkoutsWindowViewModel viewModel = new WorkoutsWindowViewModel();
-            DataContext = viewModel;
+            this.DataContext = new WorkoutsWindowViewModel(this);
         }
     }
 }

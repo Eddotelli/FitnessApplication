@@ -89,6 +89,10 @@
                 <Button Content="Save"
                         Command="{Binding SaveCommand}"
                         Margin="5"/>
+
+                <Button Content="Copy"
+                        Command="{Binding CopyCommand}"
+                        Margin="5"/>
             </StackPanel>
             
         </StackPanel>

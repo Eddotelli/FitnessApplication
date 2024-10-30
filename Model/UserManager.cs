@@ -12,10 +12,6 @@ namespace FitTrack.Model
 {
     public class UserManager
     {
-        //private static UserManager instance;
-        //public static UserManager => Instance ?? =new UserManager(); // Alternativ 1. //
-
-        // Alternativ 2. //
         // Singleton implementation. //
         private static UserManager instance = null; // Håller den enda instansen av UserManager, och är initialiserad till null för att inte ska skapas direkt utan när den faktiskt behövs. //
         private static readonly object padlock = new object(); // <---  Padlock-objekt. Ett objekt som säkerställer att endast en tråd(t.ex. ett fönster) åt gången kan skapa instansen. //
@@ -25,7 +21,7 @@ namespace FitTrack.Model
            // Hanteras endast inom klassen. Ingen utanför klassen kan ändra listan. // 
 
         // Privat lista som innehåller användarkonton. //
-        private ObservableCollection<UserAccount> users = new ObservableCollection<UserAccount>();
+        private ObservableCollection<User> users = new ObservableCollection<User>();
 
         // Privat lista som innehåller träningspass med kort info. //
         private ObservableCollection<Workout> workoutsInfo = new ObservableCollection<Workout>();
@@ -34,13 +30,16 @@ namespace FitTrack.Model
         private UserManager() 
         {
             //Fast(test)-användare. //
-            users.Add(new UserAccount("t", "t", "t" ));
+            users.Add(new User("user", "user123!", "Gambia", "user", "user" ));
         }
+
+        // Egenskap för lagring av kopierat träningspass. //
+        public Workout CopiedWorkout { get; set; }
 
         // ------------------------------ Publika egenskaper för att få tillgång till listorna ------------------------------ //
         // Låter andra klsser att läsa och observera listan, men kan ej ersätta den utan att gå igenom kontrollerade  metoder.//
 
-                         // ----  '=>' är ett uttryckspil för definera en get-metod på ett kompakt sätt ---- //
+        // ----  '=>'(lamdbafunktion) är ett uttryckspil för definera en get-metod på ett kompakt sätt ---- //
 
         // Proccesen för att hämta instansen. //
         // 1. Kontollerar om instansen är null när egenskapen Instance nås. //
@@ -61,24 +60,38 @@ namespace FitTrack.Model
             }
         }
         
-        // Listan med användaren. //
-        public ObservableCollection<UserAccount> Users => users;
+        // Lista med användaren. //
+        public ObservableCollection<User> Users => users;
 
         // Publik egenskap för att få tillgång till listan med träningspass för kort info. //
         public ObservableCollection<Workout> WorkoutsInfo => workoutsInfo;
 
         // Publik egenskap för att hålla koll samt ev. ändra på den inloggade användaren. //
-        public UserAccount LoggedInUser { get; set; } // <------------------------------------------ Granska detta.
+        public User LoggedInUser { get; set; } // <------------------------------------------ Granska detta.
          
 
         // ------------------------------ Metoder ------------------------------- //
 
         // Lägger till en användare i listan för användare. //
-        public void AddUser (UserAccount user)
+        public void AddUser (User user)
         {
             users.Add(user);
         }
 
+        // Kontrollerar om användaren redan finns i listan. //
+        public bool UserExists(string username)
+        {
+            foreach (var user in users)
+            {
+                if (user.Username == username)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // Håller koll på inloggade användare. //
         public bool CurrentUser(string username)
         {
             // Sätts till null innan vi börjar leta efter användare. //

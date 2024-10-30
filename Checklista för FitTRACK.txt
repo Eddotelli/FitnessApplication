@@ -1,0 +1,8 @@
+|| --------------------- Att göra --------------------- ||
+
+() Försök att lösa så att WorkoutsDetailsWindow-fönstret stängs.
+() Implementera ett filterfunktion.
+() Implementera en tvåfaktorsautentisering.
+() Fixa så att varje tränings lista följer med var och en användare.
+() Få Admin-user att funka i appen, se över Person- och User-klassen.
+() Finslipa designen och användarvänligheten.

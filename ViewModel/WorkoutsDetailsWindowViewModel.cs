@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace FitTrack.ViewModel
 {
@@ -108,6 +109,7 @@ namespace FitTrack.ViewModel
         // ------------------------------ Kommando ------------------------------ //
         public RelayCommand EditCommand => new RelayCommand(execute => EditWorkout());
         public RelayCommand SaveCommand => new RelayCommand(execute => SaveWorkout());
+        public RelayCommand CopyCommand => new RelayCommand(execute => CopyWorkout());
 
 
         // ------------------------------ Metoder ------------------------------ //
@@ -125,5 +127,38 @@ namespace FitTrack.ViewModel
             // Använd UpdateWorkout för att meddela ändringen i UserManager
             userManager.UpdateWorkout(localWorkout);
         }
+
+        public void CopyWorkout()
+        {
+            // Kontrollera om träningspasset är av typen StrengthWorkout
+            if (localWorkout is StrengthWorkout strengthWorkout)
+            {
+                userManager.CopiedWorkout = new StrengthWorkout(
+                    strengthWorkout.Name,
+                    strengthWorkout.Repetitions,
+                    strengthWorkout.Date,
+                    strengthWorkout.TypeInput,
+                    strengthWorkout.Duration,
+                    strengthWorkout.CaloriesBurned,
+                    strengthWorkout.Notes
+                );
+            }
+            // Kontrollera om träningspasset är av typen CardioWorkout
+            else if (localWorkout is CardioWorkout cardioWorkout)
+            {
+                userManager.CopiedWorkout = new CardioWorkout(
+                    cardioWorkout.Name,
+                    cardioWorkout.Distance,
+                    cardioWorkout.Date,
+                    cardioWorkout.TypeInput,
+                    cardioWorkout.Duration,
+                    cardioWorkout.CaloriesBurned,
+                    cardioWorkout.Notes
+                );
+            }
+
+            MessageBox.Show("Workout copied successfully!");
+        }
+
     }
 }

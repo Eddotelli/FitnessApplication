@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FitTrack.View"
         mc:Ignorable="d"
-        Title="WorkoutsWindow" Height="450" Width="400">
+        Title="WorkoutsWindow" Height="650" Width="400">
     <Grid>
         
         <StackPanel>
@@ -27,6 +27,12 @@
                     Width="200"
                     Margin="5"/>
 
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+                <Label Content="Name" HorizontalContentAlignment="Center" Width="100"/>
+                <Label Content="Type" HorizontalContentAlignment="Center" Width="100"/>
+                <Label Content="Duration" HorizontalContentAlignment="Center" Width="100"/>
+            </StackPanel>
+            
             <!-- ListBox för att visa träningspassen -->
             <ListBox ItemsSource="{Binding WorkoutsInfo}"
                      SelectedItem="{Binding SelectedItem}"
@@ -41,9 +47,9 @@
                         
                         <StackPanel Orientation="Horizontal" Margin="5">
                             
-                            <TextBlock Text="{Binding Name}" Width="100"/>
-                            <TextBlock Text="{Binding TypeInput}" Width="100"/>
-                            <TextBlock Text="{Binding Duration}" Width="100"/>
+                            <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" Width="100"/>
+                            <TextBlock Text="{Binding TypeInput}" HorizontalAlignment="Center" Width="100"/>
+                            <TextBlock Text="{Binding Duration}" HorizontalAlignment="Center" Width="100"/>
                             
                         </StackPanel>
                         
@@ -53,15 +59,44 @@
                 
             </ListBox>
 
-            <Button Content="Remove selected workout"
-                    Command="{Binding RemoveCommand}"
-                    Width="200"/>
-
             <Button Content="Open details"
                     Command="{Binding OpenCommand}"
                     Width="200"
                     Margin="10"/>
-            
+
+            <Button Content="Remove selected workout"
+                    Command="{Binding RemoveCommand}"
+                    Width="200"/>
+
+            <Button Content="Sign out"
+                    Command="{Binding SignOutCommand}"
+                    Width="200"
+                    Margin="10"/>
+
+            <!-- Information om den inloggade användaren -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                
+                <TextBlock Text="Current logged in user:" FontSize="12" VerticalAlignment="Center" Width="125"/>
+                
+                <Label Content="{Binding LoggedInUsername}" FontSize="12"/>
+                
+            </StackPanel>
+
+            <!-- Infoknapp och Popup -->
+            <Button Content="Info" Command="{Binding InfoPopupCommand}" HorizontalAlignment="Left" Width="30" Margin="5"/>
+
+            <Popup Name="InfoPopup" StaysOpen="False" PlacementTarget="{Binding ElementName=InfoButton}" Placement="Bottom" IsOpen="{Binding IsInfoPopupOpen}">
+
+                <Border Background="LightGray" BorderBrush="Black" BorderThickness="1" Padding="10">
+
+                    <TextBlock Text="In this app you can add, edit and note your training sessions according to your needs. FitTRACK is a company that wants to simplify training for every individual."
+                               Width="150"
+                               TextWrapping="Wrap"/>
+                    
+                </Border>
+                
+            </Popup>
+
         </StackPanel>
         
     </Grid>

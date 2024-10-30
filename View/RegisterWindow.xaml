@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FitTrack.View"
         mc:Ignorable="d"
-        Title="RegisterWindow" Height="450" Width="400">
+        Title="RegisterWindow" Height="600" Width="400">
     <Grid>
  
         <StackPanel>
@@ -17,50 +17,64 @@
                    Foreground="LightGray"
                    Margin="10"/>
 
-            <Label Content="Username"
-                   HorizontalContentAlignment="Center"
-                   Width="200"/>
+            <Label Content="Username" HorizontalContentAlignment="Center" Width="200"/>
 
-            <TextBox x:Name="tbUsername"      
-                     Text="{Binding UsernameInput, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox Text="{Binding UsernameInput, UpdateSourceTrigger=PropertyChanged}"
+                     TextAlignment="Center"
+                     Width="200"
+                     Margin="5"
+                     />
+
+            <Label Content="Password" HorizontalContentAlignment="Center" Width="200"/>
+
+            <TextBox Text="{Binding PasswordInput, UpdateSourceTrigger=PropertyChanged}"
+                     TextAlignment="Center"
+                     Width="200"
+                     Margin="5"
+                     />
+
+            <Label Content="Confirm Password" HorizontalContentAlignment="Center" Width="200"/>
+
+            <TextBox Text="{Binding ConfirmPasswordInput, UpdateSourceTrigger=PropertyChanged}"
                      TextAlignment="Center"
                      Width="200"
                      Margin="10"
                      />
 
-            <Label Content="Password"
-                   HorizontalContentAlignment="Center"
-                   Width="200"/>
-
-            <TextBox x:Name="tbPassword"
-                     Text="{Binding PasswordInput, UpdateSourceTrigger=PropertyChanged}"
-                     TextAlignment="Center"
-                     Width="200"
-                     Margin="10"
-                     />
-
-            <Label Content="Confirm Password"
-                   HorizontalContentAlignment="Center"
-                   Width="200"/>
-
-            <TextBox x:Name="tbConfirmPassword"
-                     Text="{Binding ConfirmPasswordInput, UpdateSourceTrigger=PropertyChanged}"
-                     TextAlignment="Center"
-                     Width="200"
-                     Margin="10"
-                     />
-
-            <ComboBox Name="cbCountrys"
-                      ItemsSource="{Binding Countries}"
+            <Label Content="Select a country." HorizontalContentAlignment="Center" Width="200"/>
+            
+            <ComboBox ItemsSource="{Binding Countries}"
                       SelectedItem="{Binding CountryComboBox}"
                       Width="200"
                       Margin="10"
                       />
 
+            <Label Content="Select a security question" HorizontalContentAlignment="Center" Width="200"/>
+
+            <ComboBox ItemsSource="{Binding SecurityQuestions}"
+                      SelectedItem="{Binding SecurityQuestionComboBox}"
+                      Width="200"
+                      Margin="5"
+                      />
+
+            <Label Content="Answer to security question" HorizontalContentAlignment="Center" Width="200"/>
+
+            <TextBox Text="{Binding SecurityAnswer, UpdateSourceTrigger=PropertyChanged}"
+                     TextAlignment="Center"
+                     Width="200"
+                     Margin="5"/>
+
             <Button Command="{Binding RegisterCommand}"
                     Content="Register"
                     Width="200"
-                    Margin="10"/>
+                    Margin="10"
+                    />
+
+            <Button Command="{Binding CancelCommand}"
+                    Content="Cancel"
+                    Width="200"
+                    Margin="10"
+                    />
 
         </StackPanel>
         

@@ -1,5 +1,6 @@
 ﻿using FitTrack.Model;
 using FitTrack.MVVM;
+using FitTrack.View;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,6 +15,8 @@ namespace FitTrack.ViewModel
     {
         // Singleton-instans av UserManager, används för att hantera gemensam lista mellan olika fönster. //
         private UserManager userManager;
+
+        private readonly Window _userDetailsWindow;
 
         // ---------- Egenskaper ---------- //
         private string orignalUsernameInput;
@@ -80,14 +83,17 @@ namespace FitTrack.ViewModel
         // ------------------------------ Kommando ------------------------------ //
         public RelayCommand SaveCommand => new RelayCommand(execute => SaveUserDetails());
         public RelayCommand CancelCommand => new RelayCommand(execute => Cancel());
+        public RelayCommand ExitCommand => new RelayCommand(execute => Exit());
 
 
         // ------------------------------ Konstruktor ------------------------------ //
 
         // Konstruktor som skapar en ny instans av UserManager. //
-        public UserDetailsWindowViewModel()
+        public UserDetailsWindowViewModel(Window userDetailsWindow)
         {
             userManager = UserManager.Instance; // Använda Singelton-instansen. //
+
+            _userDetailsWindow = userDetailsWindow;
 
             // Kontrollerar så att en användare är inloggad. //
             if (userManager.LoggedInUser != null)
@@ -112,6 +118,8 @@ namespace FitTrack.ViewModel
                 orignalOldPasswordInput = userManager.LoggedInUser.Password;
                 orignalCountryComboBox = userManager.LoggedInUser.Country;
             }
+
+            _userDetailsWindow = userDetailsWindow;
         }
 
         // Lista för olika länder (fasta värden). //
@@ -140,16 +148,24 @@ namespace FitTrack.ViewModel
                     // Kontrollerar om det gamla lösernordet är korrekt. //
                     if (OldPasswordInput == userManager.LoggedInUser.Password)
                     {
-                        UserAccount userToUpdate = null; // Deklararer variabel med UserAccount, en plats att lagra upphittad användare från UserAccount-listan. //
+                        User userToUpdate = null; // Deklararer variabel med User, en plats att lagra upphittad användare från User-listan. //
                         foreach (var user in userManager.Users)
                         {
                             if (user.Username == currentUserInfo.Username)
                             {
                                 // Loppar igenom för att se om användaren-namnet redan finns i listan. //
-                                if (user.Username == UsernameInput && user.Password == NewPasswordInput)
+                                if (user.Username == UsernameInput)
                                 {
                                     MessageBox.Show("The username is already in use by another user. Please choose another.");
                                 }
+
+                                // Kontrollerar lösenordets styrka. //
+                                if (!IsPasswordValid(NewPasswordInput))
+                                {
+                                    MessageBox.Show("The password must be at least 8 characters long and contain at least one number and one special character.");
+                                    return;
+                                }
+
                                 else
                                 {
                                     userToUpdate = user;
@@ -162,18 +178,25 @@ namespace FitTrack.ViewModel
                         {
                             // Uppdaterar användarens information. //
                             userToUpdate.Username = UsernameInput;
-                            userToUpdate.Password = newPasswordInput;
-                            userToUpdate.Country = countryComboBox;
+                            userToUpdate.Password = NewPasswordInput;
+                            userToUpdate.Country = CountryComboBox;
 
                             // Uppdatera också referensen till LoggedInUser som för inloggade användaren. //
                             currentUserInfo.Username = UsernameInput;
-                            currentUserInfo.Password = newPasswordInput;
-                            currentUserInfo.Country = countryComboBox;
+                            currentUserInfo.Password = NewPasswordInput;
+                            currentUserInfo.Country = CountryComboBox;
 
                             MessageBox.Show("User information updated.");
 
                             // Kontroll-utskrift i konsolen. //
                             Console.WriteLine("User information updated.");
+
+                            // Öppnar upp WorkoutsWindow-fönstret. //
+                            WorkoutsWindow work = new WorkoutsWindow();
+                            work.Show();
+
+                            // Stänger ner UserDetailsWindow-fönstret. //
+                            _userDetailsWindow.Close();
                         }
                         else
                         {
@@ -196,6 +219,14 @@ namespace FitTrack.ViewModel
             }
         }
 
+        // Metod för att validera lösenordets styrka. //
+        private bool IsPasswordValid(string password)
+        {
+            // Kontrollerar att lösenordet är minst 8 tecken, innehåller minst en siffra och ett specialtecken. //
+            return password.Length >= 8 && password.Any(char.IsDigit) && password.Any(ch => !char.IsLetterOrDigit(ch)); // <----- Förstå denna bättre!
+        }
+
+        // Metod för att avbryta och återställa informationen. //
         public void Cancel() 
         {
             MessageBoxResult result = MessageBox.Show("Are you sure to cancel and reset?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -219,6 +250,21 @@ namespace FitTrack.ViewModel
             else if (result == MessageBoxResult.No)
             {
                 // ------> Behövs det någon logik här? <------ //
+            }
+        }
+
+        // Metod för att avbryta och gå tillbaka till WorkoutsWindow-fönstret. //
+        public void Exit()
+        {
+            MessageBoxResult result = MessageBox.Show("Are you sure to exit?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                // Öppnar upp WorkoutsWindow-fönstret. //
+                WorkoutsWindow work = new WorkoutsWindow();
+                work.Show();
+
+                _userDetailsWindow.Close(); // Stänger ner UserDetailsWindow-fönstret. //
             }
         }
     }
