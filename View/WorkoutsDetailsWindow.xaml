@@ -5,103 +5,102 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FitTrack.View"
         mc:Ignorable="d"
-        Title="WorkoutsDetailsWindow" Height="450" Width="400">
-    <Grid>
+        Title="WorkoutDetailsWindow" Height="550" Width="400">
 
-        <StackPanel>
+    <Grid Background="LightGray" Margin="10">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="300">
+
             <!-- Titel för fönstret -->
-            <Label Content="Workout Details Window"
-                   HorizontalContentAlignment="Center"
-                   FontSize="20"
-                   Background="Crimson"
-                   Foreground="LightGray"
-                   Margin="10"/>
+            <Label Content="Workout Details"
+               HorizontalContentAlignment="Center"
+               FontSize="20"
+               FontWeight="Bold"
+               Background="Crimson"
+               Foreground="LightGray"
+               Margin="0,10,0,20"/>
 
-            <!-- Textfält och etiketter för varje träningsattribut -->
-            <TextBlock Text="Name"
-                       TextAlignment="Center"
-                       Width="200"
-                       />
-            
+            <!-- Fält för träningsattribut -->
+            <!-- Namn -->
+            <Label Content="Name" HorizontalContentAlignment="Left" Foreground="Crimson" Margin="0,5,0,0" Width="250"/>
             <TextBox Text="{Binding Name}"
-                     IsReadOnly="{Binding IsReadOnly}"
-                     Width="200"
-                     Margin="5"/>
+                 IsReadOnly="{Binding IsReadOnly}"
+                 Width="250"
+                 HorizontalAlignment="Center"
+                 Margin="0,0,0,10"/>
 
-            <TextBlock Text="Type"
-                       TextAlignment="Center"
-                       Width="200"
-                       />
-            
-            <TextBox Text="{Binding Type}"
-                     IsReadOnly="{Binding IsReadOnly}"
-                     Width="200"
-                     Margin="5"/>
+            <!-- Typ -->
+            <Label Content="Type" HorizontalContentAlignment="Left" Foreground="Crimson" Margin="0,5,0,0" Width="250"/>
+            <ComboBox ItemsSource="{Binding DataContext.WorkoutTypes, RelativeSource={RelativeSource AncestorType=Window}}"
+                  SelectedItem="{Binding Type}"
+                  IsEnabled="{Binding IsEditable}" 
+                  Width="250"
+                  Margin="5"/>
 
-            <TextBlock Text="Duration"
-                       TextAlignment="Center"
-                       Width="200"
-                       />
-            
+            <!-- Duration -->
+            <Label Content="Duration" HorizontalContentAlignment="Left" Foreground="Crimson" Margin="0,5,0,0" Width="250"/>
             <TextBox Text="{Binding Duration}"
-                     IsReadOnly="{Binding IsReadOnly}"
-                     Width="200"
-                     Margin="5"/>
+                 IsReadOnly="{Binding IsReadOnly}"
+                 Width="250"
+                 HorizontalAlignment="Center"
+                 Margin="0,0,0,10"/>
 
-            <TextBlock Text="Calories Burned"
-                       TextAlignment="Center"
-                       Width="200"
-                       />
-            
+            <!-- Kalorier brända -->
+            <Label Content="Calories Burned" HorizontalContentAlignment="Left" Foreground="Crimson" Margin="0,5,0,0" Width="250"/>
             <TextBox Text="{Binding CaloriesBurned}"
-                     IsReadOnly="{Binding IsReadOnly}"
-                     Width="200"
-                     Margin="5"/>
+                 IsReadOnly="{Binding IsReadOnly}"
+                 Width="250"
+                 HorizontalAlignment="Center"
+                 Margin="0,0,0,10"/>
 
-            <TextBlock Text="Notes"
-                       TextAlignment="Center"
-                       Width="200"
-                       />
-            
+            <!-- Anteckningar -->
+            <Label Content="Notes" HorizontalContentAlignment="Left" Foreground="Crimson" Margin="0,5,0,0" Width="250"/>
             <TextBox Text="{Binding Notes}"
-                     IsReadOnly="{Binding IsReadOnly}"
-                     Width="200"
-                     Margin="5"/>
+                 IsReadOnly="{Binding IsReadOnly}"
+                 Width="250"
+                 HorizontalAlignment="Center"
+                 Margin="0,0,0,10"/>
 
-            <TextBlock Text="Date"
-                       TextAlignment="Center"
-                       Width="200"
-                       />
-            
-            <TextBox Text="{Binding Date}"
-                     IsReadOnly="{Binding IsReadOnly}"
-                     TextAlignment="Center"
-                     Width="200"
-                     Margin="5"/>
+            <!-- Datum -->
+            <Label Content="Date" HorizontalContentAlignment="Left" Foreground="Crimson" Margin="0,5,0,0" Width="250"/>
+            <DatePicker SelectedDate="{Binding Date}"
+                    IsEnabled="{Binding IsEditable}"
+                    Width="250"
+                    HorizontalAlignment="Center"
+                    Margin="0,0,0,10"/>
 
-            <!-- Knappar för att redigera och spara data -->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
-                
+            <!-- Knappar för hantering av träningsinformation -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,10">
                 <Button Content="Edit"
-                        Command="{Binding EditCommand}"
-                        Margin="5"/>
-                
+                    Command="{Binding EditCommand}"
+                    Width="60"
+                    Background="Crimson"
+                    Foreground="LightGray"
+                    Margin="5"/>
+
                 <Button Content="Save"
-                        Command="{Binding SaveCommand}"
-                        Margin="5"/>
+                    Command="{Binding SaveCommand}"
+                    Width="60"
+                    Background="Crimson"
+                    Foreground="LightGray"
+                    Margin="5"
+                    IsEnabled="{Binding CanSave}"/>
 
                 <Button Content="Copy"
-                        Command="{Binding CopyCommand}"
-                        Margin="5"/>
-                
+                    Command="{Binding CopyCommand}"
+                    Width="60"
+                    Background="Crimson"
+                    Foreground="LightGray"
+                    Margin="5"/>
+
                 <Button Content="Exit"
-                        Command="{Binding ExitCommand}"
-                        Margin="5"/>
-                
+                    Command="{Binding ExitCommand}"
+                    Width="60"
+                    Background="Crimson"
+                    Foreground="LightGray"
+                    Margin="5"/>
             </StackPanel>
-            
+
         </StackPanel>
-        
     </Grid>
-    
+
 </Window>

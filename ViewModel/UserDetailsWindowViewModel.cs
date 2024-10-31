@@ -18,6 +18,9 @@ namespace FitTrack.ViewModel
 
         private readonly Window _userDetailsWindow;
 
+        // Alternativ för ComboBox i kolumnen "Type". //
+        public ObservableCollection<string> WorkoutTypes { get; set; }
+
         // ------------------------------ Egenskaper ------------------------------ //
         private string orignalUsernameInput;
         private string orignalOldPasswordInput;
@@ -120,6 +123,12 @@ namespace FitTrack.ViewModel
             }
 
             _userDetailsWindow = userDetailsWindow;
+
+            // Lista över typer som visas i ComboBox för "Type"-kolumnen. //
+            WorkoutTypes = new ObservableCollection<string>
+            {
+                "Strength", "Cardio"
+            };
         }
 
         // Lista för olika länder (fasta värden). //
@@ -134,85 +143,91 @@ namespace FitTrack.ViewModel
         
         // ------------------------------ Metoder ------------------------------ //
         public void SaveUserDetails()
-        {  
+        {
             MessageBoxResult result = MessageBox.Show("Are you sure to save?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
-            if (result == MessageBoxResult.Yes) 
+            if (result == MessageBoxResult.Yes)
             {
-                // Deklarerar en ny variabel för att lagra uppdaterade uppgifter. //
+                // Kontrollera att en användare är inloggad //
                 var currentUserInfo = userManager.LoggedInUser;
-
-                // Kontrollerar så att en användare är inloggad. //
-                if (userManager.LoggedInUser != null)
+                if (currentUserInfo == null)
                 {
-                    // Kontrollerar om det gamla lösernordet är korrekt. //
-                    if (OldPasswordInput == userManager.LoggedInUser.Password)
+                    Console.WriteLine("No user is logged in.");
+                    return;
+                }
+
+                // Lagrar referens till användare som ska uppdateras. //
+                User userToUpdate = null;
+
+                foreach (var user in userManager.Users)
+                {
+                    if (user.Username == currentUserInfo.Username)
                     {
-                        User userToUpdate = null; // Deklararer variabel med User, en plats att lagra upphittad användare från User-listan. //
-                        foreach (var user in userManager.Users)
-                        {
-                            if (user.Username == currentUserInfo.Username)
-                            {
-                                // Loppar igenom för att se om användaren-namnet redan finns i listan. //
-                                if (user.Username == UsernameInput)
-                                {
-                                    MessageBox.Show("The username is already in use by another user. Please choose another.");
-                                }
+                        userToUpdate = user;
 
-                                // Kontrollerar lösenordets styrka. //
-                                if (!IsPasswordValid(NewPasswordInput))
-                                {
-                                    MessageBox.Show("The password must be at least 8 characters long and contain at least one number and one special character.");
-                                    return;
-                                }
+                        // Avsluta loopen när rätt användare hittas. //
+                        break; 
+                    }
+                }
 
-                                else
-                                {
-                                    userToUpdate = user;
-                                    break;
-                                }
-                            }
-                        }
+                if (userToUpdate == null)
+                {
+                    Console.WriteLine("Could not find the user in the list.");
+                    return;
+                }
 
-                        if (userToUpdate != null)
-                        {
-                            // Uppdaterar användarens information. //
-                            userToUpdate.Username = UsernameInput;
-                            userToUpdate.Password = NewPasswordInput;
-                            userToUpdate.Country = CountryComboBox;
+                // Kontroll av gammalt lösenord om användaren försöker ändra sitt lösenord. //
+                if (!string.IsNullOrEmpty(OldPasswordInput) && OldPasswordInput != currentUserInfo.Password)
+                {
+                    MessageBox.Show("Old password is NOT correct. Please try again.");
+                    return;
+                }
 
-                            // Uppdatera också referensen till LoggedInUser som för inloggade användaren. //
-                            currentUserInfo.Username = UsernameInput;
-                            currentUserInfo.Password = NewPasswordInput;
-                            currentUserInfo.Country = CountryComboBox;
-
-                            MessageBox.Show("User information updated.");
-
-                            // Kontroll-utskrift i konsolen. //
-                            Console.WriteLine("User information updated.");
-
-                            // Öppnar upp WorkoutsWindow-fönstret. //
-                            WorkoutsWindow work = new WorkoutsWindow();
-                            work.Show();
-
-                            // Stänger ner UserDetailsWindow-fönstret. //
-                            _userDetailsWindow.Close();
-                        }
-                        else
-                        {
-                            Console.WriteLine("Could not find the user in the list.");
-                        }
+                // Kontroll om användarnamnet ändras och finns redan. //
+                if (!string.IsNullOrEmpty(UsernameInput) && UsernameInput != currentUserInfo.Username)
+                {
+                    if (userManager.Users.Any(u => u.Username == UsernameInput))
+                    {
+                        MessageBox.Show("The username is already in use by another user. Please choose another.");
+                        return;
                     }
                     else
                     {
-                        MessageBox.Show("Old password is NOT right. Please try again.");
-                    }                   
+                        userToUpdate.Username = UsernameInput;
+                        currentUserInfo.Username = UsernameInput;
+                    }
                 }
-                else
+
+                // Kontroll och validering av nytt lösenord om användaren vill ändra det. //
+                if (!string.IsNullOrEmpty(NewPasswordInput) && NewPasswordInput != currentUserInfo.Password)
                 {
-                    Console.WriteLine("No user is logged in.");
+                    if (!IsPasswordValid(NewPasswordInput))
+                    {
+                        MessageBox.Show("The password must be at least 8 characters long and contain at least one number and one special character.");
+                        return;
+                    }
+                    else
+                    {
+                        userToUpdate.Password = NewPasswordInput;
+                        currentUserInfo.Password = NewPasswordInput;
+                    }
                 }
-            }           
+
+                // Uppdatera land om användaren har valt ett nytt land. //
+                if (!string.IsNullOrEmpty(CountryComboBox) && CountryComboBox != currentUserInfo.Country)
+                {
+                    userToUpdate.Country = CountryComboBox;
+                    currentUserInfo.Country = CountryComboBox;
+                }
+
+                MessageBox.Show("User information updated.");
+                Console.WriteLine("User information updated.");
+
+                // Öppnar WorkoutsWindow och stänger UserDetailsWindow. //
+                WorkoutsWindow work = new WorkoutsWindow();
+                work.Show();
+                _userDetailsWindow.Close();
+            }
         }
 
         // Metod för att avbryta och återställa informationen. //

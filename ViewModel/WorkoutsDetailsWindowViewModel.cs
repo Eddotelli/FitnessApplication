@@ -25,21 +25,7 @@ namespace FitTrack.ViewModel
         // Lokal kopia av träningspasset som redigeras. //
         private Workout localWorkout;
 
-        // Fält för att styra om fälten ska vara låsta för redigering (default är låst). //
-        private bool isReadOnly = true;
-
-        // Offentlig bindningsbar egenskap för att styra om fälten är redigerbara i UI. //
-        public bool IsReadOnly
-        {
-            get { return isReadOnly; }
-            set
-            {
-                isReadOnly = value;
-
-                // Meddelar UI om ändringen. //
-                OnPropertyChanged(nameof(IsReadOnly));
-            }
-        }
+        
 
 
         // ------------------------------ Egenskaper ------------------------------ //
@@ -109,6 +95,33 @@ namespace FitTrack.ViewModel
             }
         }
 
+        // Fält för att styra om fälten ska vara låsta för redigering (default är låst). //
+        private bool isReadOnly = true;
+        private bool canSave = false;
+
+        // Offentlig bindningsbar egenskap för att styra om fälten är redigerbara i UI. //
+        public bool IsReadOnly
+        {
+            get { return isReadOnly; }
+            set
+            {
+                isReadOnly = value;
+
+                // Meddelar UI om ändringen. //
+                OnPropertyChanged(nameof(IsReadOnly));
+            }
+        }
+
+        public bool CanSave
+        {
+            get { return canSave; }
+            set
+            {
+                canSave = value;
+                OnPropertyChanged(nameof(CanSave));
+            }
+        }
+
         // ------------------------------ Konstruktor ------------------------------ //
 
         // Konstruktor som initierar AddWorkoutWindowViewModel. //
@@ -126,7 +139,7 @@ namespace FitTrack.ViewModel
 
         // ------------------------------ Kommando ------------------------------ //
         public RelayCommand EditCommand => new RelayCommand(execute => EditWorkout());
-        public RelayCommand SaveCommand => new RelayCommand(execute => SaveWorkout());
+        public RelayCommand SaveCommand => new RelayCommand(execute => SaveWorkout(), canExecute => CanSave);
         public RelayCommand CopyCommand => new RelayCommand(execute => CopyWorkout());
         public RelayCommand ExitCommand => new RelayCommand(execute => Exit());
 
@@ -138,6 +151,7 @@ namespace FitTrack.ViewModel
         {
             // Gör fälten redigerbara. //
             IsReadOnly = false;
+            CanSave = true;
         }
 
         // Metod för att spara ändringar.
@@ -149,6 +163,7 @@ namespace FitTrack.ViewModel
             {
                 // Lås fälten igen. //
                 IsReadOnly = true;
+                CanSave = false;
 
                 // Använd UpdateWorkout för att meddela ändringen i UserManager. //
                 userManager.UpdateWorkout(localWorkout);

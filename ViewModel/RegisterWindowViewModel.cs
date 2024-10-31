@@ -86,6 +86,13 @@ namespace FitTrack.ViewModel
                 return;
             }
 
+            // Kontrollerar om lösernorden matchar. //
+            if (PasswordInput != ConfirmPasswordInput)
+            {
+                MessageBox.Show("The passwords do not match.");
+                return;
+            }
+
             // Kontrollerar att ett land har valts. //
             if (string.IsNullOrEmpty(CountryComboBox))
             {

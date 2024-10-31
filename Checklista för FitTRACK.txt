@@ -1,9 +1,11 @@
 ------------------------------- Att göra -------------------------------
 () Få Admin-user att funka i appen, se över Person- och User-klassen. <--- Återkom till denna.
+() Få kontrollerna att funka på AddWorkout-fönstet.
 () Implementera ett filterfunktion.
 () Implementera en tvåfaktorsautentisering.
 () Finslipa designen och användarvänligheten.
 () Gå igenom koden och förstå den bättre.
+(X) Se över kontrollen på lösenordet i RegisterWindow.
 (X) Lägg in en MessageBox på SignOut-knappen i WorkoutWindow.
 (X) Försök att lösa så att WorkoutsDetailsWindow-fönstret stängs.
 (X) Fixa så att varje tränings lista följer med var och en användare.
@@ -19,7 +21,7 @@
 
 (X) MainWndow
 (X) RegisterWindow
-() WorkoutWindow
-() UserDetailsWindow
+(X) WorkoutWindow
+(X) UserDetailsWindow
 () AddWorkoutWindow
 () WorkoutDetailsWindow
