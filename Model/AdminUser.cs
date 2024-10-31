@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,9 +20,9 @@ namespace FitTrack.Model
         }
 
         // ------------------------------ Metoder ------------------------------ //
-        public void ManageAllWorkouts()
+        public ObservableCollection<Workout> ManageAllWorkouts()
         {
-
+            return UserManager.Instance.GetAllWorkouts();
         }
     }
 }

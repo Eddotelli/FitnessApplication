@@ -93,6 +93,11 @@
                 <Button Content="Copy"
                         Command="{Binding CopyCommand}"
                         Margin="5"/>
+                
+                <Button Content="Exit"
+                        Command="{Binding ExitCommand}"
+                        Margin="5"/>
+                
             </StackPanel>
             
         </StackPanel>

@@ -18,7 +18,7 @@ namespace FitTrack.ViewModel
 
         private readonly Window _userDetailsWindow;
 
-        // ---------- Egenskaper ---------- //
+        // ------------------------------ Egenskaper ------------------------------ //
         private string orignalUsernameInput;
         private string orignalOldPasswordInput;
         private string orignalCountryComboBox;
@@ -88,7 +88,7 @@ namespace FitTrack.ViewModel
 
         // ------------------------------ Konstruktor ------------------------------ //
 
-        // Konstruktor som skapar en ny instans av UserManager. //
+        // Konstruktor som initierar UserDetailsWindowViewModel. //
         public UserDetailsWindowViewModel(Window userDetailsWindow)
         {
             userManager = UserManager.Instance; // Använda Singelton-instansen. //
@@ -213,17 +213,6 @@ namespace FitTrack.ViewModel
                     Console.WriteLine("No user is logged in.");
                 }
             }           
-            else if (result == MessageBoxResult.No)
-            {
-                // ------> Behövs det någon logik här? <------ //
-            }
-        }
-
-        // Metod för att validera lösenordets styrka. //
-        private bool IsPasswordValid(string password)
-        {
-            // Kontrollerar att lösenordet är minst 8 tecken, innehåller minst en siffra och ett specialtecken. //
-            return password.Length >= 8 && password.Any(char.IsDigit) && password.Any(ch => !char.IsLetterOrDigit(ch)); // <----- Förstå denna bättre!
         }
 
         // Metod för att avbryta och återställa informationen. //
@@ -266,6 +255,13 @@ namespace FitTrack.ViewModel
 
                 _userDetailsWindow.Close(); // Stänger ner UserDetailsWindow-fönstret. //
             }
+        }
+
+        // Metod för att validera lösenordets styrka. //
+        private bool IsPasswordValid(string password)
+        {
+            // Kontrollerar att lösenordet är minst 8 tecken, innehåller minst en siffra och ett specialtecken. //
+            return password.Length >= 8 && password.Any(char.IsDigit) && password.Any(ch => !char.IsLetterOrDigit(ch)); // <----- Förstå denna bättre!
         }
     }
 }

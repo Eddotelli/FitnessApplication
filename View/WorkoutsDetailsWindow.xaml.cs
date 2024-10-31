@@ -22,10 +22,11 @@ namespace FitTrack.View
     public partial class WorkoutsDetailsWindow : Window
     {
         public WorkoutsDetailsWindow(Workout workout)
-        //public WorkoutsDetailsWindow()
         {
             InitializeComponent();
-            DataContext = new WorkoutsDetailsWindowViewModel(workout); // Skicka med workout till ViewModel
+
+            // Skicka med workout och fönsterreferens. //
+            DataContext = new WorkoutsDetailsWindowViewModel(workout,this);
         }
     }
 }

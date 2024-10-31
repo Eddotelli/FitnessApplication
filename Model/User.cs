@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,9 @@ namespace FitTrack.Model
         public string SecurityQuestion {  get; set; }
         public string SecurityAnswer {  get; set; }
 
+        // Egenskap för att lagra träningspass specifikt för varje användare. //
+        public ObservableCollection<Workout> UserWorkouts { get; set; }
+
         // ------------------------------ Konstruktor ------------------------------ //
 
         // Konstruktor som initialiserar en ny instans av UserAccount med angivet användarnamn, lösenord, land, säkerhetsfråga och svar till säkerhetsfrågan. //
@@ -24,7 +28,12 @@ namespace FitTrack.Model
             this.Country = Country;
             this.SecurityQuestion = SecurityQuestion;
             this.SecurityAnswer = SecurityAnswer;
+
+            // Initiera UserWorkouts-listan vid skapande av en användare
+            UserWorkouts = new ObservableCollection<Workout>();
         }
+
+        
 
         // ------------------------------ Metoder ------------------------------ //
         public override void SignIn()

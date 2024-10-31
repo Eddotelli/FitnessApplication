@@ -5,54 +5,49 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FitTrack"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="400">
-    <Grid>
+        Title="FitTRACK - Main Window" Height="400" Width="350">
+    <Grid Margin="10" Background="LightGray">
 
-        <StackPanel>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="250">
 
-            <Label Content="Main Window"
-                   HorizontalContentAlignment="Center"
-                   FontSize="20"
-                   Background="Crimson"
-                   Foreground="LightGray"
-                   Margin="20"/>
+            <!-- FitTRACK Title with style adjustments -->
+            <TextBlock HorizontalAlignment="Center" Margin="0,0,0,20" FontSize="20" Foreground="Crimson">
+                <Run Text="Fit" FontWeight="Normal"/>
+                <Run Text="TRACK" FontWeight="Bold"/>
+            </TextBlock>
 
-            <Label Content="Username" HorizontalContentAlignment="Center" Width="200"/>
-            
+            <!-- Username Label and TextBox -->
+            <Label Content="Username" HorizontalContentAlignment="Center" Foreground="Crimson"/>
             <TextBox Text="{Binding UsernameInput, UpdateSourceTrigger=PropertyChanged}"
-                     TextAlignment="Center"
-                     Width="200"
-                     Margin="10"/>
+                     Width="200" TextAlignment="Center" Margin="5"/>
 
-            <Label Content="Password" HorizontalContentAlignment="Center" Width="200"/>
-
+            <!-- Password Label and TextBox (Regular TextBox) -->
+            <Label Content="Password" HorizontalContentAlignment="Center" Foreground="Crimson"/>
             <TextBox Text="{Binding PasswordInput, UpdateSourceTrigger=PropertyChanged}"
-                     TextAlignment="Center"
-                     Width="200"
-                     Margin="10"/>
+                     Width="200" TextAlignment="Center" Margin="5"/>
 
+            <!-- Buttons for Sign In, Register, and Reset Password -->
             <Button Command="{Binding SignInCommand}"
-                    Width="200"
                     Content="Sign in"
-                    Margin="10"/>
+                    Background="Crimson"
+                    Foreground="LightGray"
+                    Width="200"
+                    Margin="10,20,10,5"/>
 
             <Button Command="{Binding RegisterCommand}"
+                    Content="Register"
+                    Background="Crimson"
+                    Foreground="LightGray"
                     Width="200"
-                    Content="Register"/>
+                    Margin="10,5"/>
 
             <Button Command="{Binding ResetPasswordCommand}"
-                    Width="200"
                     Content="Reset password"
-                    Margin="10"/>
-
-            <Label Content="FitTRACK"
-                   HorizontalContentAlignment="Center"
-                   FontSize="20"
-                   Background="Crimson"
-                   Foreground="LightGray"
-                   Margin="20"/>
+                    Background="Crimson"
+                    Foreground="LightGray"
+                    Width="200"
+                    Margin="10,5"/>
 
         </StackPanel>
-
     </Grid>
 </Window>

@@ -29,9 +29,18 @@ namespace FitTrack.Model
         // Privat konstruktor förhindrar skapande av fler instanser. //
         private UserManager() 
         {
-            //Fast(test)-användare. //
+            // Fast(test)-användare. //
             users.Add(new User("user", "user123!", "Gambia", "user", "user" ));
+
+            // Admin-användare. //
+            var adminUser = new AdminUser("admin", "admin123!", "Country", "donkey", "kong");
+
+            // Lägger till admin-användaren till listan för användare. //
+            users.Add(adminUser);
         }
+
+        // Egenskap för att få den inloggade användarens träningspass.
+        public ObservableCollection<Workout> LoggedInUserWorkouts => LoggedInUser?.UserWorkouts;
 
         // Egenskap för lagring av kopierat träningspass. //
         public Workout CopiedWorkout { get; set; }
@@ -68,7 +77,25 @@ namespace FitTrack.Model
 
         // Publik egenskap för att hålla koll samt ev. ändra på den inloggade användaren. //
         public User LoggedInUser { get; set; } // <------------------------------------------ Granska detta.
-         
+
+        // Samlad lista över alla träningspass för alla användare. //
+        public ObservableCollection<Workout> GetAllWorkouts()
+        {
+            // Listan som lagrar träningspassen från alla användare. //
+            ObservableCollection<Workout> allWorkouts = new ObservableCollection<Workout>();
+
+            // Loppar igenom och lägger in varje skapad träningspass och varje användare. //
+            foreach (var user in Users)
+            {
+                
+                foreach (var workout in user.UserWorkouts)
+                {
+                    allWorkouts.Add(workout);
+                }
+            }
+            return allWorkouts;
+        }
+
 
         // ------------------------------ Metoder ------------------------------- //
 

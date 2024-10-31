@@ -6,115 +6,66 @@
         xmlns:local="clr-namespace:FitTrack.View"
         mc:Ignorable="d"
         Title="AddWorkoutWindow" Height="450" Width="800">
-    <Grid>
-        
-        <StackPanel>
-            
-            <Label Content="Add Workout Window"
-                   HorizontalContentAlignment="Center"
-                   FontSize="20"
-                   Background="Crimson"
-                   Foreground="LightGray"
-                   Margin="10"/>
+    <Grid Background="LightGray" Margin="10">
 
-            <Label Content="Choose a workout type" HorizontalContentAlignment="Center"/>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10">
 
-            <!-- ComboBox för att välja WorkoutType -->
-            <ComboBox Text="Type"
-                      ItemsSource="{Binding WorkoutTypes}"
-                      SelectedItem="{Binding WorkoutTypeComboBox}"
-                      Width="80"
-                      Margin="5"
-                      />
+            <!-- Header -->
+            <Label HorizontalContentAlignment="Center" FontSize="20" Background="Crimson" Foreground="LightGray" Margin="0,0,0,10">
+                <TextBlock TextAlignment="Center">
+                <Run Text="Fit" FontWeight="Normal"/>
+                <Run Text="TRACK" FontWeight="Bold"/>
+                </TextBlock>
+            </Label>
 
-            <!-- ListBox för att visa och redigera träningspass -->
-            <ListBox ItemsSource="{Binding WorkoutsInfo}"
-                     SelectedItem="{Binding SelectedItem}"
-                     Width="650"
-                     Height="200"
-                     Margin="5">
+            <!-- Workout Type Selection -->
+            <ComboBox ItemsSource="{Binding WorkoutTypes}"
+                  SelectedItem="{Binding WorkoutTypeComboBox}"
+                  Width="150" Background="White" Foreground="Crimson" Margin="5"/>
 
+            <!-- Workout List with Headers -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+                <Label Content="Name" Width="100" Foreground="Crimson" HorizontalContentAlignment="Center"/>
+                <Label Content="Type" Width="100" Foreground="Crimson" HorizontalContentAlignment="Center"/>
+                <Label Content="Duration" Width="100" Foreground="Crimson" HorizontalContentAlignment="Center"/>
+            </StackPanel>
+
+            <ListBox ItemsSource="{Binding WorkoutsInfo}" SelectedItem="{Binding SelectedItem}" Width="350" Height="150" Margin="5">
                 <ListBox.ItemTemplate>
-
                     <DataTemplate>
-
-                        <StackPanel Orientation="Horizontal">
-
-                            <!-- TextBox för Name -->
-                            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                                     Width="100"
-                                     Margin="5"/>
-
-                            <!-- ComboBox för Type med WorkoutTypes som ItemsSource -->
+                        <StackPanel Orientation="Horizontal" Margin="2">
+                            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="80" Background="White" Foreground="Crimson" Margin="2"/>
                             <ComboBox ItemsSource="{Binding DataContext.WorkoutTypes, RelativeSource={RelativeSource AncestorType=Window}}"
-                                      SelectedItem="{Binding TypeInput, UpdateSourceTrigger=PropertyChanged}"
-                                      Width="100"
-                                      Margin="5"/>
-
-                            <!-- TextBox för Duration -->
-                            <TextBox Text="{Binding Duration, StringFormat=\{0:hh\\:mm\\:ss\}, UpdateSourceTrigger=PropertyChanged}"
-                                     Width="50"
-                                     Margin="5"/>
-
-                            <!-- TextBox för CaloriesBurned -->
-                            <TextBox Text="{Binding CaloriesBurned, UpdateSourceTrigger=PropertyChanged}"
-                                     Width="50"
-                                     Margin="5"/>
-
-                            <!-- TextBox för Notes -->
-                            <TextBox Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}"
-                                     Width="150"
-                                     Margin="5"/>
-
-                            <!-- DatePicker för Date -->
-                            <DatePicker SelectedDate="{Binding Date, UpdateSourceTrigger=PropertyChanged}"
-                                        Width="100"
-                                        Margin="5"/>
-
+                                  SelectedItem="{Binding TypeInput, UpdateSourceTrigger=PropertyChanged}"
+                                  Width="80" Background="White" Foreground="Crimson" Margin="2"/>
+                            <TextBox Text="{Binding Duration, StringFormat=\{0:hh\\:mm\\:ss\}, UpdateSourceTrigger=PropertyChanged}" Width="60" Background="White" Foreground="Crimson" Margin="2"/>
+                            <TextBox Text="{Binding CaloriesBurned, UpdateSourceTrigger=PropertyChanged}" Width="50" Background="White" Foreground="Crimson" Margin="2"/>
+                            <TextBox Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" Width="120" Background="White" Foreground="Crimson" Margin="2"/>
+                            <DatePicker SelectedDate="{Binding Date, UpdateSourceTrigger=PropertyChanged}" Width="100" Background="White" Foreground="Crimson" Margin="2"/>
                         </StackPanel>
-
                     </DataTemplate>
-
                 </ListBox.ItemTemplate>
-
             </ListBox>
 
-            <StackPanel Orientation ="Horizontal" HorizontalAlignment="Center">
-                <!-- Buttons for actions -->
-                <Button Content="Add"
-                        Command="{Binding AddCommand}"
-                        Width="100"
-                        Margin="5"/>
+            <!-- Conditional Fields: Reps or Distance/Slider -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+                <TextBlock Text="Reps:" Foreground="Crimson" Margin="0,0,5,0" Visibility="{Binding TypeInput, Converter={StaticResource StrengthVisibilityConverter}}"/>
+                <TextBox Text="{Binding Repetitions, UpdateSourceTrigger=PropertyChanged}" Width="60" Background="White" Foreground="Crimson" Margin="5" Visibility="{Binding TypeInput, Converter={StaticResource StrengthVisibilityConverter}}"/>
+                <TextBlock Text="Distance:" Foreground="Crimson" Margin="0,0,5,0" Visibility="{Binding TypeInput, Converter={StaticResource CardioVisibilityConverter}}"/>
+                <TextBox Text="{Binding Distance, UpdateSourceTrigger=PropertyChanged}" Width="60" Background="White" Foreground="Crimson" Margin="5" Visibility="{Binding TypeInput, Converter={StaticResource CardioVisibilityConverter}}"/>
+                <Slider Value="{Binding Distance, Mode=TwoWay}" Minimum="10" Maximum="100" Width="100" Margin="5" Visibility="{Binding TypeInput, Converter={StaticResource CardioVisibilityConverter}}"/>
+            </StackPanel>
 
-                <Button Content="Remove"
-                        Command="{Binding RemoveCommand}"
-                        Width="100"
-                        Margin="5"/>
-
-                <Button Content="Save"
-                        Command="{Binding SaveCommand}"
-                        Width="100"
-                        Margin="5"/>
-
-                <Button Content="Paste"
-                        Command="{Binding PasteCommand}"
-                        Width="100"
-                        Margin="5"/>
-
-                <Button Content="Restore"
-                        Command="{Binding RestoreCommand}"
-                        Width="100"
-                        Margin="5"/>
-
-                <Button Content="Exit"
-                        Command="{Binding ExitCommand}"
-                        Width="100"
-                        Margin="5"/>
-
+            <!-- Action Buttons -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                <Button Content="Add" Command="{Binding AddCommand}" Width="70" Background="Crimson" Foreground="LightGray" Margin="2"/>
+                <Button Content="Remove" Command="{Binding RemoveCommand}" Width="70" Background="Crimson" Foreground="LightGray" Margin="2"/>
+                <Button Content="Save" Command="{Binding SaveCommand}" Width="70" Background="Crimson" Foreground="LightGray" Margin="2"/>
+                <Button Content="Paste" Command="{Binding PasteCommand}" Width="70" Background="Crimson" Foreground="LightGray" Margin="2"/>
+                <Button Content="Restore" Command="{Binding RestoreCommand}" Width="70" Background="Crimson" Foreground="LightGray" Margin="2"/>
+                <Button Content="Exit" Command="{Binding ExitCommand}" Width="70" Background="Crimson" Foreground="LightGray" Margin="2"/>
             </StackPanel>
 
         </StackPanel>
-        
     </Grid>
-      
 </Window>

@@ -1,8 +1,25 @@
-|| --------------------- Att göra --------------------- ||
-
-() Försök att lösa så att WorkoutsDetailsWindow-fönstret stängs.
+------------------------------- Att göra -------------------------------
+() Få Admin-user att funka i appen, se över Person- och User-klassen. <--- Återkom till denna.
 () Implementera ett filterfunktion.
 () Implementera en tvåfaktorsautentisering.
-() Fixa så att varje tränings lista följer med var och en användare.
-() Få Admin-user att funka i appen, se över Person- och User-klassen.
 () Finslipa designen och användarvänligheten.
+() Gå igenom koden och förstå den bättre.
+(X) Lägg in en MessageBox på SignOut-knappen i WorkoutWindow.
+(X) Försök att lösa så att WorkoutsDetailsWindow-fönstret stängs.
+(X) Fixa så att varje tränings lista följer med var och en användare.
+
+------------------------------------------------------------------------
+(X) Person-klass
+(X) User-klass
+() AdminUser-klass
+
+(X) Workout-klass
+() CardioWorkout
+() StrengthWorkout
+
+(X) MainWndow
+(X) RegisterWindow
+() WorkoutWindow
+() UserDetailsWindow
+() AddWorkoutWindow
+() WorkoutDetailsWindow

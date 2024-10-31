@@ -9,37 +9,55 @@ namespace FitTrack.ViewModel
 {
     public class WorkoutsWindowViewModel : ViewModelBase
     {
-        // Singleton-instans av UserManager, används för att hantera gemensam lista mellan olika fönster. //
+        // Singleton-instans av UserManager, används för att dela en gemensam lista och centraliserad datahantering mellan olika fönster. //
         private UserManager userManager;
 
-        // Denna referens används för att kunna stänga eller kontrollera fönstret från ViewModel.
+        // Denna referens används för att kunna stänga eller kontrollera fönstret från ViewModel. //
         private readonly Window _workoutWindow;
 
-        // Bunden till UserManager's WorkoutsInfo direkt för synkronisering. //
-        public ObservableCollection<Workout> WorkoutsInfo => userManager.WorkoutsInfo;
+        //// Denna egenskap binder till den inloggade användarens WorkoutsInfo och uppdateras automatiskt. //
+        //public ObservableCollection<Workout> WorkoutsInfo => userManager.LoggedInUser?.UserWorkouts;
 
-        // ------------------------------ Egenskaper ------------------------------ //
-        // Egenskap för vald träningspass. //
-        // Privat fält som lagrar den valda träningspasset. //
-        private Workout selectedItem;
-        public Workout SelectedItem
+        // Egenskap för träningspass-listan, anpassad efter om en admin eller vanlig användare är inloggad.
+        private ObservableCollection<Workout> _workoutsInfo;
+        public ObservableCollection<Workout> WorkoutsInfo
         {
-            get { return selectedItem; } // Returnerar värdet av selectedItem. //
-            set
+            get { return _workoutsInfo; }
+            private set
             {
-                selectedItem = value; // Sätter värdet av selectedItem till det nya värdet. //
-                OnPropertyChanged(nameof(SelectedItem)); // Meddelar att SelectedItem har ändrats, så UI kan uppdateras. //
+                _workoutsInfo = value;
+                OnPropertyChanged(nameof(WorkoutsInfo));
             }
         }
 
-        // Egenskap för att hantera popup-öppning
+        // ------------------------------ Egenskaper ------------------------------ //
+
+        // Privat egenskap som lagrar den valda träningspasset. //
+        private Workout selectedItem;
+        public Workout SelectedItem
+        {
+            // Returnerar värdet av selectedItem. //
+            get { return selectedItem; }
+            set
+            {
+                // Sätter värdet av selectedItem till det nya värdet. //
+                selectedItem = value;
+
+                // Meddelar att SelectedItem har ändrats, så UI kan uppdateras. //
+                OnPropertyChanged(nameof(SelectedItem));
+            }
+        }
+
+        // Egenskap för att hantera popup-öppning. //
         private bool _isInfoPopupOpen;
         public bool IsInfoPopupOpen
         {
-            get => _isInfoPopupOpen;
+            get { return _isInfoPopupOpen; }
             set
             {
                 _isInfoPopupOpen = value;
+
+                // Meddelar UI om ändringen. //
                 OnPropertyChanged(nameof(IsInfoPopupOpen));
             }
         }
@@ -74,12 +92,25 @@ namespace FitTrack.ViewModel
 
         // ------------------------------ Konstruktor ------------------------------ //
 
-        // Konstruktor som skapar en ny instans av UserManager. //
+        // Konstruktor som initierar WorkoutsWindowViewModel. //
         public WorkoutsWindowViewModel(Window workoutwindow)
         {
-            userManager = UserManager.Instance; // Använda Singelton-instansen. //
+            // Hämtar Singleton-instansen av UserManager för att säkerställa att samma användar- och datahantering delas över hela applikationen. //
+            userManager = UserManager.Instance;
 
-            _workoutWindow = workoutwindow; // Detta gör att ViewModel kan stänga fönstret när registreringen är klar. //
+            // Detta gör att ViewModel kan stänga fönstret när registreringen är klar. //
+            _workoutWindow = workoutwindow;
+
+            if (userManager.LoggedInUser is AdminUser)
+            {
+                // Om AdminUser är inloggad, visa alla träningspass.
+                WorkoutsInfo = userManager.GetAllWorkouts();
+            }
+            else
+            {
+                // För vanliga användare, visa bara användarens egna träningspass.
+                WorkoutsInfo = userManager.LoggedInUser?.UserWorkouts ?? new ObservableCollection<Workout>();
+            }
         }
 
         // ------------------------------ Metoder ------------------------------ //
@@ -106,10 +137,14 @@ namespace FitTrack.ViewModel
         public void RemoveWorkout()
         {
             // Tar bort vald träningspass från listan. //
-            if (selectedItem != null) 
+            if (SelectedItem != null) 
             {
-                userManager.WorkoutsInfo.Remove(selectedItem);
-                SelectedItem = null; // Rensa SelectedItem för att förhindra referens till raderat objekt. //
+                if (userManager.LoggedInUser != null)
+                {
+                    userManager.LoggedInUser.UserWorkouts.Remove(SelectedItem);
+                    SelectedItem = null;
+                    OnPropertyChanged(nameof(WorkoutsInfo));
+                }
             }
             else
             {
@@ -123,11 +158,10 @@ namespace FitTrack.ViewModel
             if (workout != null)
             {
                 WorkoutsDetailsWindow detailsWindow = new WorkoutsDetailsWindow(workout);
-                //WorkoutsDetailsWindow detailsWindow = new WorkoutsDetailsWindow();
-                //detailsWindow.Show();
+                detailsWindow.Show();
 
                 // Stänger ner WorkoutWindow-fönstret. //
-                //_workoutWindow.Close();
+                _workoutWindow.Close();
             }
             else
             {
@@ -137,14 +171,20 @@ namespace FitTrack.ViewModel
 
         private void SignOut()
         {
-            userManager.LoggedInUser = null;
+            MessageBoxResult result = MessageBox.Show("Are you sure yow wanna sign out?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
-            // Öppnar upp MainWindow-fönstret. //
-            MainWindow main = new MainWindow();
-            main.Show();
+            if (result == MessageBoxResult.Yes)
+            {
+                // Rensar inloggad användare. //
+                userManager.LoggedInUser = null;
 
-            // Stänger ner WorkoutWindow-fönstret. //
-            _workoutWindow.Close();
+                // Öppnar upp MainWindow-fönstret. //
+                MainWindow main = new MainWindow();
+                main.Show();
+
+                // Stänger ner WorkoutWindow-fönstret. //
+                _workoutWindow.Close();
+            }   
         }
 
         // Metod för att uppdatera användarnamnet i UI vid ändringar

@@ -14,10 +14,9 @@ namespace FitTrack.ViewModel
 {
     public class RegisterWindowViewModel : ViewModelBase
     {
-        // Singleton-instans av UserManager, används för att hantera gemensam lista mellan olika fönster. //
+        // Singleton-instans av UserManager, används för att dela en gemensam lista och centraliserad datahantering mellan olika fönster. //
         private UserManager userManager;
 
-        // Deklarerar en privat fältvariabel för att referera till det fönster där registreringen sker. //
         // Denna referens används för att kunna stänga eller kontrollera fönstret från ViewModel. //
         private readonly Window _registerWindow;
 
@@ -31,14 +30,13 @@ namespace FitTrack.ViewModel
 
         // ------------------------------ Konstruktor ------------------------------ //
 
-        // Konstruktor som skapar en ny instans av UserManager. //
+        // Konstruktor som initierar RegisterWindowViewModel. //
         public RegisterWindowViewModel(Window registerWindow)
         {
-            // Ser till så att den används en och samma UserManager-instans varje gång den anropas. //
-            userManager = UserManager.Instance; // Använda Singelton-instansen. //
-
-            // Tilldelar den instans av Window (fönstret) som skickades in till konstruktorparametern `registerWindow`.
-            // Detta gör att ViewModel kan stänga fönstret när registreringen är klar.
+            // Hämtar Singleton-instansen av UserManager för att säkerställa att samma användar- och datahantering delas över hela applikationen. //
+            userManager = UserManager.Instance;
+            
+            // Detta gör att ViewModel kan stänga fönstret när registreringen är klar. //
             _registerWindow = registerWindow;
         }
 
@@ -88,14 +86,14 @@ namespace FitTrack.ViewModel
                 return;
             }
 
-            // Kontrollera att ett land har valts. //
+            // Kontrollerar att ett land har valts. //
             if (string.IsNullOrEmpty(CountryComboBox))
             {
                 MessageBox.Show("Please select a country.");
                 return;
             }
 
-            // Kontrollera att en säkerhetsfråga har valts och att ett svar har angivits. //
+            // Kontrollerar att en säkerhetsfråga har valts och att ett svar har angivits. //
             if (string.IsNullOrEmpty(SecurityQuestionComboBox) || string.IsNullOrWhiteSpace(SecurityAnswer))
             {
                 MessageBox.Show("Please select a security question and provide an answer.");
@@ -129,7 +127,8 @@ namespace FitTrack.ViewModel
             MainWindow mainWindow = new MainWindow();
             mainWindow.Show();
 
-            _registerWindow.Close(); // Stänger ner RegisterWindow-fönstret. //
+            // Stänger ner RegisterWindow-fönstret. //
+            _registerWindow.Close();
         }
 
         // Metod för att avbryta och gå tillbaka till MainWindow-fönstret. //
@@ -143,7 +142,8 @@ namespace FitTrack.ViewModel
                 MainWindow mainWindow = new MainWindow();
                 mainWindow.Show();
 
-                _registerWindow.Close(); // Stänger ner RegisterWindow-fönstret. //
+                // Stänger ner RegisterWindow-fönstret. //
+                _registerWindow.Close();
             }
         }
 

@@ -20,8 +20,10 @@ namespace FitTrack.Model
         // ------------------------------ Metoder ------------------------------ //
         public override int CalculateCaloriesBurned()
         {
-            // Exempelberäkning (anpassa enligt behov)
-            return (int)(Duration.TotalMinutes * 8); // Exempel: 8 kalorier per minut
+            Random slump = new Random();
+
+            //Slumpar mellan 8-15 kalorier per minut. //
+            return (int)Distance * (slump.Next(8, 16));
         }
     }
 }

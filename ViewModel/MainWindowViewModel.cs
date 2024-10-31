@@ -14,7 +14,7 @@ namespace FitTrack.ViewModel
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        // Singleton-instans av UserManager som deklareras, används för att hantera gemensam lista mellan olika fönster. //
+        // Singleton-instans av UserManager, används för att dela en gemensam lista och centraliserad datahantering mellan olika fönster. //
         private UserManager userManager;
 
         // Denna referens används för att kunna stänga eller kontrollera fönstret från ViewModel. //
@@ -34,20 +34,21 @@ namespace FitTrack.ViewModel
 
         // ------------------------------ Konstruktor ------------------------------ //
 
-        // Konstruktor som skapar en ny instans av UserManager. //
+        // Konstruktor som initierar MainWindowViewModel. //
         public MainWindowViewModel(Window mainwindow)
         {
-            // Ser till så att den används en och samma UserManager-instans varje gång den anropas. //
-            userManager = UserManager.Instance; // Använda Singelton-instansen. //
+            // Hämtar Singleton-instansen av UserManager för att säkerställa att samma användar- och datahantering delas över hela applikationen. //
+            userManager = UserManager.Instance;
 
+            // Förinmatade user(test)-användare. //
             UsernameInput = "user";
             PasswordInput = "user123!";
 
             OnPropertyChanged(nameof(UsernameInput));
             OnPropertyChanged(nameof(PasswordInput));
-       
-            _mainWindow = mainwindow; // Detta gör att ViewModel kan stänga fönstret när registreringen är klar. //
 
+            // Sparar referens till fönstret. //
+            _mainWindow = mainwindow;
         }
 
         // ------------------------------ Metoder ------------------------------ //
@@ -61,13 +62,13 @@ namespace FitTrack.ViewModel
             {
                 if (user.Username == UsernameInput && user.Password == PasswordInput)
                 {
-                    // isAuthenticated får värdet 'true' genom metoden CurrentUser i UserManager-klassen. //
-                    isAuthenticated = userManager.CurrentUser(UsernameInput); // Detta ger även LoggedInUser username-inputet som värde. //
+                    // isAuthenticated får värdet 'true' genom metoden CurrentUser i UserManager-klassen. Detta ger även LoggedInUser username-inputet som värde. //
+                    isAuthenticated = userManager.CurrentUser(UsernameInput);
                     break;
                 }
             }
 
-            // Kontrollera om inloggningen gick igenom eller ej. //
+            // Kontrollerar om inloggningen gick igenom eller ej. //
             if (isAuthenticated)
             {
                 // Om inloggningen lyckas visas ett välkomstmeddelande. //
@@ -82,8 +83,8 @@ namespace FitTrack.ViewModel
                 OnPropertyChanged(nameof(PasswordInput));
 
                 // Öppna WorkoutsWindow. //
-                WorkoutsWindow workoutsWindow = new WorkoutsWindow();
-                workoutsWindow.Show();
+                WorkoutsWindow work = new WorkoutsWindow();
+                work.Show();
 
                 // Stänger ner MainWindow-fönstret. //
                 _mainWindow.Close();
@@ -107,9 +108,9 @@ namespace FitTrack.ViewModel
 
         }
 
-        private void ResetPassword() // <--- Lägga denna i User?
+        private void ResetPassword()
         {
-            // Sök efter användaren baserat på inmatat användarnamn. // <---- Återkom och förstå denna bättre.
+            // Sök efter användaren baserat på inmatat användarnamn. //
             User user = null;
 
             foreach (User u in userManager.Users)
@@ -123,21 +124,19 @@ namespace FitTrack.ViewModel
 
             if (user != null)
             {
-                // Användaren hittades, visa säkerhetsfrågan. //
+                // Om användaren hittas, visas säkerhetsfrågan. //
                 var userQuestion = user.SecurityQuestion;
                 string answer = Microsoft.VisualBasic.Interaction.InputBox($"Security Question:\n{userQuestion}", "Answer Security Question");
 
-                // Kontrollera om svaret matchar det som användaren har sparat. //
-                
+                // Kontrollera om svaret matchar det som användaren har anget. //
                 if (answer.Equals(user.SecurityAnswer, StringComparison.OrdinalIgnoreCase))
                 {
                     MessageBox.Show("Security answer correct!");
 
-                    // Anropa ResetPassword på user-objektet och visa användarens lösenord i PasswordInput.
+                    // Anropar ResetPassword på user-objektet och visar användarens lösenord i PasswordInput. //
                     user.ResetPassword(answer);
 
-                    //ShowPassword(user.Password);
-
+                    // Uppdaterar UI. //
                     OnPropertyChanged(nameof(PasswordInput));
                 }
                 else
@@ -151,7 +150,7 @@ namespace FitTrack.ViewModel
             }
         }
 
-        // Metod som hanterar visning av lösenord
+        // Metod som hanterar visning av lösenordet. //
         public void ShowPassword(string password)
         {
             PasswordInput = password;

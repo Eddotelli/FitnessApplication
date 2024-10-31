@@ -1,5 +1,6 @@
 ﻿using FitTrack.Model;
 using FitTrack.MVVM;
+using FitTrack.View;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,39 +13,49 @@ namespace FitTrack.ViewModel
 {
     public class WorkoutsDetailsWindowViewModel : ViewModelBase
     {
-        // Singleton-instans av UserManager, används för att få tillgång till träningspassen
+        // Singleton-instans av UserManager, används för att dela en gemensam lista och centraliserad datahantering mellan olika fönster. //
         private UserManager userManager;
+
+        // Denna referens används för att kunna stänga eller kontrollera fönstret från ViewModel. //
+        private readonly Window _detailsWindow;
 
         // Bunden till UserManager's WorkoutsInfo direkt för synkronisering med andra fönster. //
         public ObservableCollection<Workout> WorkoutsInfo => userManager.WorkoutsInfo;
 
-        // Lokal kopia av träningspasset som redigeras
+        // Lokal kopia av träningspasset som redigeras. //
         private Workout localWorkout;
 
-        // Fält för att styra om fälten ska vara låsta för redigering (default är låst)
+        // Fält för att styra om fälten ska vara låsta för redigering (default är låst). //
         private bool isReadOnly = true;
 
-        // Offentlig bindningsbar egenskap för att styra om fälten är redigerbara i UI
+        // Offentlig bindningsbar egenskap för att styra om fälten är redigerbara i UI. //
         public bool IsReadOnly
         {
             get { return isReadOnly; }
             set
             {
                 isReadOnly = value;
-                OnPropertyChanged(nameof(IsReadOnly)); // Meddelar UI om ändringen
+
+                // Meddelar UI om ändringen. //
+                OnPropertyChanged(nameof(IsReadOnly));
             }
         }
 
 
         // ------------------------------ Egenskaper ------------------------------ //
+
         // Bindningsbara egenskaper för att visa och ändra information i UI. //
         public string Name
         {
-            get { return localWorkout.Name; } // Hämtar namnet från träningspasset
+            // Hämtar namnet från träningspasset. //
+            get { return localWorkout.Name; }
             set
             {
-                localWorkout.Name = value; // Uppdaterar namnet. //
-                OnPropertyChanged(nameof(Name)); // Meddelar UI om ändringen. //
+                // Uppdaterar namnet. //
+                localWorkout.Name = value;
+
+                // Meddelar UI om ändringen. //
+                OnPropertyChanged(nameof(Name));
             }
         }
 
@@ -99,38 +110,62 @@ namespace FitTrack.ViewModel
         }
 
         // ------------------------------ Konstruktor ------------------------------ //
-        // Konstruktorn tar emot det träningspass som ska redigeras
-        public WorkoutsDetailsWindowViewModel(Workout workout)
+
+        // Konstruktor som initierar AddWorkoutWindowViewModel. //
+        public WorkoutsDetailsWindowViewModel(Workout workout, Window detailsWindow)
         {
-            userManager = UserManager.Instance; // Använd befintlig instans av UserManager. //
-            localWorkout = workout; // Spara träningspasset som skickats in. //
-        }  
+            // Hämtar Singleton-instansen av UserManager för att säkerställa att samma användar- och datahantering delas över hela applikationen. //
+            userManager = UserManager.Instance;
+
+            // Sparar träningspasset som skickats in. //
+            localWorkout = workout;
+
+            // Sparar referens till fönstret. //
+            _detailsWindow = detailsWindow;
+        }
 
         // ------------------------------ Kommando ------------------------------ //
         public RelayCommand EditCommand => new RelayCommand(execute => EditWorkout());
         public RelayCommand SaveCommand => new RelayCommand(execute => SaveWorkout());
         public RelayCommand CopyCommand => new RelayCommand(execute => CopyWorkout());
+        public RelayCommand ExitCommand => new RelayCommand(execute => Exit());
 
 
         // ------------------------------ Metoder ------------------------------ //
+
         // Metod för att låsa upp textfälten så att de kan redigeras. //
         public void EditWorkout()
         {
-            IsReadOnly = false; // Gör fälten redigerbara. //
+            // Gör fälten redigerbara. //
+            IsReadOnly = false;
         }
 
         // Metod för att spara ändringar.
         public void SaveWorkout()
         {
-            IsReadOnly = true; // Lås fälten igen. //
+            MessageBoxResult result = MessageBox.Show("Are you sure to save and go back?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
-            // Använd UpdateWorkout för att meddela ändringen i UserManager
-            userManager.UpdateWorkout(localWorkout);
+            if (result == MessageBoxResult.Yes)
+            {
+                // Lås fälten igen. //
+                IsReadOnly = true;
+
+                // Använd UpdateWorkout för att meddela ändringen i UserManager. //
+                userManager.UpdateWorkout(localWorkout);
+
+                // Öppnar upp WorkoutsWindow-fönstret. //
+                WorkoutsWindow work = new WorkoutsWindow();
+                work.Show();
+
+                // Stänger ner WorkoutsDetailsWindow-fönstret. //
+                _detailsWindow.Close();
+            }    
         }
 
+        // Kopierar träningspasset. //
         public void CopyWorkout()
         {
-            // Kontrollera om träningspasset är av typen StrengthWorkout
+            // Kontrollera om träningspasset är av typen StrengthWorkout. //
             if (localWorkout is StrengthWorkout strengthWorkout)
             {
                 userManager.CopiedWorkout = new StrengthWorkout(
@@ -143,7 +178,7 @@ namespace FitTrack.ViewModel
                     strengthWorkout.Notes
                 );
             }
-            // Kontrollera om träningspasset är av typen CardioWorkout
+            // Kontrollera om träningspasset är av typen CardioWorkout. //
             else if (localWorkout is CardioWorkout cardioWorkout)
             {
                 userManager.CopiedWorkout = new CardioWorkout(
@@ -160,5 +195,20 @@ namespace FitTrack.ViewModel
             MessageBox.Show("Workout copied successfully!");
         }
 
+        // Metod för att stänga fönstret och gå tillbaka.
+        public void Exit()
+        {
+            MessageBoxResult result = MessageBox.Show("Are you sure to exit and go back?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                // Öppnar upp WorkoutsWindow-fönstret. //
+                WorkoutsWindow work = new WorkoutsWindow();
+                work.Show();
+
+                // Stänger ner WorkoutsDetailsWindow-fönstret. //
+                _detailsWindow.Close();
+            }
+        }
     }
 }

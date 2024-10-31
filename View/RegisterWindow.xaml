@@ -5,79 +5,79 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FitTrack.View"
         mc:Ignorable="d"
-        Title="RegisterWindow" Height="600" Width="400">
-    <Grid>
- 
-        <StackPanel>
+        Title="FitTRACK - Register" Height="550" Width="300">
+    <Grid Margin="10" Background="LightGray">
 
-            <Label Content="Register Window"
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="250">
+
+            <!-- Rubrik för Register Window -->
+            <Label Content="Register"
                    HorizontalContentAlignment="Center"
                    FontSize="20"
                    Background="Crimson"
                    Foreground="LightGray"
                    Margin="10"/>
 
-            <Label Content="Username" HorizontalContentAlignment="Center" Width="200"/>
-
+            <!-- Användarnamn -->
+            <Label Content="Username" HorizontalContentAlignment="Center" Foreground="Crimson" Margin="5"/>
             <TextBox Text="{Binding UsernameInput, UpdateSourceTrigger=PropertyChanged}"
                      TextAlignment="Center"
                      Width="200"
-                     Margin="5"
-                     />
+                     Margin="5"/>
 
-            <Label Content="Password" HorizontalContentAlignment="Center" Width="200"/>
-
+            <!-- Lösenord -->
+            <Label Content="Password" HorizontalContentAlignment="Center" Foreground="Crimson" Margin="5"/>
             <TextBox Text="{Binding PasswordInput, UpdateSourceTrigger=PropertyChanged}"
                      TextAlignment="Center"
                      Width="200"
-                     Margin="5"
-                     />
+                     Margin="5"/>
 
-            <Label Content="Confirm Password" HorizontalContentAlignment="Center" Width="200"/>
-
+            <!-- Bekräfta lösenord -->
+            <Label Content="Confirm Password" HorizontalContentAlignment="Center" Foreground="Crimson" Margin="5"/>
             <TextBox Text="{Binding ConfirmPasswordInput, UpdateSourceTrigger=PropertyChanged}"
                      TextAlignment="Center"
                      Width="200"
-                     Margin="10"
-                     />
+                     Margin="5"/>
 
-            <Label Content="Select a country." HorizontalContentAlignment="Center" Width="200"/>
-            
+            <!-- Landval -->
+            <Label Content="Select a country" HorizontalContentAlignment="Center" Foreground="Crimson" Margin="5"/>
             <ComboBox ItemsSource="{Binding Countries}"
                       SelectedItem="{Binding CountryComboBox}"
                       Width="200"
-                      Margin="10"
-                      />
+                      Margin="5"/>
 
-            <Label Content="Select a security question" HorizontalContentAlignment="Center" Width="200"/>
-
+            <!-- Säkerhetsfråga -->
+            <Label Content="Select a security question" HorizontalContentAlignment="Center" Foreground="Crimson" Margin="5"/>
             <ComboBox ItemsSource="{Binding SecurityQuestions}"
                       SelectedItem="{Binding SecurityQuestionComboBox}"
                       Width="200"
-                      Margin="5"
-                      />
+                      Margin="5"/>
 
-            <Label Content="Answer to security question" HorizontalContentAlignment="Center" Width="200"/>
-
+            <!-- Svar på säkerhetsfråga -->
+            <Label Content="Answer to security question" HorizontalContentAlignment="Center" Foreground="Crimson" Margin="5"/>
             <TextBox Text="{Binding SecurityAnswer, UpdateSourceTrigger=PropertyChanged}"
                      TextAlignment="Center"
                      Width="200"
                      Margin="5"/>
 
-            <Button Command="{Binding RegisterCommand}"
-                    Content="Register"
-                    Width="200"
-                    Margin="10"
-                    />
-
-            <Button Command="{Binding CancelCommand}"
-                    Content="Cancel"
-                    Width="200"
-                    Margin="10"
-                    />
+            <!-- Register- och Cancel-knappar -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="20,10,0,0">
+                <Button Command="{Binding RegisterCommand}"
+                        Content="Register"
+                        Width="100"
+                        Background="Crimson"
+                        Foreground="LightGray"
+                        Margin="5"/>
+                <Button Command="{Binding CancelCommand}"
+                        Content="Cancel"
+                        Width="100"
+                        Background="Crimson"
+                        Foreground="LightGray"
+                        Margin="5"/>
+            </StackPanel>
 
         </StackPanel>
-        
+
     </Grid>
-    
+
 </Window>
