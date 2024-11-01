@@ -29,11 +29,11 @@ namespace FitTrack.Model
             this.SecurityQuestion = SecurityQuestion;
             this.SecurityAnswer = SecurityAnswer;
 
-            // Initiera UserWorkouts-listan vid skapande av en användare
+            // Initiera UserWorkouts-listan vid skapande av en användare. //
             UserWorkouts = new ObservableCollection<Workout>();
-        }
 
-        
+            
+        }
 
         // ------------------------------ Metoder ------------------------------ //
         public override void SignIn()

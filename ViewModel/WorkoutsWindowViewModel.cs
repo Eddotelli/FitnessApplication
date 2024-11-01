@@ -15,10 +15,7 @@ namespace FitTrack.ViewModel
         // Denna referens används för att kunna stänga eller kontrollera fönstret från ViewModel. //
         private readonly Window _workoutWindow;
 
-        //// Denna egenskap binder till den inloggade användarens WorkoutsInfo och uppdateras automatiskt. //
-        //public ObservableCollection<Workout> WorkoutsInfo => userManager.LoggedInUser?.UserWorkouts;
-
-        // Egenskap för träningspass-listan, anpassad efter om en admin eller vanlig användare är inloggad.
+        // Egenskap för träningspass-listan, anpassad efter om en admin eller vanlig användare är inloggad. //
         private ObservableCollection<Workout> _workoutsInfo;
         public ObservableCollection<Workout> WorkoutsInfo
         {
@@ -62,8 +59,7 @@ namespace FitTrack.ViewModel
             }
         }
 
-        // --- TEST --- //
-        // Egenskap för att visa användarnamnet
+        // Egenskap för att visa användarnamnet. //
         public string LoggedInUsername
         {
             get
@@ -103,14 +99,19 @@ namespace FitTrack.ViewModel
 
             if (userManager.LoggedInUser is AdminUser)
             {
-                // Om AdminUser är inloggad, visa alla träningspass.
+                // Om AdminUser är inloggad, visa alla träningspass. //
                 WorkoutsInfo = userManager.GetAllWorkouts();
+
+                UserManager.Instance.CurrentUser(LoggedInUsername);
+
+                
             }
-            else
+            else if (userManager.LoggedInUser is User) 
             {
-                // För vanliga användare, visa bara användarens egna träningspass.
+                // För vanliga användare, visar bara användarens egna träningspass. //
                 WorkoutsInfo = userManager.LoggedInUser?.UserWorkouts ?? new ObservableCollection<Workout>();
             }
+
         }
 
         // ------------------------------ Metoder ------------------------------ //
@@ -120,7 +121,7 @@ namespace FitTrack.ViewModel
             UserDetailsWindow user = new UserDetailsWindow();
             user.Show();
 
-            // Stänger ner WorkoutWindow-fönstret. //
+            // Stänger ner WorkoutsWindow-fönstret. //
             _workoutWindow.Close();
         }
         
@@ -130,21 +131,52 @@ namespace FitTrack.ViewModel
             AddWorkoutWindow add = new AddWorkoutWindow();
             add.Show();
 
-            // Stänger ner WorkoutWindow-fönstret. //
+            // Stänger ner WorkoutsWindow-fönstret. //
             _workoutWindow.Close();
         }
 
         public void RemoveWorkout()
         {
-            // Tar bort vald träningspass från listan. //
-            if (SelectedItem != null) 
+            // Kontrollerar om ett träningspass är valt. //
+            if (SelectedItem != null)
             {
-                if (userManager.LoggedInUser != null)
-                {
-                    userManager.LoggedInUser.UserWorkouts.Remove(SelectedItem);
-                    SelectedItem = null;
-                    OnPropertyChanged(nameof(WorkoutsInfo));
+                // Om AdminUser är inloggad, letar efter rätt användare och tar bort träningspasset från dennes lista. //
+                if (userManager.LoggedInUser is AdminUser)
+                {                    
+                    foreach (var user in userManager.Users)
+                    {
+                        if (user.UserWorkouts.Contains(SelectedItem))
+                        {
+                            user.UserWorkouts.Remove(SelectedItem);
+                            MessageBox.Show($"Workout '{SelectedItem.Name}' has been removed from user '{user.Username}'s workout list.");
+                            break;
+                        }
+                    }
                 }
+                else if (userManager.LoggedInUser != null)
+                {
+                    // Om en vanlig användare är inloggad, tar bort träningspasset från den inloggades lista. //
+                    userManager.LoggedInUser.UserWorkouts.Remove(SelectedItem);
+                    MessageBox.Show($"Workout '{SelectedItem.Name}' has been removed from your workout list.");
+                }
+
+                // Uppdaterar listan efter borttagningen. //
+                if (userManager.LoggedInUser is AdminUser)
+                {
+                    // Om AdminUser är inloggad, visa alla träningspassen igen. //
+                    WorkoutsInfo = userManager.GetAllWorkouts();
+                }
+                else
+                {
+                    // Annars visas bara den inloggades träningspass. //
+                    WorkoutsInfo = userManager.LoggedInUser?.UserWorkouts ?? new ObservableCollection<Workout>();
+                }
+
+                // Nollställ det valda träningspasset.
+                SelectedItem = null;
+
+                // Meddela UI om uppdateringen.
+                OnPropertyChanged(nameof(WorkoutsInfo));
             }
             else
             {

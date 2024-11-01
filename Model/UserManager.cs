@@ -29,8 +29,17 @@ namespace FitTrack.Model
         // Privat konstruktor förhindrar skapande av fler instanser. //
         private UserManager() 
         {
-            // Fast(test)-användare. //
-            users.Add(new User("user", "user123!", "Gambia", "user", "user" ));
+            // (test)-användare "user". //
+            var user = new User("user", "user123!", "Gambia", "user", "user");
+            users.Add(user);
+
+            // Lägger till träningspass till användaren "user". //
+            var strengthWorkout = new StrengthWorkout("Squats", 30, DateTime.Now, "Strength", TimeSpan.FromMinutes(5), 300, "3x10 sets");
+            var cardioWorkout = new CardioWorkout("Intervals", 10, DateTime.Now, "Cardio", TimeSpan.FromMinutes(3), 630, "3x10 sets");
+
+            // Lägger till träningspassen i den user(test)-användare användarens träningslista. //
+            user.UserWorkouts.Add(strengthWorkout);
+            user.UserWorkouts.Add(cardioWorkout);
 
             // Admin-användare. //
             var adminUser = new AdminUser("admin", "admin123!", "Country", "donkey", "kong");
@@ -76,7 +85,7 @@ namespace FitTrack.Model
         public ObservableCollection<Workout> WorkoutsInfo => workoutsInfo;
 
         // Publik egenskap för att hålla koll samt ev. ändra på den inloggade användaren. //
-        public User LoggedInUser { get; set; } // <------------------------------------------ Granska detta.
+        public User LoggedInUser { get; set; }
 
         // Samlad lista över alla träningspass för alla användare. //
         public ObservableCollection<Workout> GetAllWorkouts()

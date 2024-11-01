@@ -58,20 +58,20 @@
 
                             <!-- Repetitions (endast synlig om WorkoutType är "Strength") -->
                             <TextBlock Text="Repetitions:" 
-                                   Visibility="{Binding IsStrengthWorkout, Converter={StaticResource BoolToVis}}" 
+                                   Visibility="{Binding IsStrengthWorkout}" 
                                    Margin="5"/>
 
                             <TextBox Text="{Binding Repetitions, UpdateSourceTrigger=PropertyChanged}" 
-                                 Visibility="{Binding IsStrengthWorkout, Converter={StaticResource BoolToVis}}" 
+                                 Visibility="{Binding IsStrengthWorkout}" 
                                  Margin="5"/>
 
                             <!-- Distance (endast synlig om WorkoutType är "Cardio") -->
                             <TextBlock Text="Distance:" 
-                                   Visibility="{Binding IsCardioWorkout, Converter={StaticResource BoolToVis}}" 
+                                   Visibility="{Binding IsCardioWorkout}" 
                                    Margin="5"/>
 
                             <TextBox Text="{Binding Distance, UpdateSourceTrigger=PropertyChanged}" 
-                                 Visibility="{Binding IsCardioWorkout, Converter={StaticResource BoolToVis}}" 
+                                 Visibility="{Binding IsCardioWorkout}" 
                                  Margin="5"/>
 
                             <!-- Duration -->

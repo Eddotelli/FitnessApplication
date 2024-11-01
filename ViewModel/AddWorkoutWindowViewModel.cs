@@ -298,13 +298,13 @@ namespace FitTrack.ViewModel
             // Debug statement to confirm this method is being called
             Debug.WriteLine("UpdateCaloriesBurned called");
 
-            if (Repetitions > 0)
+            if (WorkoutTypeComboBox == "Strength" || Repetitions > 0)
             {
                 var strengthWorkout = new StrengthWorkout(Name, Repetitions, Date, "Strength", Duration, 0, Notes);
                 CaloriesBurned = strengthWorkout.CalculateCaloriesBurned();
                 Debug.WriteLine($"Calculated Calories for Strength: {CaloriesBurned}");
             }
-            else if (Distance > 0)
+            else if (WorkoutTypeComboBox == "Strength" || Distance > 0)
             {
                 var cardioWorkout = new CardioWorkout(Name, Distance, Date, "Cardio", Duration, 0, Notes);
                 CaloriesBurned = cardioWorkout.CalculateCaloriesBurned();
