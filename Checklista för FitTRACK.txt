@@ -1,8 +1,9 @@
 ------------------------------- Att göra -------------------------------
-() Få Admin-user att funka i appen, se över Person- och User-klassen. <--- Återkom till denna.
+(X) Få Admin-user att funka i appen, se över Person- och User-klassen. <--- Återkom till denna.
 () Få kontrollerna att funka på AddWorkout-fönstet.
-() Implementera ett filterfunktion.
-() Implementera en tvåfaktorsautentisering.
+(X) Implementera ett filterfunktion.
+(X) Implementera en tvåfaktorsautentisering.
+() Se över Remove-knappen i WorkoutWindow.
 () Finslipa designen och användarvänligheten.
 () Gå igenom koden och förstå den bättre.
 () Fixa så att listan för typ funkar och att kalendern i WorkoutDetailsWindow också är lås.
@@ -10,15 +11,15 @@
 ------------------------------------------------------------------------
 (X) Person-klass
 (X) User-klass
-() AdminUser-klass
+(X) AdminUser-klass
 
 (X) Workout-klass
-() CardioWorkout
-() StrengthWorkout
+(X) CardioWorkout
+(X) StrengthWorkout
 
 (X) MainWndow
 (X) RegisterWindow
 (X) WorkoutWindow
 (X) UserDetailsWindow
 () AddWorkoutWindow
-() WorkoutDetailsWindow
+(X) WorkoutDetailsWindow

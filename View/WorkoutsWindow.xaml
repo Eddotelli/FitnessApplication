@@ -15,8 +15,7 @@
                FontWeight="Light"
                Foreground="Crimson"
                Margin="10"/>
-        
-        
+       
 
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10,50,10,10">
 
@@ -50,8 +49,18 @@
                     
                 </StackPanel>
 
+                <Label Content="Search filter by name"
+                       FontSize="9"
+                       HorizontalContentAlignment="Center"
+                       Foreground="Crimson"/>
+                
+                <TextBox Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}"
+                         Width="70"/>
+
+
+
                 <!-- ListBox for Workout Display -->
-                <ListBox ItemsSource="{Binding WorkoutsInfo}"
+                <ListBox ItemsSource="{Binding FilterWorkout}"
                          SelectedItem="{Binding SelectedItem}"
                          Width="350"
                          Height="200"

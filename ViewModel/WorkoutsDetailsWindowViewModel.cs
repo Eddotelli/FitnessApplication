@@ -182,9 +182,6 @@ namespace FitTrack.ViewModel
             }
         }
 
-
-
-
         // ------------------------------ Konstruktor ------------------------------ //
 
         // Konstruktor som initierar AddWorkoutWindowViewModel. //
@@ -207,39 +204,7 @@ namespace FitTrack.ViewModel
 
             RestoreVisibility = Visibility.Collapsed;
 
-            //// Skapa en kopia av workout beroende på dess typ
-            //if (workout is StrengthWorkout strengthWorkout)
-            //{
-            //    originalWorkout = new StrengthWorkout
-            //    {
-            //        Name = strengthWorkout.Name,
-            //        TypeInput = strengthWorkout.TypeInput,
-            //        Duration = strengthWorkout.Duration,
-            //        CaloriesBurned = strengthWorkout.CaloriesBurned,
-            //        Notes = strengthWorkout.Notes,
-            //        Date = strengthWorkout.Date,
-                    
-            //    };
-            //}
-            //else if (workout is CardioWorkout cardioWorkout)
-            //{
-            //    originalWorkout = new CardioWorkout
-            //    {
-            //        Name = cardioWorkout.Name,
-            //        TypeInput = cardioWorkout.TypeInput,
-            //        Duration = cardioWorkout.Duration,
-            //        CaloriesBurned = cardioWorkout.CaloriesBurned,
-            //        Notes = cardioWorkout.Notes,
-            //        Date = cardioWorkout.Date,
-            //        Distance = cardioWorkout.Distance
-            //    };
-            //}
-            //else
-            //{
-            //    throw new InvalidOperationException("Unknown workout type.");
-            //}
-
-            //localWorkout = workout;
+            CaloriesBurned = localWorkout.CalculateCaloriesBurned();
         }
 
         // ------------------------------ Kommando ------------------------------ //

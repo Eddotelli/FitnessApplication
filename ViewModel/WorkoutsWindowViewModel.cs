@@ -27,6 +27,18 @@ namespace FitTrack.ViewModel
             }
         }
 
+        // Egenskap för filter-listan. //
+        private ObservableCollection<Workout> filterWorkout;
+        public ObservableCollection<Workout> FilterWorkout
+        {
+            get { return filterWorkout; }
+            private set
+            {
+                filterWorkout = value;
+                OnPropertyChanged(nameof(FilterWorkout));
+            }
+        }
+
         // ------------------------------ Egenskaper ------------------------------ //
 
         // Privat egenskap som lagrar den valda träningspasset. //
@@ -77,6 +89,22 @@ namespace FitTrack.ViewModel
             }
         }
 
+        // Egenskap för filter. //
+        private string filter;
+        public string Filter
+        {
+            get { return filter; }
+            set 
+            { 
+                filter = value;
+                OnPropertyChanged(nameof(Filter));
+                DoFilter();
+            }
+        }
+
+
+
+
         // ------------------------------ Kommando ------------------------------ //
         public RelayCommand UserCommand => new RelayCommand(execute => UserDetails());
         public RelayCommand EditCommand => new RelayCommand(execute => AddWorkout());
@@ -112,6 +140,8 @@ namespace FitTrack.ViewModel
                 WorkoutsInfo = userManager.LoggedInUser?.UserWorkouts ?? new ObservableCollection<Workout>();
             }
 
+            FilterWorkout = new ObservableCollection<Workout>();
+            DoFilter();
         }
 
         // ------------------------------ Metoder ------------------------------ //
@@ -149,6 +179,7 @@ namespace FitTrack.ViewModel
                         {
                             user.UserWorkouts.Remove(SelectedItem);
                             MessageBox.Show($"Workout '{SelectedItem.Name}' has been removed from user '{user.Username}'s workout list.");
+                            OnPropertyChanged(nameof(FilterWorkout));
                             break;
                         }
                     }
@@ -158,6 +189,8 @@ namespace FitTrack.ViewModel
                     // Om en vanlig användare är inloggad, tar bort träningspasset från den inloggades lista. //
                     userManager.LoggedInUser.UserWorkouts.Remove(SelectedItem);
                     MessageBox.Show($"Workout has been removed from your workout list.");
+                    OnPropertyChanged(Filter);
+                    DoFilter();
                 }
 
                 // Uppdaterar listan efter borttagningen. //
@@ -229,6 +262,27 @@ namespace FitTrack.ViewModel
         public void InfoPopup()
         {
             IsInfoPopupOpen = !IsInfoPopupOpen;
+        }
+
+        
+        // Metod för filtret. //
+        public void DoFilter()
+        {
+            FilterWorkout.Clear();
+
+            foreach (var workout in UserManager.Instance.GetAllWorkouts()) 
+            {
+                // Hämta och visa alla träningar vid tom inmatning
+                if (string.IsNullOrEmpty(Filter))
+                {
+                    FilterWorkout.Add(workout);
+                }
+                // Hämta och visa de träningar som inkluderar inmatad söktext
+                else if (workout.TypeInput.Contains(Filter, StringComparison.OrdinalIgnoreCase) || workout.Notes.Contains(Filter, StringComparison.OrdinalIgnoreCase))
+                {
+                    FilterWorkout.Add(workout);
+                }
+            }
         }
     }
 }

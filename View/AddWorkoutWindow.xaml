@@ -84,7 +84,7 @@
                                        Margin="5"/>
 
                             <TextBox Text="{Binding CaloriesBurned, Mode=OneWay}"
-                                     IsReadOnly="True"
+                                     
                                      Width="50"
                                      Margin="5"/>
 
@@ -114,12 +114,6 @@
                         Margin="5"
                         IsEnabled="{Binding CanExecuteButtons}"/>
 
-                <Button Content="Restore"
-                        Command="{Binding RestoreCommand}"
-                        Width="100"
-                        Margin="5"
-                        IsEnabled="{Binding CanExecuteButtons}"/>
-
                 <Button Content="Save"
                         Command="{Binding SaveCommand}"
                         Width="100"
@@ -134,12 +128,6 @@
 
                 <Button Content="Paste"
                         Command="{Binding PasteCommand}"
-                        Width="100"
-                        Margin="5"
-                        IsEnabled="{Binding CanExecuteButtons}"/>
-
-                <Button Content="Cancel"
-                        Command="{Binding CancelCommand}"
                         Width="100"
                         Margin="5"
                         IsEnabled="{Binding CanExecuteButtons}"/>
