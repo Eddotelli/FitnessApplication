@@ -131,7 +131,6 @@ namespace FitTrack.ViewModel
                 WorkoutsInfo = userManager.GetAllWorkouts();
 
                 UserManager.Instance.CurrentUser(LoggedInUsername);
-
                 
             }
             else if (userManager.LoggedInUser is User) 
@@ -140,7 +139,11 @@ namespace FitTrack.ViewModel
                 WorkoutsInfo = userManager.LoggedInUser?.UserWorkouts ?? new ObservableCollection<Workout>();
             }
 
+            // Rensa träningspass för att undvika gamla data vid ny inloggning. ((
             FilterWorkout = new ObservableCollection<Workout>();
+
+            // Hämta träningspassen för aktuell inloggad användare. //
+            LoadUserWorkouts();
             DoFilter();
         }
 
@@ -282,6 +285,22 @@ namespace FitTrack.ViewModel
                 {
                     FilterWorkout.Add(workout);
                 }
+            }
+        }
+
+        private void LoadUserWorkouts()
+        {
+            // Rensa WorkoutsInfo innan laddning för att förhindra visning av gamla data.
+            WorkoutsInfo = new ObservableCollection<Workout>();
+
+            // Kontrollera om det är en AdminUser eller vanlig User och ladda respektive träningspass.
+            if (userManager.LoggedInUser is AdminUser)
+            {
+                WorkoutsInfo = userManager.GetAllWorkouts();
+            }
+            else if (userManager.LoggedInUser is User)
+            {
+                WorkoutsInfo = userManager.LoggedInUser.UserWorkouts ?? new ObservableCollection<Workout>();
             }
         }
     }

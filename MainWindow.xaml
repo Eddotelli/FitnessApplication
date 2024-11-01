@@ -8,13 +8,16 @@
         Title="FitTRACK - Main Window" Height="400" Width="350">
     <Grid Margin="10" Background="LightGray">
 
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="250">
+        <!-- FitTRACK Title with style adjustments -->
+        <TextBlock HorizontalAlignment="Left" Margin="121,32,0,309" FontSize="20" Foreground="Crimson">
+              <Run Text="Fit" FontWeight="Normal"/>
+        </TextBlock>
 
-            <!-- FitTRACK Title with style adjustments -->
-            <TextBlock HorizontalAlignment="Center" Margin="0,0,0,20" FontSize="20" Foreground="Crimson">
-                <Run Text="Fit" FontWeight="Normal"/>
-                <Run Text="TRACK" FontWeight="Bold"/>
-            </TextBlock>
+        <TextBlock HorizontalAlignment="Left" Margin="143,32,0,312" FontSize="20" Foreground="Crimson">
+              <Run Text="TRACK" FontWeight="Bold"/>
+        </TextBlock>
+
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="250">
 
             <!-- Username Label and TextBox -->
             <Label Content="Username" HorizontalContentAlignment="Center" Foreground="Crimson"/>

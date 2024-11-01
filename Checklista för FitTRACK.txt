@@ -3,10 +3,10 @@
 () Få kontrollerna att funka på AddWorkout-fönstet.
 (X) Implementera ett filterfunktion.
 (X) Implementera en tvåfaktorsautentisering.
-() Se över Remove-knappen i WorkoutWindow.
-() Finslipa designen och användarvänligheten.
+(X) Se över Remove-knappen i WorkoutWindow.
+(X) Finslipa designen och användarvänligheten.
 () Gå igenom koden och förstå den bättre.
-() Fixa så att listan för typ funkar och att kalendern i WorkoutDetailsWindow också är lås.
+(X) Fixa så att listan för typ funkar och att kalendern i WorkoutDetailsWindow också är lås.
 
 ------------------------------------------------------------------------
 (X) Person-klass
@@ -21,5 +21,5 @@
 (X) RegisterWindow
 (X) WorkoutWindow
 (X) UserDetailsWindow
-() AddWorkoutWindow
-(X) WorkoutDetailsWindow
+(X0) AddWorkoutWindow
+(X) WorkoutDetailsWindow <-- Fixa Restore-knappen.

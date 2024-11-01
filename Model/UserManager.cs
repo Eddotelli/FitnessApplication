@@ -28,21 +28,23 @@ namespace FitTrack.Model
         {
             // (test)-användare "user". //
             var user = new User("user", "user123!", "Gambia", "user", "user");
-            users.Add(user);
+
+            // Lägger till user-användaren till listan för användare. //
+            AddUser(user);
 
             // Lägger till träningspass till användaren "user". //
-            var strengthWorkout = new StrengthWorkout("Squats", 30, DateTime.Now, "Strength", TimeSpan.FromMinutes(5), 300, "3x10 sets");
-            var cardioWorkout = new CardioWorkout("Intervals", 10, DateTime.Now, "Cardio", TimeSpan.FromMinutes(3), 630, "3x10 sets");
+            Workout passEtt = new StrengthWorkout("Squats", 30, DateTime.Now, "Strength", TimeSpan.FromMinutes(5), 300, "3x10 sets");
+            Workout passTva = new CardioWorkout("Intervals", 10, DateTime.Now, "Cardio", TimeSpan.FromMinutes(3), 630, "3x10 sets");
 
             // Lägger till träningspassen i den user(test)-användare användarens träningslista. //
-            user.UserWorkouts.Add(strengthWorkout);
-            user.UserWorkouts.Add(cardioWorkout);
+            user.UserWorkouts.Add(passEtt);
+            user.UserWorkouts.Add(passTva);
 
             // Admin-användare. //
             var adminUser = new AdminUser("admin", "admin123!", "Country", "donkey", "kong");
 
             // Lägger till admin-användaren till listan för användare. //
-            users.Add(adminUser);
+            AddUser(adminUser);
         }
 
         // Privat lista som innehåller träningspass med kort info. //

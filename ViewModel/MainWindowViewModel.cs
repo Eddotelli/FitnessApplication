@@ -40,13 +40,6 @@ namespace FitTrack.ViewModel
             // Hämtar Singleton-instansen av UserManager för att säkerställa att samma användar- och datahantering delas över hela applikationen. //
             userManager = UserManager.Instance;
 
-            // Förinmatade user(test)-användare. //
-            UsernameInput = "user";
-            PasswordInput = "user123!";
-
-            OnPropertyChanged(nameof(UsernameInput));
-            OnPropertyChanged(nameof(PasswordInput));
-
             // Sparar referens till fönstret. //
             _mainWindow = mainwindow;
 

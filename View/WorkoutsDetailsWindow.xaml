@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FitTrack.View"
         mc:Ignorable="d"
-        Title="WorkoutDetailsWindow" Height="650" Width="400">
+        Title=" FitTRACK - Workout Details Window" Height="650" Width="400">
 
     <Grid Background="LightGray" Margin="10">
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="300">
 
             <!-- Titel för fönstret -->
-            <Label Content="Workout Details"
+            <Label Content="Workouts Details"
                    HorizontalContentAlignment="Center"
                    FontSize="20"
                    FontWeight="Bold"
@@ -20,7 +20,7 @@
                    Margin="0,10,0,20"/>
 
             <!-- Fält för träningsattribut -->
-            <!-- Namn -->
+            <!-- TextBox för namn -->
             <Label Content="Name" HorizontalContentAlignment="Left" Foreground="Crimson" Margin="0,5,0,0" Width="250"/>
             <TextBox Text="{Binding Name}"
                      IsEnabled="{Binding IsEnabled}"
@@ -28,7 +28,7 @@
                      HorizontalAlignment="Center"
                      Margin="0,0,0,10"/>
 
-            <!-- Typ -->
+            <!-- ComboBox för typ, binder direkt till WorkoutTypes i ViewModel -->
             <Label Content="Type" HorizontalContentAlignment="Left" Foreground="Crimson" Margin="0,5,0,0" Width="250"/>
             <ComboBox ItemsSource="{Binding DataContext.WorkoutTypes, RelativeSource={RelativeSource AncestorType=Window}}"
                       SelectedItem="{Binding Type}"
@@ -36,7 +36,7 @@
                       Width="250"
                       Margin="5"/>
 
-            <!-- Duration -->
+            <!-- TextBox för duration -->
             <Label Content="Duration" HorizontalContentAlignment="Left" Foreground="Crimson" Margin="0,5,0,0" Width="250"/>
             <TextBox Text="{Binding Duration}"
                      IsEnabled="{Binding IsEnabled}"
@@ -44,7 +44,7 @@
                      HorizontalAlignment="Center"
                      Margin="0,0,0,10"/>
 
-            <!-- Repetitions eller Distance (beroende på typ av Workout) -->
+            <!-- Dynamiskt synliga fält för Repetitions eller Distance beroende på typ av träningspass -->
             <Label x:Name="LabelRepetitions" Content="Repetitions" Foreground="Crimson" Margin="0,5,0,0" Width="250">
                 <Label.Style>
                     <Style TargetType="Label">
@@ -98,7 +98,7 @@
             </TextBox>
 
 
-            <!-- Kalorier brända -->
+            <!-- TextBox för kalorier brända -->
             <Label Content="Calories Burned" HorizontalContentAlignment="Left" Foreground="Crimson" Margin="0,5,0,0" Width="250"/>
             <TextBox Text="{Binding CaloriesBurned}"
                      IsEnabled="{Binding IsEnabled}"
@@ -106,7 +106,7 @@
                      HorizontalAlignment="Center"
                      Margin="0,0,0,10"/>
 
-            <!-- Anteckningar -->
+            <!-- TextBox för anteckningar -->
             <Label Content="Notes" HorizontalContentAlignment="Left" Foreground="Crimson" Margin="0,5,0,0" Width="250"/>
             <TextBox Text="{Binding Notes}"
                      IsEnabled="{Binding IsEnabled}"
@@ -114,7 +114,7 @@
                      HorizontalAlignment="Center"
                      Margin="0,0,0,10"/>
 
-            <!-- Datum -->
+            <!-- DatePicker för datum -->
             <Label Content="Date" HorizontalContentAlignment="Left" Foreground="Crimson" Margin="0,5,0,0" Width="250"/>
             <DatePicker SelectedDate="{Binding Date}"
                         IsEnabled="{Binding IsEnabled}"

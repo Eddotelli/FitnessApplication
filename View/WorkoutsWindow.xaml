@@ -9,27 +9,29 @@
     <Grid Margin="10" Background="LightGray">
 
         <!-- Header Label -->
-        <Label Content="FitTRACK"
-               HorizontalContentAlignment="Center"
-               FontSize="20"
-               FontWeight="Light"
-               Foreground="Crimson"
-               Margin="10"/>
-       
+        <!-- FitTRACK Title with style adjustments -->
+        <TextBlock HorizontalAlignment="Left" Margin="174,22,0,319" FontSize="20" Foreground="Crimson">
+      <Run Text="Fit" FontWeight="Normal"/>
+        </TextBlock>
+
+        <TextBlock HorizontalAlignment="Left" Margin="196,22,0,322" FontSize="20" Foreground="Crimson">
+      <Run Text="TRACK" FontWeight="Bold"/>
+        </TextBlock>
+
 
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10,50,10,10">
 
             <!-- Action Buttons -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-                
+
                 <Button Content="User"
                         Command="{Binding UserCommand}"
                         Width="100"
                         Background="Crimson"
                         Foreground="LightGray"
                         Margin="5"/>
-                
-                <Button Content="Edit workout list"
+
+                <Button Content="Add workout"
                         Command="{Binding EditCommand}"
                         Width="100"
                         Background="Crimson"
@@ -42,18 +44,18 @@
 
                 <!-- Header Labels for the Workout List -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-                    
+
                     <Label Content="Name" Width="100" HorizontalContentAlignment="Center" Foreground="Crimson"/>
                     <Label Content="Type" Width="100" HorizontalContentAlignment="Center" Foreground="Crimson"/>
                     <Label Content="Duration" Width="100" HorizontalContentAlignment="Center" Foreground="Crimson"/>
-                    
+
                 </StackPanel>
 
                 <Label Content="Search filter by name"
                        FontSize="9"
                        HorizontalContentAlignment="Center"
                        Foreground="Crimson"/>
-                
+
                 <TextBox Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}"
                          Width="70"/>
 
@@ -68,23 +70,23 @@
                          Margin="5">
 
                     <ListBox.ItemTemplate>
-                        
+
                         <DataTemplate>
-                            
+
                             <StackPanel Orientation="Horizontal" Margin="5">
-                                
+
                                 <TextBlock Text="{Binding Name}" Width="100" HorizontalAlignment="Center" Foreground="Crimson"/>
                                 <TextBlock Text="{Binding TypeInput}" Width="100" HorizontalAlignment="Center" Foreground="Crimson"/>
                                 <TextBlock Text="{Binding Duration}" Width="100" HorizontalAlignment="Center" Foreground="Crimson"/>
-                                
+
                             </StackPanel>
-                            
+
                         </DataTemplate>
-                        
+
                     </ListBox.ItemTemplate>
 
                 </ListBox>
-                
+
             </StackPanel>
 
             <!-- Open Details and Remove Workout Buttons -->
@@ -96,8 +98,8 @@
                         Background="Crimson"
                         Foreground="LightGray"
                         Margin="5"/>
-                
-                <Button Content="Remove selected workout"
+
+                <Button Content="Remove workout"
                         Command="{Binding RemoveCommand}"
                         Width="140"
                         Background="Crimson"
@@ -115,21 +117,21 @@
 
             <!-- Logged In User Information -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-                
+
                 <TextBlock Text="Current logged in user:" FontSize="12" VerticalAlignment="Center" Foreground="Crimson"/>
-                
+
                 <Label Content="{Binding LoggedInUsername}" FontSize="12" Foreground="Crimson"/>
-                
+
             </StackPanel>
 
             <!-- Info Button and Popup -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,5,10,10">
-                
+
                 <Button x:Name="InfoButton" Content="Info" Command="{Binding InfoPopupCommand}" Width="50"
                         Background="Crimson" Foreground="LightGray"/>
-                
+
                 <Popup x:Name="InfoPopup" StaysOpen="False" PlacementTarget="{Binding ElementName=InfoButton}" Placement="Bottom" IsOpen="{Binding IsInfoPopupOpen}">
-                    
+
                     <Border Background="LightGray" BorderBrush="Crimson" BorderThickness="1" Padding="10">
 
                         <TextBlock Text="In this app, you can add, edit, and note your training sessions. FitTRACK is here to simplify your workout and tracking!"
@@ -137,9 +139,9 @@
                                    TextWrapping="Wrap"
                                    Foreground="Crimson"/>
                     </Border>
-                    
+
                 </Popup>
-                
+
             </StackPanel>
 
         </StackPanel>

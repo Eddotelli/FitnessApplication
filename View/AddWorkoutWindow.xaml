@@ -5,144 +5,108 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FitTrack.View"
         mc:Ignorable="d"
-        Title="AddWorkoutWindow" Height="450" Width="800">
-    <Grid>
+       Title="FitTRACK - Add Workout Window" Height="450" Width="800"
+        Background="LightGray">
 
+    <Grid Margin="10">
         <Grid.Resources>
-            <!-- Definiera BooleanToVisibilityConverter som resurs -->
             <BooleanToVisibilityConverter x:Key="BoolToVis"/>
         </Grid.Resources>
 
-        <StackPanel>
-
+        <StackPanel HorizontalAlignment="Center">
             <!-- Rubrik -->
-            <Label Content="Add Workout Window"
-               HorizontalContentAlignment="Center"
-               FontSize="20"
-               Background="Crimson"
-               Foreground="LightGray"
-               Margin="10"/>
+            <Label Content="Add Workout"
+                   HorizontalContentAlignment="Center"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   Background="Crimson"
+                   Foreground="White"
+                   Padding="8"
+                   Margin="0,10,0,20"/>
 
-            <!-- ComboBox för att välja WorkoutType -->
+            <!-- ComboBox för WorkoutType -->
             <ComboBox Text="Type"
-                  ItemsSource="{Binding WorkoutTypes}"
-                  SelectedItem="{Binding WorkoutTypeComboBox}"
-                  Width="80"
-                  Margin="5"/>
+                      ItemsSource="{Binding WorkoutTypes}"
+                      SelectedItem="{Binding WorkoutTypeComboBox}"
+                      Width="120"
+                      Margin="5"
+                      HorizontalAlignment="Center"/>
 
-            <!-- ListBox för att visa och redigera träningspass -->
+            <!-- ListBox för träningspass -->
             <ListBox ItemsSource="{Binding TempWorkouts}"
-                 SelectedItem="{Binding SelectedItem}"
-                 Width="650"
-                 Height="200"
-                 Margin="5">
+                     SelectedItem="{Binding SelectedItem}"
+                     Width="700"
+                     Height="200"
+                     Background="WhiteSmoke"
+                     BorderBrush="Crimson"
+                     BorderThickness="1"
+                     Margin="5">
 
                 <ListBox.ItemTemplate>
-
                     <DataTemplate>
-
-                        <StackPanel Orientation="Horizontal">
-
-                            <!-- TextBox för Name -->
+                        <StackPanel Orientation="Horizontal" Margin="5">
                             <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                                 Width="100"
-                                 Margin="5"/>
+                                     Width="80" Margin="5" FontSize="12"/>
 
-                            <!-- ComboBox för Type med WorkoutTypes som ItemsSource -->
                             <ComboBox ItemsSource="{Binding DataContext.WorkoutTypes, RelativeSource={RelativeSource AncestorType=Window}}"
-                                  SelectedItem="{Binding TypeInput, UpdateSourceTrigger=PropertyChanged}"
-                                  Width="100"
-                                  Margin="5"/>
+                                      SelectedItem="{Binding TypeInput, UpdateSourceTrigger=PropertyChanged}"
+                                      Width="80" Margin="5" FontSize="12"/>
 
-                            <!-- Textfält för Repetitions eller Distance, beroende på valt WorkoutType -->
-
-                            <!-- Repetitions (endast synlig om WorkoutType är "Strength") -->
-                            <TextBlock Text="Repetitions:" 
-                                   Visibility="Visible" 
-                                   Margin="5"/>
-
+                            <TextBlock Text="Repetitions:" Visibility="Visible" Margin="5" VerticalAlignment="Center"/>
                             <TextBox Text="{Binding Repetitions, UpdateSourceTrigger=PropertyChanged}" 
-                                 Visibility="Visible" 
-                                 Margin="5"/>
+                                     Width="60" Margin="5" FontSize="12" VerticalAlignment="Center"/>
 
-                            <!-- Distance (endast synlig om WorkoutType är "Cardio") -->
-                            <TextBlock Text="Distance:" 
-                                   Visibility="{Binding IsCardioWorkout}" 
-                                   Margin="5"/>
+                            <TextBlock Text="Distance:" Visibility="{Binding IsCardioWorkout}" Margin="5" VerticalAlignment="Center"/>
+                            <TextBox Text="{Binding Distance, UpdateSourceTrigger=PropertyChanged}"
+                                     Width="60" Margin="5" FontSize="12" VerticalAlignment="Center"/>
 
-                            <TextBox Text="{Binding Distance, UpdateSourceTrigger=PropertyChanged}" 
-                                 Visibility="{Binding IsCardioWorkout}" 
-                                 Margin="5"/>
-
-                            <!-- Duration -->
                             <TextBox Text="{Binding Duration, StringFormat=\{0:hh\\:mm\\:ss\}, UpdateSourceTrigger=PropertyChanged}"
-                                 Width="50"
-                                 Margin="5"/>
+                                     Width="60" Margin="5" FontSize="12"/>
 
-                            <!-- CaloriesBurned -->
-                            <TextBlock Text="Calories Burned:"
-                                       Margin="5"/>
+                            <TextBlock Text="Calories:" Margin="5" VerticalAlignment="Center"/>
+                            <TextBox Text="{Binding CaloriesBurned}" Width="50" Margin="5" FontSize="12"/>
 
-                            <TextBox Text="{Binding CaloriesBurned, Mode=OneWay}"
-                                     
-                                     Width="50"
-                                     Margin="5"/>
-
-                            <!-- Notes -->
                             <TextBox Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}"
-                                 Width="150"
-                                 Margin="5"/>
+                                     Width="120" Margin="5" FontSize="12"/>
 
-                            <!-- DatePicker för Date -->
                             <DatePicker SelectedDate="{Binding Date, UpdateSourceTrigger=PropertyChanged}"
-                                    Width="100"
-                                    Margin="5"/>
-
+                                        Width="90" Margin="5" FontSize="12"/>
                         </StackPanel>
-
                     </DataTemplate>
-
                 </ListBox.ItemTemplate>
-
             </ListBox>
 
-            <StackPanel Orientation ="Horizontal" HorizontalAlignment="Center">
-                <!-- Buttons for actions -->
+            <!-- StackPanel för knappar -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
                 <Button Content="Add"
                         Command="{Binding AddCommand}"
-                        Width="100"
-                        Margin="5"
+                        Width="80" Margin="5" FontSize="12"
+                        Background="Crimson" Foreground="White"
                         IsEnabled="{Binding CanExecuteButtons}"/>
 
                 <Button Content="Save"
                         Command="{Binding SaveCommand}"
-                        Width="100"
-                        Margin="5"
+                        Width="80" Margin="5" FontSize="12"
+                        Background="Crimson" Foreground="White"
                         IsEnabled="{Binding CanExecuteButtons}"/>
 
                 <Button Content="Remove"
                         Command="{Binding RemoveCommand}"
-                        Width="100"
-                        Margin="5"
+                        Width="80" Margin="5" FontSize="12"
+                        Background="Crimson" Foreground="White"
                         IsEnabled="{Binding CanExecuteButtons}"/>
 
                 <Button Content="Paste"
                         Command="{Binding PasteCommand}"
-                        Width="100"
-                        Margin="5"
+                        Width="80" Margin="5" FontSize="12"
+                        Background="Crimson" Foreground="White"
                         IsEnabled="{Binding CanExecuteButtons}"/>
 
                 <Button Content="Exit"
                         Command="{Binding ExitCommand}"
-                        Width="100"
-                        Margin="5"
-                        IsEnabled="{Binding CanExecuteButtons}"/>
-
-                
-
+                        Width="80" Margin="5" FontSize="12"
+                        Background="Crimson" Foreground="White"/>
             </StackPanel>
-
         </StackPanel>
-
     </Grid>
 </Window>
