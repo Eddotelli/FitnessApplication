@@ -58,11 +58,11 @@
 
                             <!-- Repetitions (endast synlig om WorkoutType är "Strength") -->
                             <TextBlock Text="Repetitions:" 
-                                   Visibility="{Binding IsStrengthWorkout}" 
+                                   Visibility="Visible" 
                                    Margin="5"/>
 
                             <TextBox Text="{Binding Repetitions, UpdateSourceTrigger=PropertyChanged}" 
-                                 Visibility="{Binding IsStrengthWorkout}" 
+                                 Visibility="Visible" 
                                  Margin="5"/>
 
                             <!-- Distance (endast synlig om WorkoutType är "Cardio") -->
@@ -114,6 +114,12 @@
                         Margin="5"
                         IsEnabled="{Binding CanExecuteButtons}"/>
 
+                <Button Content="Restore"
+                        Command="{Binding RestoreCommand}"
+                        Width="100"
+                        Margin="5"
+                        IsEnabled="{Binding CanExecuteButtons}"/>
+
                 <Button Content="Save"
                         Command="{Binding SaveCommand}"
                         Width="100"
@@ -122,6 +128,12 @@
 
                 <Button Content="Remove"
                         Command="{Binding RemoveCommand}"
+                        Width="100"
+                        Margin="5"
+                        IsEnabled="{Binding CanExecuteButtons}"/>
+
+                <Button Content="Paste"
+                        Command="{Binding PasteCommand}"
                         Width="100"
                         Margin="5"
                         IsEnabled="{Binding CanExecuteButtons}"/>
@@ -138,8 +150,7 @@
                         Margin="5"
                         IsEnabled="{Binding CanExecuteButtons}"/>
 
-                <Button Content="Update Calories"
-                        Command="{Binding UpdateCaloriesCommand}" />
+                
 
             </StackPanel>
 

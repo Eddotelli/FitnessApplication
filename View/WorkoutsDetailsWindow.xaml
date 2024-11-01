@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FitTrack.View"
         mc:Ignorable="d"
-        Title="WorkoutDetailsWindow" Height="550" Width="400">
+        Title="WorkoutDetailsWindow" Height="650" Width="400">
 
     <Grid Background="LightGray" Margin="10">
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="300">
@@ -23,7 +23,7 @@
             <!-- Namn -->
             <Label Content="Name" HorizontalContentAlignment="Left" Foreground="Crimson" Margin="0,5,0,0" Width="250"/>
             <TextBox Text="{Binding Name}"
-                     IsReadOnly="{Binding IsReadOnly}"
+                     IsEnabled="{Binding IsEnabled}"
                      Width="250"
                      HorizontalAlignment="Center"
                      Margin="0,0,0,10"/>
@@ -32,22 +32,76 @@
             <Label Content="Type" HorizontalContentAlignment="Left" Foreground="Crimson" Margin="0,5,0,0" Width="250"/>
             <ComboBox ItemsSource="{Binding DataContext.WorkoutTypes, RelativeSource={RelativeSource AncestorType=Window}}"
                       SelectedItem="{Binding Type}"
-                      IsEnabled="{Binding IsEditable}" 
+                      IsEnabled="{Binding IsEnabled}" 
                       Width="250"
                       Margin="5"/>
 
             <!-- Duration -->
             <Label Content="Duration" HorizontalContentAlignment="Left" Foreground="Crimson" Margin="0,5,0,0" Width="250"/>
             <TextBox Text="{Binding Duration}"
-                     IsReadOnly="{Binding IsReadOnly}"
+                     IsEnabled="{Binding IsEnabled}"
                      Width="250"
                      HorizontalAlignment="Center"
                      Margin="0,0,0,10"/>
 
+            <!-- Repetitions eller Distance (beroende på typ av Workout) -->
+            <Label x:Name="LabelRepetitions" Content="Repetitions" Foreground="Crimson" Margin="0,5,0,0" Width="250">
+                <Label.Style>
+                    <Style TargetType="Label">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Type}" Value="Strength">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
+
+            <TextBox x:Name="TextBoxRepetitions" IsEnabled="{Binding IsEnabled}" Text="{Binding Repetitions}" IsReadOnly="{Binding IsReadOnly}" Width="250" HorizontalAlignment="Center" Margin="0,0,0,10">
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Type}" Value="Strength">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+
+            <Label x:Name="LabelDistance" Content="Distance" Foreground="Crimson" Margin="0,5,0,0" Width="250">
+                <Label.Style>
+                    <Style TargetType="Label">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Type}" Value="Cardio">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
+
+            <TextBox x:Name="TextBoxDistance" IsEnabled="{Binding IsEnabled}" Text="{Binding Distance}" IsReadOnly="{Binding IsReadOnly}" Width="250" HorizontalAlignment="Center" Margin="0,0,0,10">
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Type}" Value="Cardio">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+
+
             <!-- Kalorier brända -->
             <Label Content="Calories Burned" HorizontalContentAlignment="Left" Foreground="Crimson" Margin="0,5,0,0" Width="250"/>
             <TextBox Text="{Binding CaloriesBurned}"
-                     IsReadOnly="{Binding IsReadOnly}"
+                     IsEnabled="{Binding IsEnabled}"
                      Width="250"
                      HorizontalAlignment="Center"
                      Margin="0,0,0,10"/>
@@ -55,7 +109,7 @@
             <!-- Anteckningar -->
             <Label Content="Notes" HorizontalContentAlignment="Left" Foreground="Crimson" Margin="0,5,0,0" Width="250"/>
             <TextBox Text="{Binding Notes}"
-                     IsReadOnly="{Binding IsReadOnly}"
+                     IsEnabled="{Binding IsEnabled}"
                      Width="250"
                      HorizontalAlignment="Center"
                      Margin="0,0,0,10"/>
@@ -63,7 +117,7 @@
             <!-- Datum -->
             <Label Content="Date" HorizontalContentAlignment="Left" Foreground="Crimson" Margin="0,5,0,0" Width="250"/>
             <DatePicker SelectedDate="{Binding Date}"
-                        IsEnabled="{Binding IsEditable}"
+                        IsEnabled="{Binding IsEnabled}"
                         Width="250"
                         HorizontalAlignment="Center"
                         Margin="0,0,0,10"/>
@@ -75,7 +129,16 @@
                         Width="60"
                         Background="Crimson"
                         Foreground="LightGray"
-                        Margin="5"/>
+                        Margin="5"
+                        Visibility="{Binding EditVisibility}"/>
+
+                <Button Content="Restore"
+                        Command="{Binding RestoreCommand}"
+                        Width="60"
+                        Background="Crimson"
+                        Foreground="LightGray"
+                        Margin="5"
+                        Visibility="{Binding RestoreVisibility}"/>
 
                 <Button Content="Save"
                         Command="{Binding SaveCommand}"

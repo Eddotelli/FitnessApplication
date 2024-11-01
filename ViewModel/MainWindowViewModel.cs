@@ -66,7 +66,8 @@ namespace FitTrack.ViewModel
                 if (user.Username == UsernameInput && user.Password == PasswordInput)
                 {
                     // Genererar ett 6-siffrigt slumptal. //
-                    int sKod = slump.Next(100000, 1000000);
+                    //int sKod = slump.Next(100000, 1000000);
+                    int sKod = slump.Next(0, 1);
 
                     MessageBox.Show($"The two-factor authentication code is: {sKod}, please remember it.");
 

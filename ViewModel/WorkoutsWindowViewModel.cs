@@ -157,7 +157,7 @@ namespace FitTrack.ViewModel
                 {
                     // Om en vanlig användare är inloggad, tar bort träningspasset från den inloggades lista. //
                     userManager.LoggedInUser.UserWorkouts.Remove(SelectedItem);
-                    MessageBox.Show($"Workout '{SelectedItem.Name}' has been removed from your workout list.");
+                    MessageBox.Show($"Workout has been removed from your workout list.");
                 }
 
                 // Uppdaterar listan efter borttagningen. //

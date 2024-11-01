@@ -29,11 +29,25 @@ namespace FitTrack.ViewModel
         public ObservableCollection<string> WorkoutTypes { get; set; }
 
         // Lagrar den temporära kopian av träningspasset. //
+        //private Workout originalWorkout;
+
         private Workout originalWorkout;
+
+        public Workout OriginalWorkout
+        {
+            get { return originalWorkout; }
+            set 
+            { 
+                originalWorkout = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         // ------------------------------ Egenskaper ------------------------------ //
 
         // Bindningsbara egenskaper för att visa och ändra information i UI. //
+        private string name;
         public string Name
         {
             // Hämtar namnet från träningspasset. //
@@ -48,6 +62,7 @@ namespace FitTrack.ViewModel
             }
         }
 
+        private string type;
         public string Type
         {
             get { return localWorkout.TypeInput; }
@@ -58,6 +73,7 @@ namespace FitTrack.ViewModel
             }
         }
 
+        private string duration;
         public TimeSpan Duration
         {
             get { return localWorkout.Duration; }
@@ -68,6 +84,7 @@ namespace FitTrack.ViewModel
             }
         }
 
+        private string caloriesBurned;
         public int CaloriesBurned
         {
             get { return localWorkout.CaloriesBurned; }
@@ -78,6 +95,7 @@ namespace FitTrack.ViewModel
             }
         }
 
+        private string notes;
         public string Notes
         {
             get { return localWorkout.Notes; }
@@ -88,6 +106,7 @@ namespace FitTrack.ViewModel
             }
         }
 
+        private string date;
         public DateTime Date
         {
             get { return localWorkout.Date; }
@@ -98,32 +117,73 @@ namespace FitTrack.ViewModel
             }
         }
 
-        // Fält för att styra om fälten ska vara låsta för redigering (default är låst). //
-        private bool isReadOnly = true;
-        private bool canSave = false;
-
-        // Offentlig bindningsbar egenskap för att styra om fälten är redigerbara i UI. //
-        public bool IsReadOnly
+        // Egenskaper för Repetitions och Distance beroende på vilken typ av träningspass det är
+        private string repetitons;
+        public int Repetitions
         {
-            get { return isReadOnly; }
+            get
+            {
+                if (localWorkout is StrengthWorkout strengthWorkout)
+                {
+                    return strengthWorkout.Repetitions;
+                }
+                return 0;
+            }
             set
             {
-                isReadOnly = value;
-
-                // Meddelar UI om ändringen. //
-                OnPropertyChanged(nameof(IsReadOnly));
+                if (localWorkout is StrengthWorkout strengthWorkout)
+                {
+                    strengthWorkout.Repetitions = value;
+                    OnPropertyChanged(nameof(Repetitions));
+                }
             }
         }
 
-        public bool CanSave
+        private string distance;
+        public int Distance
         {
-            get { return canSave; }
+            get
+            {
+                if (localWorkout is CardioWorkout cardioWorkout)
+                {
+                    return cardioWorkout.Distance;
+                }
+                return 0;
+            }
             set
             {
-                canSave = value;
-                OnPropertyChanged(nameof(CanSave));
+                if (localWorkout is CardioWorkout cardioWorkout)
+                {
+                    cardioWorkout.Distance = value;
+                    OnPropertyChanged(nameof(Distance));
+                }
             }
         }
+
+        private Visibility editVisibility;
+        public Visibility EditVisibility
+        {
+            get { return editVisibility; }
+            set
+            {
+                editVisibility = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private Visibility restoreVisibility;
+        public Visibility RestoreVisibility
+        {
+            get { return restoreVisibility; }
+            set 
+            { 
+                restoreVisibility = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+
 
         // ------------------------------ Konstruktor ------------------------------ //
 
@@ -145,6 +205,8 @@ namespace FitTrack.ViewModel
                 "Strength", "Cardio"
             };
 
+            RestoreVisibility = Visibility.Collapsed;
+
             //// Skapa en kopia av workout beroende på dess typ
             //if (workout is StrengthWorkout strengthWorkout)
             //{
@@ -156,7 +218,7 @@ namespace FitTrack.ViewModel
             //        CaloriesBurned = strengthWorkout.CaloriesBurned,
             //        Notes = strengthWorkout.Notes,
             //        Date = strengthWorkout.Date,
-            //        Repetitions = strengthWorkout.Repetitions
+                    
             //    };
             //}
             //else if (workout is CardioWorkout cardioWorkout)
@@ -185,16 +247,48 @@ namespace FitTrack.ViewModel
         public RelayCommand SaveCommand => new RelayCommand(execute => SaveWorkout(), canExecute => CanSave);
         public RelayCommand CopyCommand => new RelayCommand(execute => CopyWorkout());
         public RelayCommand ExitCommand => new RelayCommand(execute => Exit());
+        public RelayCommand RestoreCommand => new RelayCommand(execute => RestoreWorkout());
 
 
         // ------------------------------ Metoder ------------------------------ //
+
+        // Fält för att styra om fälten ska vara låsta för redigering (default är låst). //
+        private bool isEnabled = false;
+        private bool canSave = false;
+
+        // Offentlig bindningsbar egenskap för att styra om fälten är redigerbara i UI. //
+        public bool IsEnabled
+        {
+            get { return isEnabled; }
+            set
+            {
+                isEnabled = value;
+
+                // Meddelar UI om ändringen. //
+                OnPropertyChanged(nameof(IsEnabled));
+            }
+        }
+
+        public bool CanSave
+        {
+            get { return canSave; }
+            set
+            {
+                canSave = value;
+                OnPropertyChanged(nameof(CanSave));
+            }
+        }
+
 
         // Metod för att låsa upp textfälten så att de kan redigeras. //
         public void EditWorkout()
         {
             // Gör fälten redigerbara. //
-            IsReadOnly = false;
+            IsEnabled = true;
             CanSave = true;
+
+            RestoreVisibility = Visibility.Visible;
+            EditVisibility = Visibility.Collapsed;
         }
 
         // Metod för att spara ändringar.
@@ -206,7 +300,7 @@ namespace FitTrack.ViewModel
             {
                 
                 // Lås fälten igen. //
-                IsReadOnly = true;
+                IsEnabled = true;
                 CanSave = false;
 
                 // Använd UpdateWorkout för att meddela ändringen i UserManager. //
@@ -221,8 +315,11 @@ namespace FitTrack.ViewModel
             }    
         }
 
-        private void RestoreOriginalWorkout()
+        private void RestoreWorkout()
         {
+            EditVisibility = Visibility.Visible;
+            RestoreVisibility = Visibility.Collapsed;
+
             localWorkout.Name = originalWorkout.Name;
             localWorkout.TypeInput = originalWorkout.TypeInput;
             localWorkout.Duration = originalWorkout.Duration;
@@ -251,34 +348,9 @@ namespace FitTrack.ViewModel
         // Kopierar träningspasset. //
         public void CopyWorkout()
         {
-            // Kontrollera om träningspasset är av typen StrengthWorkout. //
-            if (localWorkout is StrengthWorkout strengthWorkout)
-            {
-                userManager.CopiedWorkout = new StrengthWorkout(
-                    strengthWorkout.Name,
-                    strengthWorkout.Repetitions,
-                    strengthWorkout.Date,
-                    strengthWorkout.TypeInput,
-                    strengthWorkout.Duration,
-                    strengthWorkout.CaloriesBurned,
-                    strengthWorkout.Notes
-                );
-            }
-            // Kontrollera om träningspasset är av typen CardioWorkout. //
-            else if (localWorkout is CardioWorkout cardioWorkout)
-            {
-                userManager.CopiedWorkout = new CardioWorkout(
-                    cardioWorkout.Name,
-                    cardioWorkout.Distance,
-                    cardioWorkout.Date,
-                    cardioWorkout.TypeInput,
-                    cardioWorkout.Duration,
-                    cardioWorkout.CaloriesBurned,
-                    cardioWorkout.Notes
-                );
-            }
+            userManager.CopiedWorkout = localWorkout;
 
-            MessageBox.Show("Workout copied successfully!");
+            MessageBox.Show($"Workout copied '{userManager.CopiedWorkout.Name}' successfully!");
         }
 
         // Metod för att stänga fönstret och gå tillbaka.

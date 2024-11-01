@@ -23,9 +23,6 @@ namespace FitTrack.Model
         // Privat lista som innehåller användarkonton. //
         private ObservableCollection<User> users = new ObservableCollection<User>();
 
-        // Privat lista som innehåller träningspass med kort info. //
-        private ObservableCollection<Workout> workoutsInfo = new ObservableCollection<Workout>();
-
         // Privat konstruktor förhindrar skapande av fler instanser. //
         private UserManager() 
         {
@@ -47,6 +44,9 @@ namespace FitTrack.Model
             // Lägger till admin-användaren till listan för användare. //
             users.Add(adminUser);
         }
+
+        // Privat lista som innehåller träningspass med kort info. //
+        private ObservableCollection<Workout> workoutsInfo = new ObservableCollection<Workout>();
 
         // Egenskap för att få den inloggade användarens träningspass.
         public ObservableCollection<Workout> LoggedInUserWorkouts => LoggedInUser?.UserWorkouts;
