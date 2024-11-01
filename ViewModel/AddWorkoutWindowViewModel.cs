@@ -9,8 +9,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
+// Add these at the top to use Debug
+using System.Diagnostics;
+
 namespace FitTrack.ViewModel
 {
+
+
     public class AddWorkoutWindowViewModel : ViewModelBase
     {
         // Singleton-instans av UserManager, används för att dela en gemensam lista och centraliserad datahantering mellan olika fönster. //
@@ -24,6 +29,9 @@ namespace FitTrack.ViewModel
 
         // Alternativ för ComboBox i kolumnen "Type". //
         public ObservableCollection<string> WorkoutTypes { get; set; }
+
+        // Temporär lista som ska visas i `ListBox` på AddWorkoutWindow. //
+        public ObservableCollection<Workout> TempWorkouts { get; private set; } = new ObservableCollection<Workout>();
 
 
         // ------------------------------ Egenskaper ------------------------------ //
@@ -48,10 +56,17 @@ namespace FitTrack.ViewModel
             set
             {
                 workoutTypeComboBox = value;
-                CanExecuteButtons = !string.IsNullOrEmpty(workoutTypeComboBox);
+                //CanExecuteButtons = !string.IsNullOrEmpty(workoutTypeComboBox);
                 OnPropertyChanged(nameof(WorkoutTypeComboBox));
+                OnPropertyChanged(nameof(IsStrengthWorkout));
+                OnPropertyChanged(nameof(IsCardioWorkout));
+                Debug.WriteLine($"WorkoutTypeComboBox set to: {workoutTypeComboBox}");
+                UpdateCaloriesBurned();
             }
         }
+
+        public bool IsStrengthWorkout => WorkoutTypeComboBox == "Strength";
+        public bool IsCardioWorkout => WorkoutTypeComboBox == "Cardio";
 
         // Fält och egenskap för att lagra och hantera värdet på Duration. //
         private TimeSpan duration = TimeSpan.FromSeconds(0);
@@ -105,8 +120,33 @@ namespace FitTrack.ViewModel
             }
         }
 
-        public int Repetitions {  get; set; } // Endast relevant för StrengthWorkout. //
-        public int Distance {  get; set; } // Endast relevant för CardioWorkout. // 
+        // Endast relevant för StrengthWorkout. //
+        private int repetitions;
+        public int Repetitions
+        {
+            get { return repetitions; }
+            set
+            {
+                repetitions = value;
+                OnPropertyChanged(nameof(Repetitions));
+                Debug.WriteLine($"Repetitions set to: {repetitions}");
+                UpdateCaloriesBurned();
+            }
+        }
+
+        // Endast relevant för CardioWorkout. // 
+        private int distance;
+        public int Distance
+        {
+            get { return distance; }
+            set
+            {
+                distance = value;
+                OnPropertyChanged(nameof(Distance));
+                Debug.WriteLine($"Distance set to: {distance}");
+                UpdateCaloriesBurned();
+            }
+        }
 
         // Privata egenskaper som original information sparas(kopieras) till. //
         private string originalName;
@@ -149,19 +189,21 @@ namespace FitTrack.ViewModel
             }
         }
 
+
+
         // ------------------------------ Bool-egenskaper ------------------------------ //
 
-        // Bool-egenskap för att aktivera/inaktivera knapparna. //
-        private bool canExecuteButtons;
-        public bool CanExecuteButtons
-        {
-            get { return canExecuteButtons; }
-            set
-            {
-                canExecuteButtons = value;
-                OnPropertyChanged(nameof(CanExecuteButtons));
-            }
-        }
+        //// Bool-egenskap för att aktivera/inaktivera knapparna. //
+        //private bool canExecuteButtons;
+        //public bool CanExecuteButtons
+        //{
+        //    get { return canExecuteButtons; }
+        //    set
+        //    {
+        //        canExecuteButtons = value;
+        //        OnPropertyChanged(nameof(CanExecuteButtons));
+        //    }
+        //}
 
         // Bool-egenskap för att aktivera 'Save'-knappen när alla textboxar är ifyllda. //
         private bool canSaveWorkout;
@@ -178,6 +220,8 @@ namespace FitTrack.ViewModel
             }
         }
 
+        
+
         // ------------------------------ Kommando ------------------------------ //
         public RelayCommand AddCommand => new RelayCommand(execute => AddWorkout());
         public RelayCommand RestoreCommand => new RelayCommand(execute => RestoreWorkout());
@@ -185,6 +229,7 @@ namespace FitTrack.ViewModel
         public RelayCommand RemoveCommand => new RelayCommand(execute => RemoveWorkout());
         public RelayCommand PasteCommand => new RelayCommand(execute => PasteWorkout());
         public RelayCommand ExitCommand => new RelayCommand(execute => Exit());
+        public RelayCommand UpdateCaloriesCommand => new RelayCommand(param => UpdateCaloriesBurned());
 
 
         // ------------------------------ Konstruktor ------------------------------ //
@@ -205,12 +250,76 @@ namespace FitTrack.ViewModel
             };
 
             // Sätter CanExecuteKnappar till false för att inaktivera knapparna vid start. //
-            CanExecuteButtons = false;
+            //CanExecuteButtons = false;
         }
 
 
         // ------------------------------ Metoder ------------------------------ //
 
+        //public void AddWorkout()
+        //{
+        //    // Kontrollerar att användaren har valt ett WorkoutType. //
+        //    if (string.IsNullOrEmpty(WorkoutTypeComboBox))
+        //    {
+        //        MessageBox.Show("Please select a workout type before adding it.", "Validation", MessageBoxButton.OK, MessageBoxImage.Warning);
+        //        return;
+        //    }
+
+        //    // Skapar ett nytt träningspass baserat på vald WorkoutTypeComboBox. //
+        //    Workout newWorkout;
+        //    if (WorkoutTypeComboBox == "Strength")
+        //    {
+        //        // Om WorkoutTypeComboBox är "Strength" skapas en StrengthWorkout-instans. //
+        //        newWorkout = new StrengthWorkout(Name, Repetitions, Date, "Strength", Duration, CaloriesBurned, Notes);
+        //    }
+        //    else
+        //    {
+        //        //// Om WorkoutTypeComboBox är "Cardio", skapas en CardioWorkout-instans och kalorier beräknas baserat på distansen. //
+        //        //var cardioWorkout = new CardioWorkout(Name, Distance, Date, "Cardio", Duration, 0, Notes);
+        //        //cardioWorkout.CaloriesBurned = cardioWorkout.CalculateCaloriesBurned();
+
+        //        //newWorkout = cardioWorkout;
+
+        //        newWorkout = new CardioWorkout(Name, Distance, Date, "Cardio", Duration, CaloriesBurned, Notes);
+        //    }
+
+        //    // Lägg till det nya träningspasset i den inloggade användarens lista om inloggad användare finns. //
+        //    if (userManager.LoggedInUser != null)
+        //    {
+        //        userManager.LoggedInUser.UserWorkouts.Add(newWorkout);
+
+        //        // Uppdaterar UI för att reflektera det nya träningspasset. //
+        //        OnPropertyChanged(nameof(WorkoutsInfo));
+        //    }
+        //}
+
+        private void UpdateCaloriesBurned()
+        {
+            // Debug statement to confirm this method is being called
+            Debug.WriteLine("UpdateCaloriesBurned called");
+
+            if (Repetitions > 0)
+            {
+                var strengthWorkout = new StrengthWorkout(Name, Repetitions, Date, "Strength", Duration, 0, Notes);
+                CaloriesBurned = strengthWorkout.CalculateCaloriesBurned();
+                Debug.WriteLine($"Calculated Calories for Strength: {CaloriesBurned}");
+            }
+            else if (Distance > 0)
+            {
+                var cardioWorkout = new CardioWorkout(Name, Distance, Date, "Cardio", Duration, 0, Notes);
+                CaloriesBurned = cardioWorkout.CalculateCaloriesBurned();
+                Debug.WriteLine($"Calculated Calories for Cardio: {CaloriesBurned}");
+            }
+            else
+            {
+                CaloriesBurned = 0; // Reset if conditions aren't met
+
+                Debug.WriteLine("Calories reset to 0");
+            }
+            OnPropertyChanged(nameof(CaloriesBurned)); // Notify change after calculation
+        }
+
+        // Lägger till träningspass i den temporära listan. //
         public void AddWorkout()
         {
             // Kontrollerar att användaren har valt ett WorkoutType. //
@@ -229,68 +338,94 @@ namespace FitTrack.ViewModel
             }
             else
             {
-                //// Om WorkoutTypeComboBox är "Cardio", skapas en CardioWorkout-instans och kalorier beräknas baserat på distansen. //
-                //var cardioWorkout = new CardioWorkout(Name, Distance, Date, "Cardio", Duration, 0, Notes);
-                //cardioWorkout.CaloriesBurned = cardioWorkout.CalculateCaloriesBurned();
-
-                //newWorkout = cardioWorkout;
-
+                // Om WorkoutTypeComboBox är "Cardio" skapas en CardioWorkout-instans. //
                 newWorkout = new CardioWorkout(Name, Distance, Date, "Cardio", Duration, CaloriesBurned, Notes);
             }
 
-            // Lägg till det nya träningspasset i den inloggade användarens lista om inloggad användare finns. //
-            if (userManager.LoggedInUser != null)
-            {
-                userManager.LoggedInUser.UserWorkouts.Add(newWorkout);
-
-                // Uppdaterar UI för att reflektera det nya träningspasset. //
-                OnPropertyChanged(nameof(WorkoutsInfo));
-            }
+            // Lägg till träningspasset i den temporära listan. //
+            TempWorkouts.Add(newWorkout);
         }
 
-        // Sparar ner tillagda träningspass, stänger AddWorkoutsWindow och återgår till WorkoutsWindow. //
+        //// Sparar ner tillagda träningspass, stänger AddWorkoutsWindow och återgår till WorkoutsWindow. //
+        //public void SaveWorkout()
+        //{
+        //    //// Kontrollerar att alla nödvändiga fält är ifyllda och giltiga. //
+        //    //if (string.IsNullOrEmpty(Name))
+        //    //{
+        //    //    MessageBox.Show("Please enter a workout name.", "Validation", MessageBoxButton.OK, MessageBoxImage.Warning);
+        //    //    return;
+        //    //}
+
+        //    //if (string.IsNullOrEmpty(WorkoutTypeComboBox))
+        //    //{
+        //    //    MessageBox.Show("Please select a workout type.", "Validation", MessageBoxButton.OK, MessageBoxImage.Warning);
+        //    //    return;
+        //    //}
+
+        //    //if (Duration <= TimeSpan.Zero)
+        //    //{
+        //    //    MessageBox.Show("Please enter a valid duration greater than zero.", "Validation", MessageBoxButton.OK, MessageBoxImage.Warning);
+        //    //    return;
+        //    //}
+
+        //    //if (CaloriesBurned <= 0)
+        //    //{
+        //    //    MessageBox.Show("Please enter a valid number for calories burned.", "Validation", MessageBoxButton.OK, MessageBoxImage.Warning);
+        //    //    return;
+        //    //}
+
+        //    //if (string.IsNullOrEmpty(Notes))
+        //    //{
+        //    //    MessageBox.Show("Please enter notes for the workout.", "Validation", MessageBoxButton.OK, MessageBoxImage.Warning);
+        //    //    return;
+        //    //} Kontroller på fälten.
+
+        //    // Bekräftar om användaren vill spara och gå tillbaka. //
+        //    MessageBoxResult result = MessageBox.Show("Are you sure you want to save and go back?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+        //    if (result == MessageBoxResult.Yes)
+        //    {
+        //        MessageBox.Show("The training session has been saved!", "Saved!", MessageBoxButton.OK, MessageBoxImage.Information);
+
+        //        // Uppdaterar UI vid sparande. //
+        //        OnPropertyChanged(nameof(WorkoutsInfo));
+
+        //        // Öppnar WorkoutsWindow. //
+        //        WorkoutsWindow work = new WorkoutsWindow();
+        //        work.Show();
+
+        //        // Stänger AddWorkoutWindow. //
+        //        _addWorkoutWindow.Close();
+        //    }
+        //}
+
+        // Vid spara, överför träningspass från temporära listan till användarens permanenta lista. //
         public void SaveWorkout()
         {
-            //// Kontrollerar att alla nödvändiga fält är ifyllda och giltiga. //
-            //if (string.IsNullOrEmpty(Name))
-            //{
-            //    MessageBox.Show("Please enter a workout name.", "Validation", MessageBoxButton.OK, MessageBoxImage.Warning);
-            //    return;
-            //}
-
-            //if (string.IsNullOrEmpty(WorkoutTypeComboBox))
-            //{
-            //    MessageBox.Show("Please select a workout type.", "Validation", MessageBoxButton.OK, MessageBoxImage.Warning);
-            //    return;
-            //}
-
-            //if (Duration <= TimeSpan.Zero)
-            //{
-            //    MessageBox.Show("Please enter a valid duration greater than zero.", "Validation", MessageBoxButton.OK, MessageBoxImage.Warning);
-            //    return;
-            //}
-
-            //if (CaloriesBurned <= 0)
-            //{
-            //    MessageBox.Show("Please enter a valid number for calories burned.", "Validation", MessageBoxButton.OK, MessageBoxImage.Warning);
-            //    return;
-            //}
-
-            //if (string.IsNullOrEmpty(Notes))
-            //{
-            //    MessageBox.Show("Please enter notes for the workout.", "Validation", MessageBoxButton.OK, MessageBoxImage.Warning);
-            //    return;
-            //} Kontroller på fälten.
-
-            // Bekräftar om användaren vill spara och gå tillbaka. //
-            MessageBoxResult result = MessageBox.Show("Are you sure you want to save and go back?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
-
-            if (result == MessageBoxResult.Yes)
+            // Om man försöker spara när listan är tom. // <--- Återkom till denna, ska egentligen inte behövas.
+            if (TempWorkouts.Count == 0)
             {
-                MessageBox.Show("The training session has been saved!", "Saved!", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("No workouts to save. Add workouts before saving.", "Save", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
 
-                // Uppdaterar UI vid sparande. //
-                OnPropertyChanged(nameof(WorkoutsInfo));
+            // Kontrollerar så att en användare är inloggad. //
+            if (userManager.LoggedInUser != null)
+            {
+                // Loopar igenom temporära listan. //
+                foreach (var workout in TempWorkouts)
+                {
+                    // Lägger till temporära träningslistan i användarens egna lista. //
+                    userManager.LoggedInUser.UserWorkouts.Add(workout);
+                }
+
+                MessageBox.Show("All workouts have been saved!", "Saved", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                // Uppdaterar UI. //
+                OnPropertyChanged(nameof(TempWorkouts));
+
+                // Rensa den temporära listan efter sparande. //
+                TempWorkouts.Clear(); 
 
                 // Öppnar WorkoutsWindow. //
                 WorkoutsWindow work = new WorkoutsWindow();
@@ -389,6 +524,9 @@ namespace FitTrack.ViewModel
 
             if (result == MessageBoxResult.Yes)
             {
+                // Rensa temporära träningspass. //
+                TempWorkouts.Clear();
+
                 // Öppnar WorkoutsWindow-fönstret. //
                 WorkoutsWindow work = new WorkoutsWindow();
                 work.Show();

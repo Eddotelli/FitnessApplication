@@ -25,8 +25,11 @@ namespace FitTrack.ViewModel
         // Lokal kopia av träningspasset som redigeras. //
         private Workout localWorkout;
 
-        
+        // Alternativ för ComboBox i kolumnen "Type". //
+        public ObservableCollection<string> WorkoutTypes { get; set; }
 
+        // Lagrar den temporära kopian av träningspasset. //
+        private Workout originalWorkout;
 
         // ------------------------------ Egenskaper ------------------------------ //
 
@@ -135,6 +138,46 @@ namespace FitTrack.ViewModel
 
             // Sparar referens till fönstret. //
             _detailsWindow = detailsWindow;
+
+            // Lista över typer som visas i ComboBox för "Type"-kolumnen. //
+            WorkoutTypes = new ObservableCollection<string>
+            {
+                "Strength", "Cardio"
+            };
+
+            //// Skapa en kopia av workout beroende på dess typ
+            //if (workout is StrengthWorkout strengthWorkout)
+            //{
+            //    originalWorkout = new StrengthWorkout
+            //    {
+            //        Name = strengthWorkout.Name,
+            //        TypeInput = strengthWorkout.TypeInput,
+            //        Duration = strengthWorkout.Duration,
+            //        CaloriesBurned = strengthWorkout.CaloriesBurned,
+            //        Notes = strengthWorkout.Notes,
+            //        Date = strengthWorkout.Date,
+            //        Repetitions = strengthWorkout.Repetitions
+            //    };
+            //}
+            //else if (workout is CardioWorkout cardioWorkout)
+            //{
+            //    originalWorkout = new CardioWorkout
+            //    {
+            //        Name = cardioWorkout.Name,
+            //        TypeInput = cardioWorkout.TypeInput,
+            //        Duration = cardioWorkout.Duration,
+            //        CaloriesBurned = cardioWorkout.CaloriesBurned,
+            //        Notes = cardioWorkout.Notes,
+            //        Date = cardioWorkout.Date,
+            //        Distance = cardioWorkout.Distance
+            //    };
+            //}
+            //else
+            //{
+            //    throw new InvalidOperationException("Unknown workout type.");
+            //}
+
+            //localWorkout = workout;
         }
 
         // ------------------------------ Kommando ------------------------------ //
@@ -161,6 +204,7 @@ namespace FitTrack.ViewModel
 
             if (result == MessageBoxResult.Yes)
             {
+                
                 // Lås fälten igen. //
                 IsReadOnly = true;
                 CanSave = false;
@@ -175,6 +219,33 @@ namespace FitTrack.ViewModel
                 // Stänger ner WorkoutsDetailsWindow-fönstret. //
                 _detailsWindow.Close();
             }    
+        }
+
+        private void RestoreOriginalWorkout()
+        {
+            localWorkout.Name = originalWorkout.Name;
+            localWorkout.TypeInput = originalWorkout.TypeInput;
+            localWorkout.Duration = originalWorkout.Duration;
+            localWorkout.CaloriesBurned = originalWorkout.CaloriesBurned;
+            localWorkout.Notes = originalWorkout.Notes;
+            localWorkout.Date = originalWorkout.Date;
+
+            if (originalWorkout is StrengthWorkout originalStrength && localWorkout is StrengthWorkout localStrength)
+            {
+                localStrength.Repetitions = originalStrength.Repetitions;
+            }
+            else if (originalWorkout is CardioWorkout originalCardio && localWorkout is CardioWorkout localCardio)
+            {
+                localCardio.Distance = originalCardio.Distance;
+            }
+
+            // Meddela UI att data har ändrats
+            OnPropertyChanged(nameof(Name));
+            OnPropertyChanged(nameof(Type));
+            OnPropertyChanged(nameof(Duration));
+            OnPropertyChanged(nameof(CaloriesBurned));
+            OnPropertyChanged(nameof(Notes));
+            OnPropertyChanged(nameof(Date));
         }
 
         // Kopierar träningspasset. //

@@ -8,30 +8,34 @@
         Title="AddWorkoutWindow" Height="450" Width="800">
     <Grid>
 
+        <Grid.Resources>
+            <!-- Definiera BooleanToVisibilityConverter som resurs -->
+            <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        </Grid.Resources>
+
         <StackPanel>
 
             <!-- Rubrik -->
             <Label Content="Add Workout Window"
-                   HorizontalContentAlignment="Center"
-                   FontSize="20"
-                   Background="Crimson"
-                   Foreground="LightGray"
-                   Margin="10"/>
+               HorizontalContentAlignment="Center"
+               FontSize="20"
+               Background="Crimson"
+               Foreground="LightGray"
+               Margin="10"/>
 
             <!-- ComboBox för att välja WorkoutType -->
             <ComboBox Text="Type"
-                      ItemsSource="{Binding WorkoutTypes}"
-                      SelectedItem="{Binding WorkoutTypeComboBox}"
-                      Width="80"
-                      Margin="5"
-                      />
+                  ItemsSource="{Binding WorkoutTypes}"
+                  SelectedItem="{Binding WorkoutTypeComboBox}"
+                  Width="80"
+                  Margin="5"/>
 
             <!-- ListBox för att visa och redigera träningspass -->
-            <ListBox ItemsSource="{Binding WorkoutsInfo}"
-                     SelectedItem="{Binding SelectedItem}"
-                     Width="650"
-                     Height="200"
-                     Margin="5">
+            <ListBox ItemsSource="{Binding TempWorkouts}"
+                 SelectedItem="{Binding SelectedItem}"
+                 Width="650"
+                 Height="200"
+                 Margin="5">
 
                 <ListBox.ItemTemplate>
 
@@ -41,34 +45,58 @@
 
                             <!-- TextBox för Name -->
                             <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                                     Width="100"
-                                     Margin="5"/>
+                                 Width="100"
+                                 Margin="5"/>
 
                             <!-- ComboBox för Type med WorkoutTypes som ItemsSource -->
                             <ComboBox ItemsSource="{Binding DataContext.WorkoutTypes, RelativeSource={RelativeSource AncestorType=Window}}"
-                                      SelectedItem="{Binding TypeInput, UpdateSourceTrigger=PropertyChanged}"
-                                      Width="100"
-                                      Margin="5"/>
+                                  SelectedItem="{Binding TypeInput, UpdateSourceTrigger=PropertyChanged}"
+                                  Width="100"
+                                  Margin="5"/>
 
-                            <!-- TextBox för Duration -->
+                            <!-- Textfält för Repetitions eller Distance, beroende på valt WorkoutType -->
+
+                            <!-- Repetitions (endast synlig om WorkoutType är "Strength") -->
+                            <TextBlock Text="Repetitions:" 
+                                   Visibility="{Binding IsStrengthWorkout, Converter={StaticResource BoolToVis}}" 
+                                   Margin="5"/>
+
+                            <TextBox Text="{Binding Repetitions, UpdateSourceTrigger=PropertyChanged}" 
+                                 Visibility="{Binding IsStrengthWorkout, Converter={StaticResource BoolToVis}}" 
+                                 Margin="5"/>
+
+                            <!-- Distance (endast synlig om WorkoutType är "Cardio") -->
+                            <TextBlock Text="Distance:" 
+                                   Visibility="{Binding IsCardioWorkout, Converter={StaticResource BoolToVis}}" 
+                                   Margin="5"/>
+
+                            <TextBox Text="{Binding Distance, UpdateSourceTrigger=PropertyChanged}" 
+                                 Visibility="{Binding IsCardioWorkout, Converter={StaticResource BoolToVis}}" 
+                                 Margin="5"/>
+
+                            <!-- Duration -->
                             <TextBox Text="{Binding Duration, StringFormat=\{0:hh\\:mm\\:ss\}, UpdateSourceTrigger=PropertyChanged}"
+                                 Width="50"
+                                 Margin="5"/>
+
+                            <!-- CaloriesBurned -->
+                            <TextBlock Text="Calories Burned:"
+                                       Margin="5"/>
+
+                            <TextBox Text="{Binding CaloriesBurned, Mode=OneWay}"
+                                     IsReadOnly="True"
                                      Width="50"
                                      Margin="5"/>
 
-                            <!-- TextBox för CaloriesBurned -->
-                            <TextBox Text="{Binding CaloriesBurned, UpdateSourceTrigger=PropertyChanged}"
-                                     Width="50"
-                                     Margin="5"/>
-
-                            <!-- TextBox för Notes -->
+                            <!-- Notes -->
                             <TextBox Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}"
-                                     Width="150"
-                                     Margin="5"/>
+                                 Width="150"
+                                 Margin="5"/>
 
                             <!-- DatePicker för Date -->
                             <DatePicker SelectedDate="{Binding Date, UpdateSourceTrigger=PropertyChanged}"
-                                        Width="100"
-                                        Margin="5"/>
+                                    Width="100"
+                                    Margin="5"/>
 
                         </StackPanel>
 
@@ -109,6 +137,9 @@
                         Width="100"
                         Margin="5"
                         IsEnabled="{Binding CanExecuteButtons}"/>
+
+                <Button Content="Update Calories"
+                        Command="{Binding UpdateCaloriesCommand}" />
 
             </StackPanel>
 

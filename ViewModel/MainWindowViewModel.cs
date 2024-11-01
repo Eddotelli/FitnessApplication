@@ -49,6 +49,7 @@ namespace FitTrack.ViewModel
 
             // Sparar referens till fönstret. //
             _mainWindow = mainwindow;
+
         }
 
         // ------------------------------ Metoder ------------------------------ //
@@ -57,14 +58,42 @@ namespace FitTrack.ViewModel
             // Kontrollerar om användarnamn och lösenord matchar en användare i listan direkt med hjälp av CurrentUser. //
             bool isAuthenticated = false;
 
+            Random slump = new Random();
+
             // Kontrollerar om användaren finns och bekräftar användaren. //
             foreach (var user in userManager.Users)
             {
                 if (user.Username == UsernameInput && user.Password == PasswordInput)
                 {
-                    // isAuthenticated får värdet 'true' genom metoden CurrentUser i UserManager-klassen. Detta ger även LoggedInUser username-inputet som värde. //
-                    isAuthenticated = userManager.CurrentUser(UsernameInput);
-                    break;
+                    // Genererar ett 6-siffrigt slumptal. //
+                    int sKod = slump.Next(100000, 1000000);
+
+                    MessageBox.Show($"The two-factor authentication code is: {sKod}, please remember it.");
+
+                    string tFQ = "Please enter your two-factor authentication code.";
+                    string tFQanswer = Microsoft.VisualBasic.Interaction.InputBox($"Security Question:\n{tFQ}", "Answer");
+
+                    // Försök att konvertera användarens svar till ett heltal. //
+                    if (int.TryParse(tFQanswer, out int tFQanswerInt))
+                    {
+                        // Kontrollerar om det konverterade värdet matchar den genererade koden
+                        if (tFQanswerInt == sKod)
+                        {
+                            MessageBox.Show("Two-factor authentication code is correct!");
+
+                            // isAuthenticated får värdet 'true' genom metoden CurrentUser i UserManager-klassen. Detta ger även LoggedInUser username-inputet som värde. //
+                            isAuthenticated = userManager.CurrentUser(UsernameInput);
+                            break;
+                        }
+                        else
+                        {
+                            MessageBox.Show("Incorrect two-factor authentication code. Please try again.");
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Incorrect two-factor authentication code. Please try again.");
+                    }
                 }
             }
 
@@ -125,7 +154,7 @@ namespace FitTrack.ViewModel
             if (user != null)
             {
                 // Om användaren hittas, visas säkerhetsfrågan. //
-                var userQuestion = user.SecurityQuestion;
+                string userQuestion = user.SecurityQuestion;
                 string answer = Microsoft.VisualBasic.Interaction.InputBox($"Security Question:\n{userQuestion}", "Answer Security Question");
 
                 // Kontrollera om svaret matchar det som användaren har anget. //

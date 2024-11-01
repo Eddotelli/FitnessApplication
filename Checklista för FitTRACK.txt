@@ -5,10 +5,7 @@
 () Implementera en tvåfaktorsautentisering.
 () Finslipa designen och användarvänligheten.
 () Gå igenom koden och förstå den bättre.
-(X) Se över kontrollen på lösenordet i RegisterWindow.
-(X) Lägg in en MessageBox på SignOut-knappen i WorkoutWindow.
-(X) Försök att lösa så att WorkoutsDetailsWindow-fönstret stängs.
-(X) Fixa så att varje tränings lista följer med var och en användare.
+() Fixa så att listan för typ funkar och att kalendern i WorkoutDetailsWindow också är lås.
 
 ------------------------------------------------------------------------
 (X) Person-klass
