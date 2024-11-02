@@ -77,6 +77,10 @@ namespace FitTrack.ViewModel
 
                             // isAuthenticated får värdet 'true' genom metoden CurrentUser i UserManager-klassen. Detta ger även LoggedInUser username-inputet som värde. //
                             isAuthenticated = userManager.CurrentUser(UsernameInput);
+                            if (isAuthenticated)
+                            {
+                                userManager.UpdateUserWorkouts(); // Uppdatera WorkoutsInfo för inloggad användare
+                            }
                             break;
                         }
                         else
@@ -91,25 +95,27 @@ namespace FitTrack.ViewModel
                 }
             }
 
-            // Kontrollerar om inloggningen gick igenom eller ej. //
             if (isAuthenticated)
             {
-                // Om inloggningen lyckas visas ett välkomstmeddelande. //
+                // Om inloggningen lyckas, visa ett välkomstmeddelande
                 userManager.LoggedInUser.SignIn();
 
-                // Rensa fälten efter inloggning. //
+                // Uppdatera WorkoutsInfo så att endast inloggad användares träningspass syns
+                userManager.UpdateUserWorkouts();
+
+                // Rensa inloggningsfälten
                 UsernameInput = string.Empty;
                 PasswordInput = string.Empty;
 
-                // Meddelar UI att något har ändrats efter att värdena är tomma. //
+                // Meddela UI om uppdaterade inloggningsfälten
                 OnPropertyChanged(nameof(UsernameInput));
                 OnPropertyChanged(nameof(PasswordInput));
 
-                // Öppna WorkoutsWindow. //
+                // Öppna WorkoutsWindow
                 WorkoutsWindow work = new WorkoutsWindow();
                 work.Show();
 
-                // Stänger ner MainWindow-fönstret. //
+                // Stäng MainWindow
                 _mainWindow.Close();
             }
             else

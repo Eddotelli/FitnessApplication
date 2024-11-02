@@ -119,31 +119,18 @@ namespace FitTrack.ViewModel
         // Konstruktor som initierar WorkoutsWindowViewModel. //
         public WorkoutsWindowViewModel(Window workoutwindow)
         {
-            // Hämtar Singleton-instansen av UserManager för att säkerställa att samma användar- och datahantering delas över hela applikationen. //
+            // Hämtar Singleton-instansen av UserManager för att säkerställa att samma användar- och datahantering delas över hela applikationen.
             userManager = UserManager.Instance;
 
-            // Detta gör att ViewModel kan stänga fönstret när registreringen är klar. //
+            // Detta gör att ViewModel kan stänga fönstret när registreringen är klar.
             _workoutWindow = workoutwindow;
 
-            if (userManager.LoggedInUser is AdminUser)
-            {
-                // Om AdminUser är inloggad, visa alla träningspass. //
-                WorkoutsInfo = userManager.GetAllWorkouts();
+            // Uppdaterar WorkoutsInfo beroende på om det är en AdminUser eller vanlig User.
+            userManager.UpdateUserWorkouts();
+            WorkoutsInfo = userManager.WorkoutsInfo;
 
-                UserManager.Instance.CurrentUser(LoggedInUsername);
-                
-            }
-            else if (userManager.LoggedInUser is User) 
-            {
-                // För vanliga användare, visar bara användarens egna träningspass. //
-                WorkoutsInfo = userManager.LoggedInUser?.UserWorkouts ?? new ObservableCollection<Workout>();
-            }
-
-            // Rensa träningspass för att undvika gamla data vid ny inloggning. ((
+            // Initierar filter-listan och applicerar filter.
             FilterWorkout = new ObservableCollection<Workout>();
-
-            // Hämta träningspassen för aktuell inloggad användare. //
-            LoadUserWorkouts();
             DoFilter();
         }
 
@@ -170,49 +157,39 @@ namespace FitTrack.ViewModel
 
         public void RemoveWorkout()
         {
-            // Kontrollerar om ett träningspass är valt. //
+            // Kontrollerar om ett träningspass är valt.
             if (SelectedItem != null)
             {
-                // Om AdminUser är inloggad, letar efter rätt användare och tar bort träningspasset från dennes lista. //
+                // Om AdminUser är inloggad, letar efter rätt användare och tar bort träningspasset från dennes lista.
                 if (userManager.LoggedInUser is AdminUser)
-                {                    
+                {
                     foreach (var user in userManager.Users)
                     {
                         if (user.UserWorkouts.Contains(SelectedItem))
                         {
                             user.UserWorkouts.Remove(SelectedItem);
                             MessageBox.Show($"Workout '{SelectedItem.Name}' has been removed from user '{user.Username}'s workout list.");
-                            OnPropertyChanged(nameof(FilterWorkout));
                             break;
                         }
                     }
                 }
                 else if (userManager.LoggedInUser != null)
                 {
-                    // Om en vanlig användare är inloggad, tar bort träningspasset från den inloggades lista. //
+                    // Om en vanlig användare är inloggad, tar bort träningspasset från den inloggades lista.
                     userManager.LoggedInUser.UserWorkouts.Remove(SelectedItem);
-                    MessageBox.Show($"Workout has been removed from your workout list.");
-                    OnPropertyChanged(Filter);
-                    DoFilter();
+                    MessageBox.Show("Workout has been removed from your workout list.");
                 }
 
-                // Uppdaterar listan efter borttagningen. //
-                if (userManager.LoggedInUser is AdminUser)
-                {
-                    // Om AdminUser är inloggad, visa alla träningspassen igen. //
-                    WorkoutsInfo = userManager.GetAllWorkouts();
-                }
-                else
-                {
-                    // Annars visas bara den inloggades träningspass. //
-                    WorkoutsInfo = userManager.LoggedInUser?.UserWorkouts ?? new ObservableCollection<Workout>();
-                }
+                // Uppdatera WorkoutsInfo och filter-listan direkt efter borttagningen
+                userManager.UpdateUserWorkouts();  // Uppdaterar WorkoutsInfo enligt inloggad användare
+                DoFilter();  // Tillämpa filtret igen för att uppdatera FilterWorkout
 
                 // Nollställ det valda träningspasset.
                 SelectedItem = null;
 
                 // Meddela UI om uppdateringen.
                 OnPropertyChanged(nameof(WorkoutsInfo));
+                OnPropertyChanged(nameof(FilterWorkout));
             }
             else
             {
@@ -267,21 +244,28 @@ namespace FitTrack.ViewModel
             IsInfoPopupOpen = !IsInfoPopupOpen;
         }
 
-        
+
         // Metod för filtret. //
         public void DoFilter()
         {
             FilterWorkout.Clear();
 
-            foreach (var workout in UserManager.Instance.GetAllWorkouts()) 
+            // Hämta antingen alla träningspass för AdminUser, eller bara den inloggade användarens träningspass
+            var workoutsToFilter = userManager.LoggedInUser is AdminUser
+                ? userManager.GetAllWorkouts()
+                : userManager.LoggedInUser.UserWorkouts;
+
+            // Tillämpa filter på den valda listan av träningspass
+            foreach (var workout in workoutsToFilter)
             {
-                // Hämta och visa alla träningar vid tom inmatning
+                // Om filtret är tomt, visa alla träningar
                 if (string.IsNullOrEmpty(Filter))
                 {
                     FilterWorkout.Add(workout);
                 }
-                // Hämta och visa de träningar som inkluderar inmatad söktext
-                else if (workout.TypeInput.Contains(Filter, StringComparison.OrdinalIgnoreCase) || workout.Notes.Contains(Filter, StringComparison.OrdinalIgnoreCase))
+                // Annars, endast de träningar som matchar söktexten
+                else if (workout.TypeInput.Contains(Filter, StringComparison.OrdinalIgnoreCase) ||
+                         workout.Notes.Contains(Filter, StringComparison.OrdinalIgnoreCase))
                 {
                     FilterWorkout.Add(workout);
                 }

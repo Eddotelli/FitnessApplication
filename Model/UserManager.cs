@@ -142,6 +142,7 @@ namespace FitTrack.Model
                 if (user.Username == username)
                 {
                     LoggedInUser = user;
+                    UpdateUserWorkouts();
                     Console.WriteLine($"{LoggedInUser.Username} är inloggad!!"); // Kontroll-utskrift för att se att det funkar. //
                     return true;
                 }
@@ -149,6 +150,38 @@ namespace FitTrack.Model
 
             // Om ingen match hittas, returnerar false. //
             return false;
+        }
+
+        // Rensar träningspass-listan och lägger till inloggad användares pass
+        public void UpdateUserWorkouts()
+        {
+            workoutsInfo.Clear();  // Rensar listan innan vi lägger till träningspassen
+
+            if (LoggedInUser is AdminUser)
+            {
+                // För AdminUser, hämta alla träningspass från alla användare.
+                foreach (var user in Users)
+                {
+                    foreach (var workout in user.UserWorkouts)
+                    {
+                        workoutsInfo.Add(workout);
+                    }
+                }
+            }
+            else if (LoggedInUser != null)
+            {
+                // För vanliga användare, lägg till endast deras egna träningspass.
+                foreach (var workout in LoggedInUser.UserWorkouts)
+                {
+                    workoutsInfo.Add(workout);
+                }
+            }
+        }
+
+        // Rensar WorkoutsInfo, användbar vid byte av användare. //
+        public void ClearAllWorkouts()
+        {
+            workoutsInfo.Clear();
         }
 
         // Lägger till användare träningspass i listan för träningspass. //
