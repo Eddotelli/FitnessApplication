@@ -250,12 +250,14 @@ namespace FitTrack.ViewModel
         {
             FilterWorkout.Clear();
 
-            // Hämta antingen alla träningspass för AdminUser, eller bara den inloggade användarens träningspass
+            // Hämtar antingen alla träningspass för AdminUser, eller bara den inloggade användarens träningspass
             var workoutsToFilter = userManager.LoggedInUser is AdminUser
-                ? userManager.GetAllWorkouts()
-                : userManager.LoggedInUser.UserWorkouts;
 
-            // Tillämpa filter på den valda listan av träningspass
+                // Kontrollerar om den inloggade är en Admin eller ej.
+                ? userManager.GetAllWorkouts() // ? uttryckOmSant
+                : userManager.LoggedInUser.UserWorkouts; // : uttryckOmFalskt
+
+            // Tillämpar filter på den valda listan av träningspass
             foreach (var workout in workoutsToFilter)
             {
                 // Om filtret är tomt, visa alla träningar
